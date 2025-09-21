@@ -1,15 +1,39 @@
-// TODO: implement dispatch and abort
-
 import { preventDefault, getDistance } from "../utils/common";
+
+type EventName = 'register' | 'start' | 'update' | 'end';
+type Callback = (event: PointerEvent, buffer: PointerEvent[]) => void;
+
+class EventEmitter {
+  private events: Record<EventName, Set<Callback>> = {
+    register: new Set(),
+    start: new Set(),
+    update: new Set(),
+    end: new Set(),
+  };
+
+  addEventListener(eventName: EventName, callback: Callback) {
+    this.events[eventName].add(callback);
+  }
+
+  removeEventListener(eventName: EventName, callback: Callback) {
+    this.events[eventName].delete(callback);
+  }
+
+  dispatchEvent(eventName: EventName, event: PointerEvent, buffer: PointerEvent[]) {
+    this.events[eventName].forEach(cb => cb(event, buffer));
+  }
+}
+
+const emitter = new EventEmitter();
 
 export default {
   enable,
   disable,
+  emitter,
 };
 
 enum MouseButtonEvents {
   NoChanged = -1,
-  NoPress = 0,
 }
 
 enum MouseButton {
@@ -60,6 +84,7 @@ function handleContextMenu(e: MouseEvent) {
 
 function initialize(e: PointerEvent) {
   eventBuffer.push(e);
+  emitter.dispatchEvent('register', e, eventBuffer);
   currentState = State.PENDING;
 
   targetElement.addEventListener('contextmenu', handleContextMenu, true);
@@ -107,13 +132,14 @@ function update(e: PointerEvent) {
       const distance = getDistance(initial.clientX, initial.clientY, e.clientX, e.clientY);
 
       if (distance > distanceThreshold) {
+        emitter.dispatchEvent('start', initial, eventBuffer);
         currentState = State.ACTIVE;
         enablePreventDefault();
       }
       break;
     }
     case State.ACTIVE: {
-      console.log(e.clientX, e.clientY);
+      emitter.dispatchEvent('update', e, eventBuffer);
       break;
     }
   }
@@ -127,7 +153,7 @@ function terminate(e: PointerEvent) {
   eventBuffer.push(e);
 
   if (currentState === State.ACTIVE) {
-    // dispatch all bound functions on end and pass the latest event and an array of the buffered mouse events
+    emitter.dispatchEvent('end', e, eventBuffer);
   }
 
   reset();
