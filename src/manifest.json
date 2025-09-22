@@ -4,11 +4,11 @@
   "version": "0.0.1",
   "permissions": ["scripting"],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.bundle.js"
   },
   "content_scripts": [
     {
-      "js": ["content.js"],
+      "js": ["content.bundle.js"],
       "all_frames": true,
       "match_about_blank": true,
       "run_at": "document_start",

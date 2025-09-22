@@ -3,11 +3,13 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"watch": "vite build --watch --mode development",
-		"build": "vite build"
+		"watch": "ts-node build.ts --watch",
+		"build": "ts-node build.ts",
+		"clean": "rm -rf dist"
 	},
 	"devDependencies": {
 		"@types/chrome": "^0.1.12",
+		"ts-node": "^10.9.2",
 		"tslib": "^2.8.1",
 		"typescript": "^5.9.2",
 		"vite": "^7.1.6",
