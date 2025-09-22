@@ -32,6 +32,7 @@ enum State {
   PASSIVE,
   PENDING,
   ACTIVE,
+  ABORTED,
 };
 
 let targetElement = window;
@@ -93,6 +94,19 @@ function disablePreventDefault() {
   targetElement.removeEventListener('mousedown', preventDefault, true);
 }
 
+const toSingleButton = (b: number) => {
+  switch (b) {
+    case MouseButton.LEFT:
+      return 0;
+    case MouseButton.RIGHT:
+      return 2;
+    case MouseButton.MIDDLE:
+      return 1;
+    default:
+      return -1;
+  }
+};
+
 function handlePointermove(e: PointerEvent) {
   if (!e.isTrusted) return;
 
@@ -100,7 +114,11 @@ function handlePointermove(e: PointerEvent) {
     update(e);
   }
   else if (e.button !== MouseButtonEvents.NoChanged) {
-    terminate(e);
+    if (e.button === toSingleButton(MouseButton.RIGHT)) {
+      terminate(e);
+    } else {
+      abort();
+    }
   }
   else if (e.buttons === 0) {
     terminate(e);
@@ -168,5 +186,11 @@ function reset() {
 }
 
 function handleVisibilitychange() {
+  abort();
   reset();
+}
+
+function abort() {
+  emitter.dispatchEvent('abort', eventBuffer);
+  currentState = State.ABORTED;
 }
