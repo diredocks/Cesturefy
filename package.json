@@ -3,17 +3,15 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"build": "rollup -c",
-    "watch": "rollup -c -w"
+		"watch": "vite build --watch --mode development",
+		"build": "vite build"
 	},
 	"devDependencies": {
-		"@rollup/plugin-commonjs": "^28.0.6",
-		"@rollup/plugin-node-resolve": "^16.0.1",
-		"@rollup/plugin-typescript": "^12.1.4",
 		"@types/chrome": "^0.1.12",
-		"rollup": "^4.52.0",
-		"rollup-plugin-copy": "^3.5.0",
 		"tslib": "^2.8.1",
-		"typescript": "^5.9.2"
+		"typescript": "^5.9.2",
+		"vite": "^7.1.6",
+		"vite-plugin-static-copy": "^3.1.2",
+		"vite-tsconfig-paths": "^5.1.4"
 	}
 }

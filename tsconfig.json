@@ -7,7 +7,13 @@
     "strict": true,
     "outDir": "dist",
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "src",
+    "paths": {
+      "@utils/*": ["utils/*"],
+      "@controller/*": ["controller/*"],
+      "@views/*": ["views/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src/**/*", "vite.config.ts"]
 }
