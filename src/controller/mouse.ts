@@ -1,30 +1,16 @@
 import { preventDefault, getDistance } from "../utils/common";
+import { EventEmitter } from "../utils/emitter";
 
-type EventName = 'register' | 'start' | 'update' | 'end';
 type Callback = (event: PointerEvent, buffer: PointerEvent[]) => void;
+type EventMap = {
+  register: Callback;
+  start: Callback;
+  update: Callback;
+  end: Callback;
+  abort: (buffer: PointerEvent[]) => void;
+};
 
-class EventEmitter {
-  private events: Record<EventName, Set<Callback>> = {
-    register: new Set(),
-    start: new Set(),
-    update: new Set(),
-    end: new Set(),
-  };
-
-  addEventListener(eventName: EventName, callback: Callback) {
-    this.events[eventName].add(callback);
-  }
-
-  removeEventListener(eventName: EventName, callback: Callback) {
-    this.events[eventName].delete(callback);
-  }
-
-  dispatchEvent(eventName: EventName, event: PointerEvent, buffer: PointerEvent[]) {
-    this.events[eventName].forEach(cb => cb(event, buffer));
-  }
-}
-
-const emitter = new EventEmitter();
+const emitter = new EventEmitter<EventMap>();
 
 export default {
   enable,
