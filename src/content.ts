@@ -41,6 +41,11 @@ MouseController.emitter.addEventListener('end', (_es, _e) => {
   sendBackgroundMessage('gestureEnd', pattern.getPattern());
 });
 
+MouseController.emitter.addEventListener('abort', (_es) => {
+  TraceCommandView.terminate();
+  pattern.clear();
+});
+
 function mouseGestureUpdate(es: (PointerEvent)[]) {
   for (const e of es) {
     const patternChange = pattern.addPoint(e.clientX, e.clientY);
