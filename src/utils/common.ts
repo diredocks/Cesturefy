@@ -1,8 +1,3 @@
-export interface Point {
-  x: number;
-  y: number;
-}
-
 export function preventDefault(e: Event) {
   if (e.isTrusted) {
     e.preventDefault();

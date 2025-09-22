@@ -1,6 +1,7 @@
 // TODO: figure out how this works
 
-import { getDistance, Point } from "@utils/common";
+import { getDistance } from "@utils/common";
+import { Point } from "@utils/types";
 
 export default {
   initialize,
