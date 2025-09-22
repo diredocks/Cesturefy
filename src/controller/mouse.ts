@@ -1,14 +1,8 @@
 import { preventDefault, getDistance } from "@utils/common";
 import { EventEmitter } from "@utils/emitter";
 
-type Callback = (event: PointerEvent, buffer: PointerEvent[]) => void;
-type EventMap = {
-  register: Callback;
-  start: Callback;
-  update: Callback;
-  end: Callback;
-  abort: (buffer: PointerEvent[]) => void;
-};
+type Callback = (buffer: PointerEvent[], event?: PointerEvent) => void;
+type EventMap = Record<'register' | 'start' | 'update' | 'end' | 'abort', Callback>;
 
 const emitter = new EventEmitter<EventMap>();
 
@@ -71,7 +65,7 @@ function handleContextMenu(e: MouseEvent) {
 
 function initialize(e: PointerEvent) {
   eventBuffer.push(e);
-  emitter.dispatchEvent('register', e, eventBuffer);
+  emitter.dispatchEvent('register', eventBuffer, e);
   currentState = State.PENDING;
 
   targetElement.addEventListener('contextmenu', handleContextMenu, true);
@@ -136,14 +130,14 @@ function update(e: PointerEvent) {
       const distance = getDistance(initial.clientX, initial.clientY, e.clientX, e.clientY);
 
       if (distance > distanceThreshold) {
-        emitter.dispatchEvent('start', initial, eventBuffer);
+        emitter.dispatchEvent('start', eventBuffer, initial);
         currentState = State.ACTIVE;
         enablePreventDefault();
       }
       break;
     }
     case State.ACTIVE: {
-      emitter.dispatchEvent('update', e, eventBuffer);
+      emitter.dispatchEvent('update', eventBuffer, e);
       break;
     }
   }
@@ -157,7 +151,7 @@ function terminate(e: PointerEvent) {
   eventBuffer.push(e);
 
   if (currentState === State.ACTIVE) {
-    emitter.dispatchEvent('end', e, eventBuffer);
+    emitter.dispatchEvent('end', eventBuffer, e);
   }
 
   reset();
