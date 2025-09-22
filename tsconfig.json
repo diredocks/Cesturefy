@@ -12,7 +12,8 @@
     "paths": {
       "@utils/*": ["utils/*"],
       "@controller/*": ["controller/*"],
-      "@views/*": ["views/*"]
+      "@view/*": ["view/*"],
+      "@model/*": ["model/*"]
     }
   },
   "include": ["src/**/*", "vite.config.ts"]
