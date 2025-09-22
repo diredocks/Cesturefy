@@ -1,24 +1,26 @@
-import { Message, BackgroundMessages, BackgroundHandlerMap, BackgroundHandler } from "@utils/messaging";
+import {
+  Handler, HandlerMap,
+  registerHandlers, sendTabMessage,
+  BackgroundMessages, ContentMessages
+} from "@utils/messaging/messagingB";
 
-const handleGestureChange: BackgroundHandler<'gestureChange'> = (m, sender) => {
-  console.log(m.data);
+const handleGestureChange: Handler<"gestureChange", BackgroundMessages> = (m, sender) => {
+  if (sender.tab?.id) {
+    sendTabMessage<"matchingGesture", ContentMessages>(
+      sender.tab.id,
+      "matchingGesture",
+      "Hello"
+    );
+  }
 };
 
-const handleGestureEnd: BackgroundHandler<'gestureEnd'> = (m, sender) => {
-  console.log(m.data);
+const handleGestureEnd: Handler<"gestureEnd", BackgroundMessages> = (m) => {
+  console.log("gesture ended", m.data);
 };
 
-const backgroundHandlers: BackgroundHandlerMap = {
+const backgroundHandlers: HandlerMap<BackgroundMessages> = {
   gestureChange: handleGestureChange,
   gestureEnd: handleGestureEnd,
 };
 
-chrome.runtime.onMessage.addListener(
-  <K extends keyof BackgroundMessages>(
-    m: Message<K, BackgroundMessages>,
-    sender: chrome.runtime.MessageSender,
-    res: any
-  ) => {
-    backgroundHandlers[m.subject](m, sender, res);
-  }
-);
+registerHandlers(backgroundHandlers);

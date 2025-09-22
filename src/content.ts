@@ -1,7 +1,10 @@
 import MouseController from "@controller/mouse";
 import TraceCommandView from "@views/trace-command/trace-command";
 import Pattern from "@utils/pattern";
-import { Message, BackgroundMessages } from "@utils/messaging";
+import {
+  Handler, HandlerMap, registerHandlers,
+  sendBackgroundMessage, ContentMessages
+} from "@utils/messaging/messagingC";
 
 const pattern = new Pattern(0.12, 10);
 
@@ -51,10 +54,12 @@ function mouseGestureUpdate(es: (PointerEvent)[]) {
   TraceCommandView.updateCommand("Hello");
 }
 
-function sendBackgroundMessage<K extends keyof BackgroundMessages>(
-  subject: K,
-  data: BackgroundMessages[K]
-) {
-  const msg: Message<K, BackgroundMessages> = { subject, data };
-  return chrome.runtime.sendMessage(msg);
-}
+const handleMatchingGesture: Handler<"matchingGesture", ContentMessages> = (m) => {
+  console.log("matching gesture:", m.data);
+};
+
+const contentHandlers: HandlerMap<ContentMessages> = {
+  matchingGesture: handleMatchingGesture,
+};
+
+registerHandlers(contentHandlers);
