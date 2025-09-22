@@ -2,7 +2,7 @@ import {
   Handler, HandlerMap,
   registerHandlers, sendTabMessage,
   BackgroundMessages, ContentMessages
-} from "@utils/messaging";
+} from "@utils/message";
 
 const handleGestureChange: Handler<"gestureChange", BackgroundMessages> = (m, sender) => {
   if (sender.tab?.id) {

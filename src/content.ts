@@ -4,7 +4,7 @@ import Pattern from "@utils/pattern";
 import {
   Handler, HandlerMap, registerHandlers,
   sendBackgroundMessage, ContentMessages
-} from "@utils/messaging";
+} from "@utils/message";
 
 const pattern = new Pattern(0.12, 10);
 
