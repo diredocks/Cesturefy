@@ -47,20 +47,24 @@ function handlePointerDown(e: PointerEvent) {
   }
 }
 
-let lastRightClickTime = 0;
+let lastClick = { time: 0, x: 0, y: 0 };
+
 const doubleClickThreshold = 300; // ms
+const moveThreshold = 10; // px
 
 function handleContextMenu(e: MouseEvent) {
   const now = Date.now();
+  const withinTime = now - lastClick.time < doubleClickThreshold;
+  const withinDist = getDistance(lastClick.x, lastClick.y, e.clientX, e.clientY) < moveThreshold;
 
-  if (now - lastRightClickTime < doubleClickThreshold) {
-    lastRightClickTime = 0;
-    reset();
+  if (withinTime && withinDist) {
+    reset(); // reset mouse controller
+    lastClick = { time: 0, x: 0, y: 0 }; // reset contextmenu state
     return;
   }
 
-  preventDefault(e);
-  lastRightClickTime = now;
+  e.preventDefault();
+  lastClick = { time: now, x: e.clientX, y: e.clientY };
 }
 
 function initialize(e: PointerEvent) {
