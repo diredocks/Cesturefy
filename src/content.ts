@@ -1,5 +1,5 @@
 import MouseController from "@controller/mouse";
-import TraceView from "@views/trace/trace";
+import TraceCommandView from "@views/trace-command/trace-command";
 import Pattern from "@utils/pattern";
 import { Message, BackgroundMessages } from "@utils/messaging";
 
@@ -15,7 +15,7 @@ async function main() {
 MouseController.emitter.addEventListener('start', (es, e) => {
   if (!e) return;
 
-  TraceView.initialize(e.clientX, e.clientY);
+  TraceCommandView.initialize(e.clientX, e.clientY);
 
   const coalescedEvents = es.flatMap(e => {
     const es = e.getCoalescedEvents();
@@ -34,7 +34,7 @@ MouseController.emitter.addEventListener('update', (_es, e) => {
 });
 
 MouseController.emitter.addEventListener('end', (_es, _e) => {
-  TraceView.terminate();
+  TraceCommandView.terminate();
   sendBackgroundMessage('gestureEnd', pattern.getPattern());
 });
 
@@ -47,7 +47,8 @@ function mouseGestureUpdate(es: (PointerEvent)[]) {
   }
 
   const points = es.map(e => ({ x: e.clientX, y: e.clientY }));
-  TraceView.updateTrace(points);
+  TraceCommandView.updateTrace(points);
+  TraceCommandView.updateCommand("Hello");
 }
 
 function sendBackgroundMessage<K extends keyof BackgroundMessages>(

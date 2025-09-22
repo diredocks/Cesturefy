@@ -6,6 +6,7 @@ import { Point } from "@utils/types";
 export default {
   initialize,
   updateTrace,
+  updateCommand,
   terminate,
 }
 
@@ -23,6 +24,28 @@ canvas.style.cssText = `
   all: initial !important;
   pointer-events: none !important;
 `;
+
+const command = document.createElement('div');
+command.style.cssText = `
+  --horizontalPosition: 0;
+  --verticalPosition: 0;
+  all: initial !important;
+  position: absolute !important;
+  top: calc(var(--verticalPosition) * 1%) !important;
+  left: calc(var(--horizontalPosition) * 1%) !important;
+  transform: translate(calc(var(--horizontalPosition) * -1%), calc(var(--verticalPosition) * -1%)) !important;
+  font-family: "NunitoSans Regular", "Arial", sans-serif !important;
+  line-height: normal !important;
+  text-shadow: 0.01em 0.01em 0.01em rgba(0,0,0, 0.5) !important;
+  text-align: center !important;
+  padding: 0.4em 0.4em 0.3em !important;
+  font-weight: bold !important;
+  background-color: rgba(0,0,0,0) !important;
+  width: max-content !important;
+  max-width: 50vw !important;
+  pointer-events: none !important;
+`;
+
 const context = canvas.getContext('2d')!;
 
 let traceLineWidth = 10;
@@ -82,19 +105,28 @@ function updateTrace(points: Point[]): void {
   context.fill(path);
 }
 
+function updateCommand(text: string) {
+  if (command && overlay.isConnected) {
+    command.textContent = text;
+    if (!overlay.contains(command)) overlay.appendChild(command);
+  }
+  else command.remove();
+}
+
 function terminate(): void {
   overlay.hidePopover();
   overlay.remove();
   canvas.remove();
+  command.remove();
 
   context.clearRect(0, 0, canvas.width, canvas.height);
 
   lastTraceWidth = 0;
+  command.textContent = "";
 }
 
 window.addEventListener('resize', maximizeCanvas, true);
 maximizeCanvas();
-
 
 function maximizeCanvas(): void {
   const { lineCap, lineJoin, fillStyle, strokeStyle, lineWidth } = context;
