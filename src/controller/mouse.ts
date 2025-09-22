@@ -1,5 +1,5 @@
-import { preventDefault, getDistance } from "../utils/common";
-import { EventEmitter } from "../utils/emitter";
+import { preventDefault, getDistance } from "@utils/common";
+import { EventEmitter } from "@utils/emitter";
 
 type Callback = (event: PointerEvent, buffer: PointerEvent[]) => void;
 type EventMap = {

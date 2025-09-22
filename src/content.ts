@@ -1,5 +1,5 @@
-import MouseController from "./controller/mouse";
-import TraceView from "./views/trace/trace";
+import MouseController from "@controller/mouse";
+import TraceView from "@views/trace/trace";
 
 main();
 
