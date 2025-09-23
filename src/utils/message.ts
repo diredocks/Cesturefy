@@ -1,4 +1,4 @@
-import { Vector } from "@utils/types";
+import { Vectors } from "@utils/types";
 
 export type MessageMap = Record<string, any>;
 
@@ -51,8 +51,8 @@ export function sendTabMessage<
 }
 
 export type BackgroundMessages = {
-  gestureChange: Vector[];
-  gestureEnd: Vector[];
+  gestureChange: Vectors;
+  gestureEnd: Vectors;
 };
 
 export type ContentMessages = {
