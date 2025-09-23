@@ -56,5 +56,5 @@ export type BackgroundMessages = {
 };
 
 export type ContentMessages = {
-  matchingGesture: string;
+  matchingGesture: string | null; // NOTE: null possible due to not matched any gesture
 };

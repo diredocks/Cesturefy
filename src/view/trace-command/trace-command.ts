@@ -105,8 +105,8 @@ function updateTrace(points: Point[]): void {
   context.fill(path);
 }
 
-function updateCommand(text: string) {
-  if (command && overlay.isConnected) {
+function updateCommand(text: string | null) {
+  if (command && overlay.isConnected && text !== null) {
     command.textContent = text;
     if (!overlay.contains(command)) overlay.appendChild(command);
   }
