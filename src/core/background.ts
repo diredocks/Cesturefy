@@ -6,6 +6,22 @@ import {
   BackgroundMessages, ContentMessages
 } from "@utils/message";
 
+const gesturesJson = [
+  {
+    pattern: [[1, 0]],
+    command: { name: 'CloseTab', settings: { nextFocus: 'next' } },
+  },
+  {
+    pattern: [[-1, 0]],
+    command: { name: 'NewTab', settings: { position: 'end' } },
+  },
+  {
+    pattern: [[1, -1]],
+    command: { name: 'DuplicateTab', settings: { position: 'start', focusPrevTab: true } },
+  },
+];
+const gestures: Gesture[] = gesturesJson.map(g => Gesture.fromJSON(g));
+
 const handleGestureChange: Handler<"gestureChange", BackgroundMessages> = (m, sender) => {
   const matchedGesture = getGestureByPattern(m.data, gestures, 0.15);
   if (!sender.tab?.id) {

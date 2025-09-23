@@ -22,8 +22,8 @@ interface EntryPoint {
 }
 
 const entryPoints: EntryPoint[] = [
-  { inputName: 'background', inputPath: resolve(srcPath, 'background.ts') },
-  { inputName: 'content', inputPath: resolve(srcPath, 'content.ts') },
+  { inputName: 'background', inputPath: resolve(srcPath, 'core/background.ts') },
+  { inputName: 'content', inputPath: resolve(srcPath, 'core/content.ts') },
   // { inputName: 'inject', inputPath: resolve(srcPath, 'inject/index.ts') },
   // { inputName: 'options', inputPath: resolve(srcPath, 'options/index.html'), outputDirname: 'options' },
   // { inputName: 'popup', inputPath: resolve(srcPath, 'popup/index.html'), outputDirname: 'popup' },

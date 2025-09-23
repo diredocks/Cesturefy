@@ -1,5 +1,5 @@
 import MouseController from "@controller/mouse";
-import TraceCommandView from "view/trace-command/trace-command";
+import TraceCommandView from "@view/trace-command/trace-command";
 import Pattern from "@utils/pattern";
 import {
   Handler, HandlerMap, registerHandlers,
