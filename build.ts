@@ -38,7 +38,10 @@ function createConfig(entry: EntryPoint) {
     plugins: [
       tsconfigPaths(),
       viteStaticCopy({
-        targets: [{ src: resolve(__dirname, 'src/manifest.json'), dest: '.' }],
+        targets: [
+          { src: resolve(__dirname, 'src/manifest.json'), dest: '.' },
+          { src: resolve(__dirname, 'src/_locales'), dest: '.' }
+        ],
       }),
     ],
     build: {

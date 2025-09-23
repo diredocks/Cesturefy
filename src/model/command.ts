@@ -8,15 +8,29 @@ export interface CommandJSON<TSettings = Record<string, unknown>> {
 
 export default class Command<TSettings = Record<string, unknown>> {
   private _settings: Partial<TSettings> = {};
+  private _name: string;
 
   constructor(
-    public name: string,
+    name: string,
     public fn: CommandFn<TSettings>,
     initialSettings?: Partial<TSettings>
   ) {
     if (initialSettings) {
       this._settings = { ...initialSettings };
     }
+    this._name = name;
+  }
+
+  toString() {
+    return chrome.i18n.getMessage(`commandLabel${this.getName()}`)
+  }
+
+  getName() {
+    return this._name;
+  }
+
+  setName(value: string) {
+    this._name = value;
   }
 
   getSetting<K extends keyof TSettings>(key: K): TSettings[K] | undefined {
@@ -48,7 +62,7 @@ export default class Command<TSettings = Record<string, unknown>> {
   }
 
   toJSON(): CommandJSON<TSettings> {
-    return { name: this.name, settings: { ...this._settings } };
+    return { name: this.getName(), settings: { ...this._settings } };
   }
 
   static fromJSON<TSettings = Record<string, unknown>>(

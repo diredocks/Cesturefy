@@ -1,0 +1,10 @@
+{
+  "commandLabelDuplicateTab": {
+    "message": "Duplicate tab",
+    "description": "Duplicate tab"
+  },
+  "commandLabelNewTab": {
+    "message": "New tab",
+    "description": "New tab"
+  }
+}
