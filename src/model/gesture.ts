@@ -1,7 +1,7 @@
 import { Vectors } from "@utils/types";
 import Command from "@model/command";
 
-interface GestureJSON {
+export interface GestureJSON {
   pattern: Vectors;
   command: ReturnType<Command["toJSON"]>;
   label?: string;
@@ -28,11 +28,11 @@ export default class Gesture {
   }
 
   toString(): string {
-    return this._label || this.getCommand().name;
+    return this._label || this.getCommand().toString();
   }
 
   getLabel(): string {
-    return this._label || this.getCommand().name;
+    return this._label || this.getCommand().toString();
   }
 
   setLabel(value: string): void {
@@ -65,6 +65,6 @@ export default class Gesture {
 
   static fromJSON(json: GestureJSON): Gesture {
     const command = Command.fromJSON(json.command);
-    return new Gesture(json.pattern, command, json.label || json.command.name);
+    return new Gesture(json.pattern, command, json.label || command.toString());
   }
 }

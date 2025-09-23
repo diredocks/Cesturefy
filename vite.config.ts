@@ -10,7 +10,10 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       tsconfigPaths(),
       viteStaticCopy({
-        targets: [{ src: 'src/manifest.json', dest: '.' }]
+        targets: [
+          { src: 'src/manifest.json', dest: '.' },
+          { src: 'src/_locales', dest: '.' }
+        ]
       })
     ],
     build: {

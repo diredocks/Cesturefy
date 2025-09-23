@@ -14,5 +14,6 @@
       "run_at": "document_start",
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "default_locale": "en"
 }
