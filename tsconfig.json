@@ -13,7 +13,7 @@
       "@utils/*": ["utils/*"],
       "@controller/*": ["controller/*"],
       "@view/*": ["view/*"],
-      "@model/*": ["model/*"]
+      "@model/*": ["model/*"],
     }
   },
   "include": ["src/**/*", "vite.config.ts"]
