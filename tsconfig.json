@@ -10,11 +10,11 @@
     "skipLibCheck": true,
     "baseUrl": "src",
     "paths": {
-      "@utils/*": ["utils/*"],
-      "@controller/*": ["controller/*"],
-      "@view/*": ["view/*"],
-      "@model/*": ["model/*"],
-      "@commands/*": ["commands/*"]
+      "@utils/*": ["core/utils/*"],
+      "@controller/*": ["core/controller/*"],
+      "@view/*": ["core/view/*"],
+      "@model/*": ["core/model/*"],
+      "@commands/*": ["core/commands/*"]
     }
   },
   "include": ["src/**/*", "vite.config.ts"]

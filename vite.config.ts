@@ -22,8 +22,8 @@ export default defineConfig(({ command, mode }) => {
       minify: isDev ? false : 'esbuild',
       rollupOptions: {
         input: {
-          background: path.resolve(__dirname, 'src/background.ts'),
-          content: path.resolve(__dirname, 'src/content.ts'),
+          background: path.resolve(__dirname, 'src/core/background.ts'),
+          content: path.resolve(__dirname, 'src/core/content.ts'),
         },
         output: {
           entryFileNames: '[name].js',
