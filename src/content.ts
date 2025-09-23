@@ -39,6 +39,7 @@ MouseController.emitter.addEventListener('update', (_es, e) => {
 MouseController.emitter.addEventListener('end', (_es, _e) => {
   TraceCommandView.terminate();
   sendBackgroundMessage('gestureEnd', pattern.getPattern());
+  pattern.clear();
 });
 
 MouseController.emitter.addEventListener('abort', (_es) => {
