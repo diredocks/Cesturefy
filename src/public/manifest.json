@@ -6,6 +6,11 @@
   "background": {
     "service_worker": "background.bundle.js"
   },
+  "icons": {
+    "32": "images/iconx32.png",
+    "48": "images/iconx48.png",
+    "96": "images/iconx96.png"
+  },
   "content_scripts": [
     {
       "js": ["content.bundle.js"],
