@@ -14,8 +14,9 @@
       "@controller/*": ["core/controller/*"],
       "@view/*": ["core/view/*"],
       "@model/*": ["core/model/*"],
-      "@commands/*": ["core/commands/*"]
+      "@commands/*": ["core/commands/*"],
+      "@options/*": ["options/*"]
     }
   },
-  "include": ["src/**/*", "vite.config.ts"]
+  "include": ["src/**/*"]
 }

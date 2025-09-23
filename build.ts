@@ -6,7 +6,6 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { build } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 const SrcDirname = 'src';
 const DistDirname = 'dist';
@@ -24,8 +23,8 @@ interface EntryPoint {
 const entryPoints: EntryPoint[] = [
   { inputName: 'background', inputPath: resolve(srcPath, 'core/background.ts') },
   { inputName: 'content', inputPath: resolve(srcPath, 'core/content.ts') },
+  { inputName: 'options', inputPath: resolve(srcPath, 'options/index.html'), outputDirname: 'options' },
   // { inputName: 'inject', inputPath: resolve(srcPath, 'inject/index.ts') },
-  // { inputName: 'options', inputPath: resolve(srcPath, 'options/index.html'), outputDirname: 'options' },
   // { inputName: 'popup', inputPath: resolve(srcPath, 'popup/index.html'), outputDirname: 'popup' },
 ];
 
@@ -37,12 +36,6 @@ function createConfig(entry: EntryPoint) {
     base: './',
     plugins: [
       tsconfigPaths(),
-      viteStaticCopy({
-        targets: [
-          { src: resolve(__dirname, 'src/manifest.json'), dest: '.' },
-          { src: resolve(__dirname, 'src/_locales'), dest: '.' }
-        ],
-      }),
     ],
     build: {
       watch: isWatch ? {} : undefined,

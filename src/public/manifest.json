@@ -15,5 +15,6 @@
       "matches": ["<all_urls>"]
     }
   ],
+  "options_page": "options/index.html",
   "default_locale": "en"
 }
