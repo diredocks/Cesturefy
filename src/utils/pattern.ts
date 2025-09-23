@@ -1,7 +1,7 @@
 // TODO: also figure out how this works
 
 import { vectorDirectionDifference } from "@utils/common";
-import { Vector } from "@utils/types";
+import { Vector, Vectors } from "@utils/types";
 
 export enum PatternStatus {
   PASSED_NO_THRESHOLD = 0,
@@ -18,7 +18,7 @@ export default class Pattern {
   private lastPoint: Vector | null = null;
   private previousVector: Vector | null = null;
 
-  private extractedVectors: Vector[] = [];
+  private extractedVectors: Vectors = [];
 
   constructor(differenceThreshold = 0, distanceThreshold = 0) {
     this.differenceThreshold = differenceThreshold;
@@ -82,7 +82,7 @@ export default class Pattern {
     return status;
   }
 
-  getPattern(): Vector[] {
+  getPattern(): Vectors {
     if (!this.lastPoint || !this.lastExtractedPoint) return [];
 
     const lastVector: Vector = [

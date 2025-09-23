@@ -4,3 +4,5 @@ export interface Point {
 }
 
 export type Vector = [number, number];
+export type Vectors = Vector[] | number[][];
+
