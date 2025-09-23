@@ -63,7 +63,7 @@ function handleContextMenu(e: MouseEvent) {
     return;
   }
 
-  e.preventDefault();
+  preventDefault(e);
   lastClick = { time: now, x: e.clientX, y: e.clientY };
 }
 
