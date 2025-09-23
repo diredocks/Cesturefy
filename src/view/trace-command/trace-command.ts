@@ -16,13 +16,13 @@ overlay.style.cssText = `
   all: initial !important;
   position: fixed !important;
   inset: 0 !important;
-  pointer-events: none !important;
+  pointer-events: auto !important;
 `;
 
 const canvas = document.createElement('canvas');
 canvas.style.cssText = `
   all: initial !important;
-  pointer-events: none !important;
+  pointer-events: auto !important;
 `;
 
 const command = document.createElement('div');
@@ -43,7 +43,7 @@ command.style.cssText = `
   background-color: rgba(0,0,0,0) !important;
   width: max-content !important;
   max-width: 50vw !important;
-  pointer-events: none !important;
+  pointer-events: auto !important;
 `;
 
 const context = canvas.getContext('2d')!;
