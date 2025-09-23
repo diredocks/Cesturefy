@@ -1,3 +1,5 @@
+import Gesture from "@model/gesture";
+import { getGestureByPattern } from "@utils/match";
 import {
   Handler, HandlerMap,
   registerHandlers, sendTabMessage,
@@ -5,13 +7,15 @@ import {
 } from "@utils/message";
 
 const handleGestureChange: Handler<"gestureChange", BackgroundMessages> = (m, sender) => {
-  if (sender.tab?.id) {
-    sendTabMessage<"matchingGesture", ContentMessages>(
-      sender.tab.id,
-      "matchingGesture",
-      "Hello"
-    );
+  const matchedGesture = getGestureByPattern(m.data, gestures, 0.15);
+  if (!sender.tab?.id) {
+    return;
   }
+  sendTabMessage<"matchingGesture", ContentMessages>(
+    sender.tab.id,
+    "matchingGesture",
+    (matchedGesture !== null) ? matchedGesture.getLabel() : null,
+  );
 };
 
 const handleGestureEnd: Handler<"gestureEnd", BackgroundMessages> = (m) => {
