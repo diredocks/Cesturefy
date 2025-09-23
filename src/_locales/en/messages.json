@@ -6,5 +6,9 @@
   "commandLabelNewTab": {
     "message": "New tab",
     "description": "New tab"
+  },
+  "commandLabelCloseTab": {
+    "message": "Close tab",
+    "description": "Close tab"
   }
 }
