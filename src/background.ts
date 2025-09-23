@@ -18,8 +18,12 @@ const handleGestureChange: Handler<"gestureChange", BackgroundMessages> = (m, se
   );
 };
 
-const handleGestureEnd: Handler<"gestureEnd", BackgroundMessages> = (m) => {
-  console.log("gesture ended", m.data);
+const handleGestureEnd: Handler<"gestureEnd", BackgroundMessages> = (m, sender) => {
+  const matchedGesture = getGestureByPattern(m.data, gestures, 0.15);
+  if (matchedGesture) {
+    console.log(matchedGesture);
+    matchedGesture.getCommand().execute(sender);
+  }
 };
 
 const backgroundHandlers: HandlerMap<BackgroundMessages> = {

@@ -57,11 +57,10 @@ function mouseGestureUpdate(es: (PointerEvent)[]) {
 
   const points = es.map(e => ({ x: e.clientX, y: e.clientY }));
   TraceCommandView.updateTrace(points);
-  TraceCommandView.updateCommand("Hello");
 }
 
 const handleMatchingGesture: Handler<"matchingGesture", ContentMessages> = (m) => {
-  console.log("matching gesture:", m.data);
+  TraceCommandView.updateCommand(m.data);
 };
 
 const contentHandlers: HandlerMap<ContentMessages> = {
