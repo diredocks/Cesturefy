@@ -51,7 +51,7 @@ function createConfig(entry: EntryPoint) {
       },
       outDir: `${distPath}${entry.outputDirname ? `/${entry.outputDirname}` : ''}`,
     },
-    publicDir: 'public',
+    publicDir: 'static',
   };
 }
 
