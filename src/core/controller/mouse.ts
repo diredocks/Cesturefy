@@ -2,24 +2,16 @@ import { preventDefault, getDistance } from "@utils/common";
 import { EventEmitter } from "@utils/emitter";
 
 type Callback = (buffer: PointerEvent[], event?: PointerEvent) => void;
-type EventMap = Record<'register' | 'start' | 'update' | 'end' | 'abort', Callback>;
+type MouseEvents = Record<'register' | 'start' | 'update' | 'end' | 'abort', Callback>;
 
-const emitter = new EventEmitter<EventMap>();
-
-export default {
-  enable,
-  disable,
-  emitter,
-};
-
-enum MouseButtonEvents {
-  NoChanged = -1,
-}
-
-enum MouseButton {
+export enum MouseButton {
   LEFT = 1,
   RIGHT = 2,
   MIDDLE = 4,
+}
+
+enum MouseButtonEvents {
+  NoChanged = -1,
 }
 
 enum State {
@@ -27,168 +19,188 @@ enum State {
   PENDING,
   ACTIVE,
   ABORTED,
-};
-
-let targetElement = window;
-let currentState = State.PASSIVE;
-let eventBuffer: (PointerEvent)[] = [];
-
-function enable() {
-  targetElement.addEventListener('pointerdown', handlePointerDown);
-}
-
-function disable() {
-  targetElement.removeEventListener('pointerdown', handlePointerDown);
-}
-
-function handlePointerDown(e: PointerEvent) {
-  if (e.isTrusted && e.buttons === MouseButton.RIGHT) {
-    initialize(e);
-  }
-}
-
-let lastClick = { time: 0, x: 0, y: 0 };
-
-const doubleClickThreshold = 300; // ms
-const moveThreshold = 10; // px
-
-function handleContextMenu(e: MouseEvent) {
-  const now = Date.now();
-  const withinTime = now - lastClick.time < doubleClickThreshold;
-  const withinDist = getDistance(lastClick.x, lastClick.y, e.clientX, e.clientY) < moveThreshold;
-
-  if (withinTime && withinDist) {
-    reset(); // reset mouse controller
-    lastClick = { time: 0, x: 0, y: 0 }; // reset contextmenu state
-    return;
-  }
-
-  preventDefault(e);
-  lastClick = { time: now, x: e.clientX, y: e.clientY };
-}
-
-function initialize(e: PointerEvent) {
-  eventBuffer.push(e);
-  emitter.dispatchEvent('register', eventBuffer, e);
-  currentState = State.PENDING;
-
-  targetElement.addEventListener('contextmenu', handleContextMenu, true);
-  targetElement.addEventListener('pointermove', handlePointermove, true);
-  targetElement.addEventListener('pointerup', handlePointerup, true);
-  targetElement.addEventListener('visibilitychange', handleVisibilitychange, true);
-}
-
-function enablePreventDefault() {
-  targetElement.addEventListener('click', preventDefault, true);
-  targetElement.addEventListener('auxclick', preventDefault, true);
-  targetElement.addEventListener('mouseup', preventDefault, true);
-  targetElement.addEventListener('mousedown', preventDefault, true);
-}
-
-function disablePreventDefault() {
-  targetElement.removeEventListener('click', preventDefault, true);
-  targetElement.removeEventListener('auxclick', preventDefault, true);
-  targetElement.removeEventListener('mouseup', preventDefault, true);
-  targetElement.removeEventListener('mousedown', preventDefault, true);
-}
-
-const toSingleButton = (b: number) => {
-  switch (b) {
-    case MouseButton.LEFT:
-      return 0;
-    case MouseButton.RIGHT:
-      return 2;
-    case MouseButton.MIDDLE:
-      return 1;
-    default:
-      return -1;
-  }
-};
-
-function handlePointermove(e: PointerEvent) {
-  if (!e.isTrusted) return;
-
-  if (e.buttons === MouseButton.RIGHT) {
-    update(e);
-  }
-  else if (e.button !== MouseButtonEvents.NoChanged) {
-    if (e.button === toSingleButton(MouseButton.RIGHT)) {
-      terminate(e);
-    } else {
-      abort();
-    }
-  }
-  else if (e.buttons === 0) {
-    terminate(e);
-  }
 }
 
 const distanceThreshold = 10;
+const doubleClickThreshold = 300; // ms
+const moveThreshold = 10; // px
 
-function update(e: PointerEvent) {
-  eventBuffer.push(e);
+export class MouseController {
+  private static _instance: MouseController;
 
-  switch (currentState) {
-    case State.PENDING: {
-      const initial = eventBuffer[0];
-      const distance = getDistance(initial.clientX, initial.clientY, e.clientX, e.clientY);
+  private _target: Window = window;
+  private _events = new EventEmitter<MouseEvents>();
+  private _state = State.PASSIVE;
+  private _buffer: PointerEvent[] = [];
+  private _lastClick = { time: 0, x: 0, y: 0 };
 
-      if (distance > distanceThreshold) {
-        emitter.dispatchEvent('start', eventBuffer, initial);
-        currentState = State.ACTIVE;
-        enablePreventDefault();
+  private constructor() { }
+
+  public static get instance(): MouseController {
+    if (!this._instance) {
+      this._instance = new MouseController();
+    }
+    return this._instance;
+  }
+
+  addEventListener<K extends keyof MouseEvents>(event: K, cb: MouseEvents[K]) {
+    this._events.addEventListener(event, cb);
+  }
+
+  removeEventListener<K extends keyof MouseEvents>(event: K, cb: MouseEvents[K]) {
+    this._events.removeEventListener(event, cb);
+  }
+
+  enable() {
+    this._target.addEventListener("pointerdown", this._handlePointerDown);
+  }
+
+  disable() {
+    this._target.removeEventListener("pointerdown", this._handlePointerDown);
+  }
+
+  private _handlePointerDown = (e: PointerEvent) => {
+    if (e.isTrusted && e.buttons === MouseButton.RIGHT) {
+      this._initialize(e);
+    }
+  };
+
+  private _handleContextMenu = (e: MouseEvent) => {
+    const now = Date.now();
+    const withinTime = now - this._lastClick.time < doubleClickThreshold;
+    const withinDist =
+      getDistance(this._lastClick.x, this._lastClick.y, e.clientX, e.clientY) < moveThreshold;
+
+    if (withinTime && withinDist) {
+      this._reset();
+      this._lastClick = { time: 0, x: 0, y: 0 };
+      return;
+    }
+
+    preventDefault(e);
+    this._lastClick = { time: now, x: e.clientX, y: e.clientY };
+  };
+
+  private _initialize(e: PointerEvent) {
+    this._buffer.push(e);
+    this._events.dispatchEvent("register", this._buffer, e);
+    this._state = State.PENDING;
+
+    this._target.addEventListener("contextmenu", this._handleContextMenu, true);
+    this._target.addEventListener("pointermove", this._handlePointerMove, true);
+    this._target.addEventListener("pointerup", this._handlePointerUp, true);
+    this._target.addEventListener("visibilitychange", this._handleVisibilityChange, true);
+  }
+
+  private _enablePreventDefault() {
+    this._target.addEventListener("click", preventDefault, true);
+    this._target.addEventListener("auxclick", preventDefault, true);
+    this._target.addEventListener("mouseup", preventDefault, true);
+    this._target.addEventListener("mousedown", preventDefault, true);
+  }
+
+  private _disablePreventDefault() {
+    this._target.removeEventListener("click", preventDefault, true);
+    this._target.removeEventListener("auxclick", preventDefault, true);
+    this._target.removeEventListener("mouseup", preventDefault, true);
+    this._target.removeEventListener("mousedown", preventDefault, true);
+  }
+
+  private _toSingleButton(b: number) {
+    switch (b) {
+      case MouseButton.LEFT:
+        return 0;
+      case MouseButton.RIGHT:
+        return 2;
+      case MouseButton.MIDDLE:
+        return 1;
+      default:
+        return -1;
+    }
+  }
+
+  private _handlePointerMove = (e: PointerEvent) => {
+    if (!e.isTrusted) return;
+
+    if (e.buttons === MouseButton.RIGHT) {
+      this._update(e);
+    } else if (e.button !== MouseButtonEvents.NoChanged) {
+      if (e.button === this._toSingleButton(MouseButton.RIGHT)) {
+        this._terminate(e);
+      } else {
+        this._abort();
       }
-      break;
+    } else if (e.buttons === 0) {
+      this._terminate(e);
     }
-    case State.ACTIVE: {
-      emitter.dispatchEvent('update', eventBuffer, e);
-      break;
-    }
-  }
-}
+  };
 
-function handlePointerup(e: PointerEvent) {
-  terminate(e);
-}
+  private _update(e: PointerEvent) {
+    this._buffer.push(e);
 
-function terminate(e: PointerEvent) {
-  eventBuffer.push(e);
+    switch (this._state) {
+      case State.PENDING: {
+        const initial = this._buffer[0];
+        const distance = getDistance(initial.clientX, initial.clientY, e.clientX, e.clientY);
 
-  if (currentState === State.ACTIVE) {
-    emitter.dispatchEvent('end', eventBuffer, e);
-  }
-
-  reset();
-}
-
-function reset() {
-  targetElement.removeEventListener('contextmenu', handleContextMenu, true);
-  targetElement.removeEventListener('pointermove', handlePointermove, true);
-  targetElement.removeEventListener('pointerup', handlePointerup, true);
-  targetElement.removeEventListener('visibilitychange', handleVisibilitychange, true);
-
-  disablePreventDefault();
-
-  const initialEvent = eventBuffer[0];
-  if (initialEvent) {
-    if (initialEvent.target instanceof Element) {
-      initialEvent.target.releasePointerCapture(initialEvent.pointerId);
-    } else {
-      // fallback
-      document.documentElement?.releasePointerCapture(initialEvent.pointerId);
+        if (distance > distanceThreshold) {
+          this._events.dispatchEvent("start", this._buffer, initial);
+          this._state = State.ACTIVE;
+          this._enablePreventDefault();
+        }
+        break;
+      }
+      case State.ACTIVE: {
+        this._events.dispatchEvent("update", this._buffer, e);
+        break;
+      }
     }
   }
 
-  eventBuffer = [];
-  currentState = State.PASSIVE;
+  private _handlePointerUp = (e: PointerEvent) => {
+    this._terminate(e);
+  };
+
+  private _terminate(e: PointerEvent) {
+    this._buffer.push(e);
+
+    if (this._state === State.ACTIVE) {
+      this._events.dispatchEvent("end", this._buffer, e);
+    }
+
+    this._reset();
+  }
+
+  private _reset() {
+    this._target.removeEventListener("contextmenu", this._handleContextMenu, true);
+    this._target.removeEventListener("pointermove", this._handlePointerMove, true);
+    this._target.removeEventListener("pointerup", this._handlePointerUp, true);
+    this._target.removeEventListener("visibilitychange", this._handleVisibilityChange, true);
+
+    this._disablePreventDefault();
+
+    const initial = this._buffer[0];
+    if (initial) {
+      if (initial.target instanceof Element) {
+        initial.target.releasePointerCapture(initial.pointerId);
+      } else {
+        document.documentElement?.releasePointerCapture(initial.pointerId);
+      }
+    }
+
+    this._buffer = [];
+    this._state = State.PASSIVE;
+  }
+
+  private _handleVisibilityChange = () => {
+    this._abort();
+    this._reset();
+  };
+
+  private _abort() {
+    this._events.dispatchEvent("abort", this._buffer);
+    this._state = State.ABORTED;
+  }
 }
 
-function handleVisibilitychange() {
-  abort();
-  reset();
-}
-
-function abort() {
-  emitter.dispatchEvent('abort', eventBuffer);
-  currentState = State.ABORTED;
-}
+export const mouseController = MouseController.instance;
