@@ -1,16 +1,12 @@
 import type { CommandFn } from "@utils/types";
+import { defineCommand } from "@commands/commands";
 
-export interface CloseTabSettings {
+interface CloseTabSettings {
   closePinned?: boolean;
   nextFocus?: "next" | "previous" | "recent" | "default";
 }
 
-export const CloseTabDefaults: Required<CloseTabSettings> = {
-  closePinned: false,
-  nextFocus: "default",
-};
-
-export const CloseTab: CommandFn<CloseTabSettings> = async function (sender) {
+const fn: CommandFn<CloseTabSettings> = async function (sender) {
   if (!sender.tab || !sender.tab.id) return true;
   const tab = sender.tab;
 
@@ -52,3 +48,8 @@ export const CloseTab: CommandFn<CloseTabSettings> = async function (sender) {
   await chrome.tabs.remove(sender.tab.id);
   return true;
 }
+
+export const CloseTab = defineCommand(fn, {
+  closePinned: false,
+  nextFocus: "default",
+}, 'tabs');

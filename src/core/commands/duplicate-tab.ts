@@ -1,16 +1,12 @@
 import type { CommandFn } from "@utils/types";
+import { defineCommand } from "@commands/commands";
 
-export interface DuplicateTabSettings {
+interface DuplicateTabSettings {
   focus?: boolean;
   position?: 'before' | 'after' | 'start' | 'end' | 'default';
 }
 
-export const DuplicateTabDefaults: Required<DuplicateTabSettings> = {
-  focus: true,
-  position: 'default',
-};
-
-export const DuplicateTab: CommandFn<DuplicateTabSettings> = async function (sender) {
+const fn: CommandFn<DuplicateTabSettings> = async function (sender) {
   if (!sender.tab?.id) {
     return true;
   }
@@ -45,3 +41,8 @@ export const DuplicateTab: CommandFn<DuplicateTabSettings> = async function (sen
 
   return true;
 };
+
+export const DuplicateTab = defineCommand(fn, {
+  focus: true,
+  position: 'default'
+}, 'tabs');
