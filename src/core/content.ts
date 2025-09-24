@@ -1,4 +1,4 @@
-import MouseController from "@controller/mouse";
+import { mouseController } from "@controller/mouse";
 import TraceCommandView from "@view/trace-command/trace-command";
 import Pattern from "@utils/pattern";
 import {
@@ -12,10 +12,10 @@ main();
 
 // TODO: later for config
 async function main() {
-  MouseController.enable();
+  mouseController.enable();
 }
 
-MouseController.emitter.addEventListener('start', (es, e) => {
+mouseController.addEventListener('start', (es, e) => {
   if (!e) return;
 
   TraceCommandView.initialize(e.clientX, e.clientY);
@@ -29,20 +29,20 @@ MouseController.emitter.addEventListener('start', (es, e) => {
   mouseGestureUpdate(coalescedEvents);
 });
 
-MouseController.emitter.addEventListener('update', (_es, e) => {
+mouseController.addEventListener('update', (_es, e) => {
   if (!e) return;
 
   const coalescedEvents = e.getCoalescedEvents();
   mouseGestureUpdate(coalescedEvents);
 });
 
-MouseController.emitter.addEventListener('end', (_es, _e) => {
+mouseController.addEventListener('end', (_es, _e) => {
   TraceCommandView.terminate();
   sendBackgroundMessage('gestureEnd', pattern.getPattern());
   pattern.clear();
 });
 
-MouseController.emitter.addEventListener('abort', (_es) => {
+mouseController.addEventListener('abort', (_es) => {
   TraceCommandView.terminate();
   pattern.clear();
 });
