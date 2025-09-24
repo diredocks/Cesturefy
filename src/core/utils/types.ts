@@ -13,3 +13,11 @@ export type CommandFn<TSettings = Record<string, unknown>> = (
   sender: chrome.runtime.MessageSender,
   data?: any
 ) => Promise<boolean | null>;
+
+export type CommandGroup = 'tabs' | 'load' | 'zoom' | 'history' | 'toggle' | 'scroll' | 'focus' | 'window' | 'move' | 'url' | 'image' | 'link' | 'selection' | 'window.controls' | 'clipboard' | 'input' | 'listen' | 'capture' | 'popup' | 'advanced';
+
+export interface CommandDefinition<TSettings> {
+  fn: CommandFn<TSettings>;
+  defaults: Required<TSettings>;
+  group: CommandGroup;
+}

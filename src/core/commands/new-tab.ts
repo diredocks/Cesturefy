@@ -1,16 +1,12 @@
 import type { CommandFn } from "@utils/types";
+import { defineCommand } from "@commands/commands";
 
-export interface NewTabSettings {
+interface NewTabSettings {
   focus?: boolean;
   position?: 'before' | 'after' | 'start' | 'end' | 'default';
 }
 
-export const NewTabDefaults: Required<NewTabSettings> = {
-  focus: true,
-  position: 'default',
-};
-
-export const NewTab: CommandFn<NewTabSettings> = async function (sender) {
+const fn: CommandFn<NewTabSettings> = async function (sender) {
   if (!sender.tab?.id) {
     return true;
   }
@@ -36,3 +32,8 @@ export const NewTab: CommandFn<NewTabSettings> = async function (sender) {
 
   return true;
 }
+
+export const NewTab = defineCommand(fn, {
+  focus: true,
+  position: 'default',
+}, 'tabs');
