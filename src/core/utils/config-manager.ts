@@ -1,0 +1,137 @@
+import { ConfigSchema } from "@utils/config";
+import { EventEmitter } from "@utils/emitter";
+
+export type ConfigEvents = Record<string, (...args: any[]) => void> & {
+  change: (changes: Partial<ConfigSchema>) => void;
+  loaded: () => void;
+  reset: () => void;
+};
+
+type Path<T> = T extends object
+  ? {
+    [K in keyof T]: [K] | [K, ...Path<T[K]>];
+  }[keyof T]
+  : [];
+
+type PathValue<T, P extends any[]> =
+  P extends [infer K, ...infer Rest]
+  ? K extends keyof T
+  ? Rest extends []
+  ? T[K]
+  : PathValue<T[K], Rest>
+  : never
+  : T;
+
+type StorageArea = "local" | "sync";
+
+export class ConfigManager {
+  private static _instance: ConfigManager;
+
+  private _storageArea: StorageArea;
+  private _storage: ConfigSchema;
+  private _defaults: ConfigSchema;
+  private _autoUpdate = false;
+  private _loaded: Promise<void>;
+  private _events = new EventEmitter<ConfigEvents>();
+
+  constructor(storageArea: StorageArea, defaults: ConfigSchema) {
+    if (storageArea !== "local" && storageArea !== "sync") {
+      throw new Error('Storage area must be "local" or "sync".');
+    }
+
+    this._storageArea = storageArea;
+    this._storage = {} as ConfigSchema;
+    this._defaults = defaults;
+
+    const loadStorage = chrome.storage[this._storageArea].get();
+    this._loaded = loadStorage.then((values) => {
+      this._storage = { ...values } as ConfigSchema;
+      this._events.dispatchEvent("loaded");
+    });
+
+    chrome.storage.onChanged.addListener((changes, areaName) => {
+      if (areaName !== this._storageArea) return;
+      if (this._autoUpdate) Object.assign(this._storage, changes as Partial<ConfigSchema>);
+      this._events.dispatchEvent("change", changes as Partial<ConfigSchema>);
+    });
+  }
+
+  public static get instance(): ConfigManager {
+    if (!this._instance) {
+      this._instance = new ConfigManager("local", {} as ConfigSchema);
+    }
+    return this._instance;
+  }
+
+  addEventListener<K extends keyof ConfigEvents>(event: K, callback: ConfigEvents[K]) {
+    this._events.addEventListener(event, callback);
+  }
+
+  removeEventListener<K extends keyof ConfigEvents>(event: K, callback: ConfigEvents[K]) {
+    this._events.removeEventListener(event, callback);
+  }
+
+  get loaded() {
+    return this._loaded;
+  }
+
+  get autoUpdate() {
+    return this._autoUpdate;
+  }
+
+  set autoUpdate(value: boolean) {
+    this._autoUpdate = value;
+  }
+
+  get<K extends keyof ConfigSchema>(key: K): ConfigSchema[K] {
+    return this._storage[key] ?? this._defaults[key];
+  }
+
+  set<K extends keyof ConfigSchema>(key: K, value: ConfigSchema[K]): Promise<void> {
+    this._storage[key] = value;
+    return chrome.storage[this._storageArea].set({ [key]: value });
+  }
+
+  getPath<P extends Path<ConfigSchema>>(path: P): PathValue<ConfigSchema, P> {
+    let entry: any = this._storage;
+    let fallback: any = this._defaults;
+    for (const key of path) {
+      entry = entry?.[key];
+      fallback = fallback?.[key];
+    }
+    return (entry !== undefined ? entry : fallback) as PathValue<ConfigSchema, P>;
+  }
+
+  async setPath<P extends Path<ConfigSchema>>(path: P, value: PathValue<ConfigSchema, P>): Promise<void> {
+    let entry: any = this._storage;
+    for (let i = 0; i < path.length - 1; i++) {
+      const key = path[i];
+      if (!(key in entry)) entry[key] = {};
+      entry = entry[key];
+    }
+    entry[path[path.length - 1]] = value;
+
+    return chrome.storage[this._storageArea].set(this._storage);
+  }
+
+  clear(): Promise<void> {
+    this._storage = { ...this._defaults };
+    this._events.dispatchEvent("reset");
+    return chrome.storage[this._storageArea].clear();
+  }
+
+  toJSON(): ConfigSchema {
+    // return { ...this._defaults, ...this._storage };
+    return { ...this._storage };
+  }
+
+  async fromJSON(json: Partial<ConfigSchema>, persist: boolean = true): Promise<void> {
+    this._storage = { ...this._defaults, ...json };
+    if (persist) {
+      await chrome.storage[this._storageArea].set(this._storage);
+    }
+    this._events.dispatchEvent("change", json);
+  }
+}
+
+export const configManager = ConfigManager.instance;
