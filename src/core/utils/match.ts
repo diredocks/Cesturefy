@@ -2,19 +2,15 @@ import { vectorDirectionDifference } from "@utils/common";
 import { Vectors } from "@utils/types";
 import Gesture from "@model/gesture";
 
-export enum MatchingAlgorithm {
-  Strict,
-  ShapeIndependent,
-  Combined,
-}
+export type MatchingAlgorithm = 'Strict' | 'ShapeIndependent' | 'Combined';
 
 export function getGestureByPattern(
   pattern: Vectors, gestures: Gesture[],
-  maxDeviation: number = 1, algorithm: MatchingAlgorithm = MatchingAlgorithm.Combined) {
+  maxDeviation: number = 1, algorithm: MatchingAlgorithm = 'Combined') {
   let matchedGesture: Gesture | null = null;
 
   switch (algorithm) {
-    case MatchingAlgorithm.Strict: {
+    case 'Strict': {
       let lowestMismatchRatio = maxDeviation;
       for (const g of gestures) {
         const diff = patternSimilarityByProportion(pattern, g.getPattern());
@@ -26,7 +22,7 @@ export function getGestureByPattern(
       break;
     }
 
-    case MatchingAlgorithm.ShapeIndependent: {
+    case 'ShapeIndependent': {
       let lowestMismatchRatio = maxDeviation;
       for (const g of gestures) {
         const diff = patternSimilarityByDTW(pattern, g.getPattern());
@@ -38,7 +34,7 @@ export function getGestureByPattern(
       break;
     }
 
-    case MatchingAlgorithm.Combined:
+    case 'Combined':
     default: {
       let lowestMismatchRatio = Infinity;
       for (const g of gestures) {
