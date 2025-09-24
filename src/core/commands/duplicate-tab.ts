@@ -1,12 +1,12 @@
 import type { CommandFn } from "@utils/types";
 
 export interface DuplicateTabSettings {
-  focusPrevTab?: boolean;
+  focus?: boolean;
   position?: 'before' | 'after' | 'start' | 'end' | 'default';
 }
 
 export const DuplicateTabDefaults: Required<DuplicateTabSettings> = {
-  focusPrevTab: true,
+  focus: true,
   position: 'default',
 };
 
@@ -20,7 +20,9 @@ export const DuplicateTab: CommandFn<DuplicateTabSettings> = async function (sen
     return true;
   }
 
-  chrome.tabs.update(sender.tab.id, { active: this.getSetting('focusPrevTab') });
+  // if focus new tab, then don't focus prev tab
+  if (!this.getSetting('focus'))
+    chrome.tabs.update(sender.tab.id, { active: true });
 
   let index;
   switch (this.getSetting('position')) {
