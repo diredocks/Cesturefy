@@ -30,7 +30,7 @@ function main() {
 
   window.addEventListener("hashchange", onPageNavigation, true);
   // set default page if not specified
-  if (!window.location.hash) location.replace('#About');
+  if (!window.location.hash) location.replace('#Gestures');
   // and trigger page navigation handler
   else onPageNavigation();
 
