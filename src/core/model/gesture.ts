@@ -28,11 +28,11 @@ export default class Gesture {
   }
 
   toString(): string {
-    return this._label || this.getCommand().toString();
+    return this._label ?? this.getCommand().toString();
   }
 
   getLabel(): string {
-    return this._label || this.getCommand().toString();
+    return this._label ?? this.getCommand().toString();
   }
 
   setLabel(value: string): void {
