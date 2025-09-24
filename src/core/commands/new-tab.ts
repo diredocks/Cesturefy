@@ -2,8 +2,13 @@ import type { CommandFn } from "@utils/types";
 
 export interface NewTabSettings {
   focusNew?: boolean;
-  position?: 'before' | 'after' | 'start' | 'end';
+  position?: 'before' | 'after' | 'start' | 'end' | 'default';
 }
+
+export const NewTabDefaults: Required<NewTabSettings> = {
+  focusNew: true,
+  position: 'start',
+};
 
 export const NewTab: CommandFn<NewTabSettings> = async function (sender) {
   if (!sender.tab?.id) {
@@ -22,6 +27,7 @@ export const NewTab: CommandFn<NewTabSettings> = async function (sender) {
       index = 0;
       break;
     case 'end':
+    case 'default':
     default:
       // intended because default is end
       break;

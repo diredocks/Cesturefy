@@ -2,8 +2,13 @@ import type { CommandFn } from "@utils/types";
 
 export interface CloseTabSettings {
   closePinned?: boolean;
-  nextFocus?: "next" | "previous" | "recent";
+  nextFocus?: "next" | "previous" | "recent" | "default";
 }
+
+export const CloseTabDefaults: Required<CloseTabSettings> = {
+  closePinned: false,
+  nextFocus: "default",
+};
 
 export const CloseTab: CommandFn<CloseTabSettings> = async function (sender) {
   if (!sender.tab || !sender.tab.id) return true;
@@ -13,7 +18,7 @@ export const CloseTab: CommandFn<CloseTabSettings> = async function (sender) {
 
   const tabs = await chrome.tabs.query({ windowId: tab.windowId, active: false });
   if (tabs.length > 0) {
-    let nextTab = null;
+    let nextTab;
 
     switch (this.getSetting('nextFocus')) {
       case 'next':
@@ -34,6 +39,10 @@ export const CloseTab: CommandFn<CloseTabSettings> = async function (sender) {
         nextTab = withAccessed.reduce((acc, cur) =>
           acc.lastAccessed! > cur.lastAccessed! ? acc : cur
         );
+        break;
+      case 'default':
+      default:
+        nextTab = null;
         break;
     }
 
