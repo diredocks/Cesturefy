@@ -1,4 +1,4 @@
-import { CommandMap, CommandName } from "@commands/commands";
+import { commandDefaults, CommandMap, CommandName } from "@commands/commands";
 import { CommandFn } from "@utils/types";
 
 export interface CommandJSON<TSettings = Record<string, unknown>> {
@@ -8,16 +8,17 @@ export interface CommandJSON<TSettings = Record<string, unknown>> {
 
 export default class Command<TSettings = Record<string, unknown>> {
   private _settings: Partial<TSettings> = {};
+  private _defaults: TSettings;
   private _name: string;
 
   constructor(
     name: string,
     public fn: CommandFn<TSettings>,
-    initialSettings?: Partial<TSettings>
+    defaults: TSettings,
+    initialSettings?: Partial<TSettings>,
   ) {
-    if (initialSettings) {
-      this._settings = { ...initialSettings };
-    }
+    if (initialSettings) this._settings = { ...initialSettings };
+    this._defaults = { ...defaults };
     this._name = name;
   }
 
@@ -33,8 +34,8 @@ export default class Command<TSettings = Record<string, unknown>> {
     this._name = value;
   }
 
-  getSetting<K extends keyof TSettings>(key: K): TSettings[K] | undefined {
-    return this._settings[key];
+  getSetting<K extends keyof TSettings>(key: K): TSettings[K] {
+    return this._settings[key] ?? this._defaults[key] // default must exists
   }
 
   setSetting<K extends keyof TSettings>(key: K, value: TSettings[K]): void {
@@ -70,6 +71,10 @@ export default class Command<TSettings = Record<string, unknown>> {
   ): Command<TSettings> {
     const fn = CommandMap[json.name as CommandName];
     if (!fn) throw new Error(`No function found for name "${json.name}"`);
-    return new Command<TSettings>(json.name, fn, json.settings);
+
+    const defaults = commandDefaults[json.name as CommandName] as TSettings;
+    if (!defaults) throw new Error(`No default settings found for command "${json.name}"`);
+
+    return new Command<TSettings>(json.name, fn, defaults, json.settings);
   }
 }

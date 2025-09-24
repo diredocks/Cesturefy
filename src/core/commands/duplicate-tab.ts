@@ -2,8 +2,13 @@ import type { CommandFn } from "@utils/types";
 
 export interface DuplicateTabSettings {
   focusPrevTab?: boolean;
-  position?: 'before' | 'after' | 'start' | 'end';
+  position?: 'before' | 'after' | 'start' | 'end' | 'default';
 }
+
+export const DuplicateTabDefaults: Required<DuplicateTabSettings> = {
+  focusPrevTab: true,
+  position: 'default',
+};
 
 export const DuplicateTab: CommandFn<DuplicateTabSettings> = async function (sender) {
   if (!sender.tab?.id) {
@@ -29,6 +34,7 @@ export const DuplicateTab: CommandFn<DuplicateTabSettings> = async function (sen
       index = 0;
       break;
     case 'end':
+    case 'default':
     default:
       index = -1;
       break;
