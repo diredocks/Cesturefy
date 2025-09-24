@@ -2,11 +2,39 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Cesturefy</title>
+  <link rel="icon" type="image/png" href="/images/iconx32.png" sizes="16x16">
+  <link rel="stylesheet" href="index.css">
 
-  <script src="main.ts" type="module"></script>
+  <script src="components/popup-box.ts" type="module"></script>
+
+  <script src="index.ts" type="module"></script>
+  <script src="fragments/about.ts" type="module"></script>
 </head>
 
 <body>
+  <div id ="Sidebar">
+    <img class="logo" src="/images/iconx96.png">
+    <ul class="navigation">
+      <li class="nav-item">
+        <a href="#Gestures">
+          <span class="nav-item-symbol icon-arrows"></span>
+          <span class="nav-item-label" data-i18n="navigationGestures"></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#About">
+          <span class="nav-item-symbol icon-info"></span>
+          <span class="nav-item-label" data-i18n="navigationAbout"></span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div id="Content">
+    <div class="content" data-include="/options/fragments/gestures.html" id="Gestures"></div>
+    <div class="content" data-include="/options/fragments/about.html" id="About"></div>
+  </div>
 </body>
 </html>
