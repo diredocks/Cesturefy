@@ -1,13 +1,13 @@
 import type { CommandFn } from "@utils/types";
 
 export interface NewTabSettings {
-  focusNew?: boolean;
+  focus?: boolean;
   position?: 'before' | 'after' | 'start' | 'end' | 'default';
 }
 
 export const NewTabDefaults: Required<NewTabSettings> = {
-  focusNew: true,
-  position: 'start',
+  focus: true,
+  position: 'default',
 };
 
 export const NewTab: CommandFn<NewTabSettings> = async function (sender) {
@@ -32,7 +32,7 @@ export const NewTab: CommandFn<NewTabSettings> = async function (sender) {
       // intended because default is end
       break;
   }
-  await chrome.tabs.create({ active: this.getSetting('focusNew'), index });
+  await chrome.tabs.create({ active: this.getSetting('focus'), index });
 
   return true;
 }
