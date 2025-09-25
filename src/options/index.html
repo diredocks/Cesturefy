@@ -12,6 +12,7 @@
 
   <script src="index.ts" type="module"></script>
   <script src="fragments/gestures.ts" type="module"></script>
+  <script src="fragments/settings.ts" type="module"></script>
   <script src="fragments/about.ts" type="module"></script>
 </head>
 
@@ -26,6 +27,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a href="#Settings">
+          <span class="nav-item-symbol icon-gear"></span>
+          <span class="nav-item-label" data-i18n="navigationSettings"></span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a href="#About">
           <span class="nav-item-symbol icon-info"></span>
           <span class="nav-item-label" data-i18n="navigationAbout"></span>
@@ -36,6 +43,7 @@
 
   <div id="Content">
     <div class="content" data-include="/options/fragments/gestures.html" id="Gestures"></div>
+    <div class="content" data-include="/options/fragments/settings.html" id="Settings"></div>
     <div class="content" data-include="/options/fragments/about.html" id="About"></div>
   </div>
 </body>

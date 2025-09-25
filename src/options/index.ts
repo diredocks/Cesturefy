@@ -28,6 +28,10 @@ function main() {
     element.textContent = chrome.i18n.getMessage(element.dataset.i18n!);
   }
 
+  // TODO: toggle collapsables and add their event function
+  // TODO: apply onchange handler and add title to every theme button
+  // TODO: apply theme class
+
   window.addEventListener("hashchange", onPageNavigation, true);
   // set default page if not specified
   if (!window.location.hash) location.replace('#Gestures');
