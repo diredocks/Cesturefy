@@ -30,7 +30,7 @@ export class ConfigManager {
   private _storageArea: StorageArea;
   private _storage: ConfigSchema;
   private _defaults: ConfigSchema;
-  private _autoUpdate = false;
+  private _autoUpdate = true;
   private _loaded: Promise<void>;
   private _events = new EventEmitter<ConfigEvents>();
 
@@ -51,8 +51,14 @@ export class ConfigManager {
 
     chrome.storage.onChanged.addListener((changes, areaName) => {
       if (areaName !== this._storageArea) return;
-      if (this._autoUpdate) Object.assign(this._storage, changes as Partial<ConfigSchema>);
-      this._events.dispatchEvent("change", changes as Partial<ConfigSchema>);
+      const newValues: Partial<ConfigSchema> = {};
+      for (const key in changes) {
+        newValues[key as keyof ConfigSchema] = changes[key].newValue;
+      }
+      if (this._autoUpdate) {
+        this._storage = { ...this._storage, ...newValues };
+      }
+      this._events.dispatchEvent("change", newValues);
     });
   }
 
@@ -96,6 +102,7 @@ export class ConfigManager {
   }
 
   getPath<P extends Path<ConfigSchema>>(path: P): PathValue<ConfigSchema, P> {
+    // FIXME: Nested properties may be missing when accessing an object path
     let entry: any = this._storage;
     let fallback: any = this._defaults;
     for (const key of path) {
