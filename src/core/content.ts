@@ -1,5 +1,5 @@
 import { mouseController } from "@controller/mouse";
-import TraceCommandView from "@view/trace-command/trace-command";
+import { traceCommand } from "@view/trace-command";
 import Pattern from "@utils/pattern";
 import {
   Handler, HandlerMap, registerHandlers,
@@ -18,7 +18,7 @@ async function main() {
 mouseController.addEventListener('start', (es, e) => {
   if (!e) return;
 
-  TraceCommandView.initialize(e.clientX, e.clientY);
+  traceCommand.initialize(e.clientX, e.clientY);
 
   const coalescedEvents = es.flatMap(e => {
     const es = e.getCoalescedEvents();
@@ -37,13 +37,13 @@ mouseController.addEventListener('update', (_es, e) => {
 });
 
 mouseController.addEventListener('end', (_es, _e) => {
-  TraceCommandView.terminate();
+  traceCommand.terminate();
   sendBackgroundMessage('gestureEnd', pattern.getPattern());
   pattern.clear();
 });
 
 mouseController.addEventListener('abort', (_es) => {
-  TraceCommandView.terminate();
+  traceCommand.terminate();
   pattern.clear();
 });
 
@@ -56,11 +56,11 @@ function mouseGestureUpdate(es: (PointerEvent)[]) {
   }
 
   const points = es.map(e => ({ x: e.clientX, y: e.clientY }));
-  TraceCommandView.updateTrace(points);
+  traceCommand.updateTrace(points);
 }
 
 const handleMatchingGesture: Handler<"matchingGesture", ContentMessages> = (m) => {
-  TraceCommandView.updateCommand(m.data);
+  traceCommand.updateCommand(m.data);
 };
 
 const contentHandlers: HandlerMap<ContentMessages> = {
