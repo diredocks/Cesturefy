@@ -1,4 +1,5 @@
-import Gesture from "@model/gesture";
+import Gesture, { GestureJSON } from "@model/gesture";
+import { configManager } from "@utils/config-manager";
 import { getGestureByPattern } from "@utils/match";
 import {
   Handler, HandlerMap,
@@ -6,20 +7,7 @@ import {
   BackgroundMessages, ContentMessages
 } from "@utils/message";
 
-const gesturesJson = [
-  {
-    pattern: [[1, 0]],
-    command: { name: 'CloseTab', settings: { nextFocus: 'next' } },
-  },
-  {
-    pattern: [[-1, 0]],
-    command: { name: 'NewTab', settings: { position: 'end' } },
-  },
-  {
-    pattern: [[1, -1]],
-    command: { name: 'DuplicateTab', settings: { position: 'start', focusPrevTab: true } },
-  },
-];
+const gesturesJson: GestureJSON[] = configManager.get('Gestures');
 const gestures: Gesture[] = gesturesJson.map(g => Gesture.fromJSON(g));
 
 const handleGestureChange: Handler<"gestureChange", BackgroundMessages> = (m, sender) => {

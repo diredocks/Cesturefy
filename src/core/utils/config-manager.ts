@@ -106,6 +106,7 @@ export class ConfigManager {
     let entry: any = this._storage;
     let fallback: any = this._defaults;
     for (const key of path) {
+      //  FIXME: Default gestures shouldn't be all-or-none
       entry = entry?.[key];
       fallback = fallback?.[key];
     }
