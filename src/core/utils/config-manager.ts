@@ -1,4 +1,4 @@
-import { ConfigSchema } from "@utils/config";
+import { ConfigSchema, DefaultConfig } from "@utils/config";
 import { EventEmitter } from "@utils/emitter";
 
 export type ConfigEvents = Record<string, (...args: any[]) => void> & {
@@ -58,7 +58,7 @@ export class ConfigManager {
 
   public static get instance(): ConfigManager {
     if (!this._instance) {
-      this._instance = new ConfigManager("local", {} as ConfigSchema);
+      this._instance = new ConfigManager("local", DefaultConfig);
     }
     return this._instance;
   }
