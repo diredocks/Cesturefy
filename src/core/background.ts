@@ -7,8 +7,14 @@ import {
   BackgroundMessages, ContentMessages
 } from "@utils/message";
 
-const gesturesJson: GestureJSON[] = configManager.get('Gestures');
-const gestures: Gesture[] = gesturesJson.map(g => Gesture.fromJSON(g));
+let gestures: Gesture[];
+
+const applyGestures = () => {
+  gestures = (configManager.get('Gestures') as GestureJSON[]).map(g => Gesture.fromJSON(g));
+};
+
+configManager.addEventListener('loaded', applyGestures);
+configManager.addEventListener('changed', applyGestures);
 
 const handleGestureChange: Handler<"gestureChange", BackgroundMessages> = (m, sender) => {
   const matchedGesture = getGestureByPattern(m.data, gestures, 0.15);
