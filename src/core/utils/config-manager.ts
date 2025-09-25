@@ -83,13 +83,16 @@ export class ConfigManager {
     this._autoUpdate = value;
   }
 
-  get<K extends keyof ConfigSchema>(key: K): ConfigSchema[K] {
-    return this._storage[key] ?? this._defaults[key];
+  get(path: string): any {
+    const res = this.getPath(path.split(".") as any);
+    if (res === undefined) throw Error(`Config path "${path}" not found`);
+    else return res;
   }
 
-  set<K extends keyof ConfigSchema>(key: K, value: ConfigSchema[K]): Promise<void> {
-    this._storage[key] = value;
-    return chrome.storage[this._storageArea].set({ [key]: value });
+  set(path: string, value: any): Promise<void> {
+    const res = this.getPath(path.split(".") as any);
+    if (res === undefined) throw Error(`Config path "${path}" not found`);
+    return this.setPath(path.split(".") as any, value);
   }
 
   getPath<P extends Path<ConfigSchema>>(path: P): PathValue<ConfigSchema, P> {
