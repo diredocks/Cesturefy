@@ -54,7 +54,7 @@ export class TraceCommand {
     this.maximizeCanvas();
 
     configManager.addEventListener("change", () => this.applyConfig());
-    this.applyConfig();
+    configManager.addEventListener("loaded", () => this.applyConfig());
   }
 
   public static get instance(): TraceCommand {
