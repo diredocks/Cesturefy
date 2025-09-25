@@ -93,10 +93,17 @@ export const DefaultConfig: ConfigSchema = {
   },
   Gestures: [
     {
-      pattern: [[-1, -1]],
+      pattern: [[-1, 0]],
       command: {
         name: "NewTab",
         settings: { focus: false },
+      },
+    },
+    {
+      pattern: [[1, 0]],
+      command: {
+        name: 'CloseTab',
+        settings: { nextFocus: 'next' }
       },
     },
   ],
