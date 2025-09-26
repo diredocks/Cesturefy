@@ -1,5 +1,7 @@
 import { vectorDirectionDifference } from "@utils/common";
 import { Vector, Vectors } from "@utils/types";
+import { configManager } from "@utils/config-manager";
+import { DefaultConfig } from "./config";
 
 export enum PatternStatus {
   PASSED_NO_THRESHOLD = 0,
@@ -8,8 +10,8 @@ export enum PatternStatus {
 }
 
 export default class Pattern {
-  public differenceThreshold: number;
-  public distanceThreshold: number;
+  private differenceThreshold: number = DefaultConfig.Settings.Gesture.deviationTolerance;
+  private distanceThreshold: number = DefaultConfig.Settings.Gesture.distanceThreshold;
 
   private lastExtractedPoint: Vector | null = null;
   private previousPoint: Vector | null = null;
@@ -18,9 +20,9 @@ export default class Pattern {
 
   private extractedVectors: Vectors = [];
 
-  constructor(differenceThreshold = 0, distanceThreshold = 0) {
-    this.differenceThreshold = differenceThreshold;
-    this.distanceThreshold = distanceThreshold;
+  constructor() {
+    configManager.addEventListener("change", () => this.applyConfig());
+    configManager.addEventListener("loaded", () => this.applyConfig());
   }
 
   clear(): void {
@@ -89,5 +91,10 @@ export default class Pattern {
     ];
 
     return [...this.extractedVectors, lastVector];
+  }
+
+  applyConfig() {
+    this.distanceThreshold = configManager.getPath(['Settings', 'Gesture', 'distanceThreshold']);
+    this.differenceThreshold = configManager.getPath(['Settings', 'Gesture', 'deviationTolerance']);
   }
 }
