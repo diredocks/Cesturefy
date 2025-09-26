@@ -3,8 +3,7 @@
   "name": "Cesturefy",
   "version": "0.0.1",
   "permissions": [
-    "storage",
-    "scripting"
+    "storage"
   ],
   "icons": {
     "32": "images/iconx32.png",
