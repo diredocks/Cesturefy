@@ -16,17 +16,24 @@ let currentPopupPattern: Vectors | null = null;
 const Gestures: Map<HTMLElement, Gesture> = new Map();
 
 function main() {
-  const gesturePopup = document.getElementById("gesturePopup")!;
-  gesturePopup.onclose = onGesturePopupClose;
-  const gesturePopupForm = document.getElementById("gesturePopupForm")!;
-  gesturePopupForm.onsubmit = onGesturePopupFormSubmit;
-  const newGestureButton = document.getElementById("gestureAddButton")!;
-  newGestureButton.onclick = onAddButtonClick;
-  const gestureSearchToggleButton = document.getElementById("gestureSearchToggleButton")!;
-  gestureSearchToggleButton.onclick = onSearchToggle;
-  const gestureSearchInput = document.getElementById("gestureSearchInput")! as HTMLInputElement;
-  gestureSearchInput.oninput = onSearchInput;
-  gestureSearchInput.placeholder = chrome.i18n.getMessage('gestureSearchPlaceholder');
+  const gesturePopup = document.getElementById("gesturePopup") as PopupBox;
+  gesturePopup.addEventListener("close", onGesturePopupClose);
+
+  const gesturePopupForm = document.getElementById("gesturePopupForm") as HTMLFormElement;
+  gesturePopupForm.addEventListener("submit", onGesturePopupFormSubmit);
+
+  const gesturePopupCommandSelect = document.getElementById("gesturePopupCommandSelect") as CommandSelect;
+  gesturePopupCommandSelect.addEventListener("change", onCommandSelectChange);
+
+  const newGestureButton = document.getElementById("gestureAddButton") as HTMLButtonElement;
+  newGestureButton.addEventListener("click", onAddButtonClick);
+
+  const gestureSearchToggleButton = document.getElementById("gestureSearchToggleButton") as HTMLButtonElement;
+  gestureSearchToggleButton.addEventListener("click", onSearchToggle);
+
+  const gestureSearchInput = document.getElementById("gestureSearchInput") as HTMLInputElement;
+  gestureSearchInput.addEventListener("input", onSearchInput);
+  gestureSearchInput.placeholder = chrome.i18n.getMessage("gestureSearchPlaceholder");
 
   // create and add all existing gesture items
   const fragment = document.createDocumentFragment();
@@ -363,4 +370,9 @@ function updateGestureListItem(
 
   const commandField = gestureListItem.querySelector(".gl-command");
   if (commandField) commandField.textContent = gesture.toString();
+}
+
+function onCommandSelectChange(this: CommandSelect, _e: Event) {
+  const gesturePopupLabelInput = document.getElementById("gesturePopupLabelInput")! as HTMLInputElement;
+  gesturePopupLabelInput.placeholder = chrome.i18n.getMessage(`commandLabel${this.value.name}`);
 }
