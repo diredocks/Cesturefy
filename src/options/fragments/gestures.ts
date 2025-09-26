@@ -38,7 +38,7 @@ function main() {
 
   // create and add all existing gesture items
   const fragment = document.createDocumentFragment();
-  for (let gestureJSON of (configManager.get('Gestures') as GestureJSON[])) {
+  for (let gestureJSON of (configManager.getPath(['Gestures']) as GestureJSON[])) {
     const gesture = new Gesture(gestureJSON);
     const gestureListItem = createGestureListItem(gesture);
     // use the reference to the gestureItem as the Map key to the gesture object
@@ -100,7 +100,7 @@ function openGesturePopup(gesture?: Gesture): void {
   const labelInput = gesturePopup.querySelector<HTMLInputElement>("#gesturePopupLabelInput")!;
   const patternContainer = gesturePopup.querySelector<HTMLElement>("#gesturePopupPatternContainer")!;
 
-  const currentUserMouseButton = configManager.get("Settings.Gesture.mouseButton") as number;
+  const currentUserMouseButton = configManager.getPath(["Settings", "Gesture", "mouseButton"]) as number;
   const mouseButtonLabelMap: Record<number, string> = {
     1: "gesturePopupMouseButtonLeft",
     2: "gesturePopupMouseButtonRight",
@@ -539,8 +539,8 @@ function mouseGestureControllerSetup() {
 
     // setup pattern extractor
     const patternConstructor = new Pattern(
-      configManager.get("Settings.Gesture.deviationTolerance"),
-      configManager.get("Settings.Gesture.distanceThreshold")
+      configManager.getPath(["Settings", "Gesture", "deviationTolerance"]),
+      configManager.getPath(["Settings", "Gesture", "distanceThreshold"])
     );
 
     // gather all events in one array
