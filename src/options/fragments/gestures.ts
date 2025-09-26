@@ -19,6 +19,11 @@ function main() {
   gesturePopup.onclose = onGesturePopupClose;
   const newGestureButton = document.getElementById("gestureAddButton")!;
   newGestureButton.onclick = onAddButtonClick;
+  const gestureSearchToggleButton = document.getElementById("gestureSearchToggleButton")!;
+  gestureSearchToggleButton.onclick = onSearchToggle;
+  const gestureSearchInput = document.getElementById("gestureSearchInput")! as HTMLInputElement;
+  gestureSearchInput.oninput = onSearchInput;
+  gestureSearchInput.placeholder = chrome.i18n.getMessage('gestureSearchPlaceholder');
 
   // create and add all existing gesture items
   const fragment = document.createDocumentFragment();
@@ -33,6 +38,41 @@ function main() {
   gestureList.appendChild(fragment);
   gestureList.dataset.noResultsHint = chrome.i18n.getMessage('gestureHintNoSearchResults');
 
+}
+
+function onSearchToggle() {
+  const gestureSearchForm = document.getElementById("gestureSearchForm")! as HTMLFormElement;
+  const gestureSearchInput = document.getElementById("gestureSearchInput")!;
+
+  if (gestureSearchForm.classList.toggle("show")) {
+    gestureSearchInput.focus();
+  }
+  else {
+    gestureSearchForm.reset();
+    onSearchInput();
+  }
+}
+
+function onSearchInput() {
+  const gestureList = document.getElementById("gestureContainer")!;
+  const gestureAddButtonItem = gestureList.firstElementChild as HTMLButtonElement;
+  const searchQuery = (document.getElementById("gestureSearchInput")! as HTMLInputElement).value.toLowerCase().trim();
+  const searchQueryKeywords = searchQuery.split(" ");
+
+  for (const [gestureListItem, gesture] of Gestures) {
+    // get the gesture string and transform all letters to lower case
+    const gestureString = gesture.toString().toLowerCase();
+    // check if all keywords are matching the command name
+    const isMatching = searchQueryKeywords.every(keyword => gestureString.includes(keyword));
+    // hide all unmatching commands and show all matching commands
+    gestureListItem.hidden = !isMatching;
+  }
+
+  // hide gesture add button item on search input
+  gestureAddButtonItem.hidden = !!searchQuery;
+
+  // toggle "no search results" hint if all items are hidden
+  gestureList.classList.toggle("empty", !gestureList.querySelectorAll(".gl-item:not([hidden])").length);
 }
 
 function onAddButtonClick() {
