@@ -6,12 +6,17 @@ import {
   sendBackgroundMessage, ContentMessages
 } from "@utils/message";
 import { configManager } from "@utils/config-manager";
+import { DefaultConfig } from "@utils/config";
 
 const pattern = new Pattern();
+let displayTrace: boolean = DefaultConfig.Settings.Gesture.Trace.display;
+let displayCommand: boolean = DefaultConfig.Settings.Gesture.Command.display;
 
 const applySettings = () => {
   mouseController.mouseButton = configManager.getPath(['Settings', 'Gesture', 'mouseButton']);
   mouseController.distanceThreshold = configManager.getPath(['Settings', 'Gesture', 'distanceThreshold']);
+  displayTrace = configManager.getPath(['Settings', 'Gesture', 'Trace', 'display']);
+  displayCommand = configManager.getPath(['Settings', 'Gesture', 'Command', 'display']);
 };
 
 configManager.addEventListener('loaded', applySettings);
@@ -24,8 +29,7 @@ function main() {
 }
 
 mouseController.addEventListener('start', (es, e) => {
-  if (configManager.getPath(['Settings', 'Gesture', 'Trace', 'display']) ||
-    configManager.getPath(['Settings', 'Gesture', 'Command', 'display'])) {
+  if (displayTrace || displayCommand) {
     traceCommand.initialize(e.clientX, e.clientY);
   }
 
@@ -57,13 +61,12 @@ mouseController.addEventListener('abort', (_es) => {
 function mouseGestureUpdate(es: (PointerEvent)[]) {
   for (const e of es) {
     const patternChange = pattern.addPoint(e.clientX, e.clientY);
-    if (patternChange &&
-      configManager.getPath(['Settings', 'Gesture', 'Command', 'display'])) {
+    if (patternChange && displayCommand) {
       sendBackgroundMessage('gestureChange', pattern.getPattern());
     }
   }
 
-  if (configManager.getPath(['Settings', 'Gesture', 'Trace', 'display'])) {
+  if (displayTrace) {
     const points = es.map(e => ({ x: e.clientX, y: e.clientY }));
     traceCommand.updateTrace(points);
   }
