@@ -6,7 +6,7 @@ export type MatchingAlgorithm = 'Strict' | 'ShapeIndependent' | 'Combined';
 
 export function getGestureByPattern(
   pattern: Vectors, gestures: Gesture[],
-  maxDeviation: number = 1, algorithm: MatchingAlgorithm = 'Combined') {
+  maxDeviation: number, algorithm: MatchingAlgorithm) {
   let matchedGesture: Gesture | null = null;
 
   switch (algorithm) {

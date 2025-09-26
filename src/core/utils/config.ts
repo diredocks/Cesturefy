@@ -62,21 +62,21 @@ export const DefaultConfig: ConfigSchema = {
   Settings: {
     Gesture: {
       mouseButton: 2,
-      suppressionKey: "",
+      suppressionKey: "", // TODO
       distanceThreshold: 10,
       deviationTolerance: 0.15,
       matchingAlgorithm: "Combined",
-      Timeout: { active: false, duration: 1 },
+      Timeout: { active: false, duration: 1 }, // TODO
       Trace: {
-        display: true,
+        display: true, // TODO
         Style: {
           strokeStyle: "#00aaa0cc",
           lineWidth: 10,
-          lineGrowth: true,
+          lineGrowth: true, // TODO
         },
       },
       Command: {
-        display: true,
+        display: true, // TODO
         Style: {
           fontColor: "#ffffffff",
           backgroundColor: "#00000080",
@@ -87,8 +87,8 @@ export const DefaultConfig: ConfigSchema = {
       },
     },
     General: {
-      updateNotification: true,
-      theme: "light",
+      updateNotification: true, // TODO
+      theme: "light", // TODO
     },
   },
   Gestures: [
@@ -107,5 +107,5 @@ export const DefaultConfig: ConfigSchema = {
       },
     },
   ],
-  Exclusions: [],
+  Exclusions: [], // TODO
 };

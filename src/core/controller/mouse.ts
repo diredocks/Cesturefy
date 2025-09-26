@@ -29,9 +29,7 @@ enum State {
   ABORTED,
 }
 
-const distanceThreshold = 10;
 const doubleClickThreshold = 300; // ms
-const moveThreshold = 10; // px
 
 export class MouseController {
   private static _instance: MouseController;
@@ -41,7 +39,9 @@ export class MouseController {
   private _state = State.PASSIVE;
   private _buffer: PointerEvent[] = [];
   private _lastClick = { time: 0, x: 0, y: 0 };
-  private _mouseButton: MouseButton = MouseButton.RIGHT;
+  public mouseButton: MouseButton = MouseButton.RIGHT;
+
+  public distanceThreshold: number = 10; // px
 
   private constructor() { }
 
@@ -68,16 +68,8 @@ export class MouseController {
     this._target.removeEventListener("pointerdown", this._handlePointerDown);
   }
 
-  get mouseButton() {
-    return this._mouseButton;
-  }
-
-  set mouseButton(value: MouseButton) {
-    this._mouseButton = value;
-  }
-
   private _handlePointerDown = (e: PointerEvent) => {
-    if (e.isTrusted && e.buttons === this._mouseButton) {
+    if (e.isTrusted && e.buttons === this.mouseButton) {
       this._initialize(e);
     }
   };
@@ -86,7 +78,7 @@ export class MouseController {
     const now = Date.now();
     const withinTime = now - this._lastClick.time < doubleClickThreshold;
     const withinDist =
-      getDistance(this._lastClick.x, this._lastClick.y, e.clientX, e.clientY) < moveThreshold;
+      getDistance(this._lastClick.x, this._lastClick.y, e.clientX, e.clientY) < this.distanceThreshold;
 
     if (withinTime && withinDist) {
       this._reset();
@@ -139,10 +131,10 @@ export class MouseController {
   private _handlePointerMove = (e: PointerEvent) => {
     if (!e.isTrusted) return;
 
-    if (e.buttons === this._mouseButton) {
+    if (e.buttons === this.mouseButton) {
       this._update(e);
     } else if (e.button !== MouseButtonEvents.NoChanged) {
-      if (e.button === this._toSingleButton(this._mouseButton)) {
+      if (e.button === this._toSingleButton(this.mouseButton)) {
         this._terminate(e);
       } else {
         this._abort();
@@ -160,7 +152,7 @@ export class MouseController {
         const initial = this._buffer[0];
         const distance = getDistance(initial.clientX, initial.clientY, e.clientX, e.clientY);
 
-        if (distance > distanceThreshold) {
+        if (distance > this.distanceThreshold) {
           this._events.dispatchEvent("start", this._buffer, initial);
           this._state = State.ACTIVE;
           this._enablePreventDefault();

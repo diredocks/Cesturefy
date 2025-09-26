@@ -1,5 +1,3 @@
-// TODO: also figure out how this works
-
 import { vectorDirectionDifference } from "@utils/common";
 import { Vector, Vectors } from "@utils/types";
 
@@ -10,8 +8,8 @@ export enum PatternStatus {
 }
 
 export default class Pattern {
-  private differenceThreshold: number;
-  private distanceThreshold: number;
+  public differenceThreshold: number;
+  public distanceThreshold: number;
 
   private lastExtractedPoint: Vector | null = null;
   private previousPoint: Vector | null = null;
