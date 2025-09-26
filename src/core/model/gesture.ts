@@ -31,8 +31,8 @@ export default class Gesture {
     return this._label ?? this.getCommand().toString();
   }
 
-  getLabel(): string {
-    return this._label ?? this.getCommand().toString();
+  getLabel(): string | undefined {
+    return this._label;
   }
 
   setLabel(value: string): void {

@@ -24,7 +24,7 @@ const handleGestureChange: Handler<"gestureChange", BackgroundMessages> = (m, se
   sendTabMessage<"matchingGesture", ContentMessages>(
     sender.tab.id,
     "matchingGesture",
-    (matchedGesture !== null) ? matchedGesture.getLabel() : null,
+    (matchedGesture !== null) ? matchedGesture.toString() : null,
   );
 };
 
