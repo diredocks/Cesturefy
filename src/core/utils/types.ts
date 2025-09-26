@@ -22,3 +22,6 @@ export interface CommandDefinition<TSettings> {
   defaults: Required<TSettings>;
   group: CommandGroup;
 }
+
+export type RGBA = [number, number, number, number];
+export type RGB = [number, number, number];
