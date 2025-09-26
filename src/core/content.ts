@@ -5,18 +5,27 @@ import {
   Handler, HandlerMap, registerHandlers,
   sendBackgroundMessage, ContentMessages
 } from "@utils/message";
+import { configManager } from "@utils/config-manager";
 
-const pattern = new Pattern(0.12, 10);
+const pattern = new Pattern();
+
+const applySettings = () => {
+  pattern.differenceThreshold = configManager.getPath(['Settings', 'Gesture', 'deviationTolerance']);
+  pattern.distanceThreshold = configManager.getPath(['Settings', 'Gesture', 'distanceThreshold']);
+  mouseController.mouseButton = configManager.getPath(['Settings', 'Gesture', 'mouseButton']);
+  mouseController.distanceThreshold = configManager.getPath(['Settings', 'Gesture', 'distanceThreshold']);
+};
+
+configManager.addEventListener('loaded', applySettings);
+configManager.addEventListener('change', applySettings);
 
 main();
 
-async function main() {
+function main() {
   mouseController.enable();
 }
 
 mouseController.addEventListener('start', (es, e) => {
-  if (!e) return;
-
   traceCommand.initialize(e.clientX, e.clientY);
 
   const coalescedEvents = es.flatMap(e => {
@@ -29,8 +38,6 @@ mouseController.addEventListener('start', (es, e) => {
 });
 
 mouseController.addEventListener('update', (_es, e) => {
-  if (!e) return;
-
   const coalescedEvents = e.getCoalescedEvents();
   mouseGestureUpdate(coalescedEvents);
 });

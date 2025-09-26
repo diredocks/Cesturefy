@@ -128,7 +128,9 @@ function openGesturePopup(gesture?: Gesture): void {
     patternContainer.append(thumbnail);
 
     // FIXME: Another func is needed to exclude target gestures
-    const mostSimilarGesture = getGestureByPattern(currentPopupPattern, [gesture]);
+    const mostSimilarGesture = getGestureByPattern(currentPopupPattern, [gesture],
+      configManager.getPath(['Settings', 'Gesture', 'deviationTolerance']),
+      configManager.getPath(['Settings', 'Gesture', 'matchingAlgorithm']));
     if (mostSimilarGesture) {
       patternContainer.classList.add("alert");
       patternContainer.title = chrome.i18n.getMessage(
