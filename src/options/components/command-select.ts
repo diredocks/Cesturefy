@@ -10,7 +10,7 @@ const COMMAND_ITEMS = Object.entries(commands).map(([name, def]) => ({
 
 const COMMAND_SETTING_TEMPLATES = fetchHTMLAsFragment('/options/components/command-setting-templates.html');
 
-class CommandSelect extends HTMLElement {
+export class CommandSelect extends HTMLElement {
   private _command: Command | null = null;
   private _selectedCommand: Command | null = null;
   private _scrollPosition = 0;

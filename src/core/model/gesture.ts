@@ -35,7 +35,7 @@ export default class Gesture {
     return this._label;
   }
 
-  setLabel(value: string): void {
+  setLabel(value: string | undefined) {
     this._label = value;
   }
 
