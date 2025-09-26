@@ -7,16 +7,19 @@ import { createGestureThumbnail } from "@options/utils/common";
 import { mouseController } from "@controller/mouse";
 import { getGestureByPattern } from "@utils/match";
 import Gesture from "@model/gesture";
+import { CommandSelect } from "@options/components/command-select";
 
 ContentLoaded.then(main);
 
-let currentItem: Gesture | null = null;
+let currentItem: HTMLElement | null = null;
 let currentPopupPattern: Vectors | null = null;
-const Gestures = new Map();
+const Gestures: Map<HTMLElement, Gesture> = new Map();
 
 function main() {
   const gesturePopup = document.getElementById("gesturePopup")!;
   gesturePopup.onclose = onGesturePopupClose;
+  const gesturePopupForm = document.getElementById("gesturePopupForm")!;
+  gesturePopupForm.onsubmit = onGesturePopupFormSubmit;
   const newGestureButton = document.getElementById("gestureAddButton")!;
   newGestureButton.onclick = onAddButtonClick;
   const gestureSearchToggleButton = document.getElementById("gestureSearchToggleButton")!;
@@ -202,23 +205,29 @@ function onItemPointerleave(this: HTMLElement, _e: Event) {
 function onItemClick(this: HTMLElement, e: MouseEvent) {
   const target = e.target as HTMLElement | null;
 
-  // if delete button received the click
   if (target?.classList.contains("gl-remove-button")) {
-    // remove gesture object and gesture list item
-    Gestures.delete(this);
-    removeGestureListItem(this);
-
-    // update config
-    configManager.setPath(['Gestures'],
-      Array.from(Gestures.values())
-        .map(g => g.toJSON())
-    );
+    handleDeleteItem(this);
   } else {
-    // open gesture popup and hold reference to current item
-    currentItem = Gestures.get(this);
-    // open gesture popup and pass related gesture object
-    openGesturePopup(Gestures.get(this));
+    handleEditItem(this);
   }
+}
+
+function handleDeleteItem(item: HTMLElement) {
+  const gesture = Gestures.get(item);
+  if (!gesture) return;
+
+  Gestures.delete(item);
+  removeGestureListItem(item);
+
+  configManager.setPath(
+    ["Gestures"],
+    Array.from(Gestures.values()).map(g => g.toJSON())
+  );
+}
+
+function handleEditItem(item: HTMLElement) {
+  currentItem = item;
+  openGesturePopup(Gestures.get(currentItem));
 }
 
 function removeGestureListItem(gestureListItem: HTMLElement): void {
@@ -276,4 +285,82 @@ function removeGestureListItem(gestureListItem: HTMLElement): void {
 
   gestureListItem.addEventListener("animationend", handleAnimationEnd);
   gestureListItem.classList.add("gl-item-animate-remove");
+}
+
+function onGesturePopupFormSubmit(event: Event) {
+  event.preventDefault();
+
+  const gesturePopupCommandSelect = document.getElementById("gesturePopupCommandSelect")! as CommandSelect;
+  const gesturePopupLabelInput = document.getElementById("gesturePopupLabelInput")! as HTMLInputElement;
+
+  if (!gesturePopupCommandSelect || !gesturePopupLabelInput) return;
+  if (!gesturePopupCommandSelect.value || !currentPopupPattern) return;
+
+  if (!currentItem) {
+    const newGesture = Gesture.fromJSON(
+      {
+        pattern: currentPopupPattern,
+        label: gesturePopupLabelInput.value,
+        command: {
+          name: gesturePopupCommandSelect.value
+        }
+      }
+    );
+
+    const gestureListItem = createGestureListItem(newGesture);
+    Gestures.set(gestureListItem, newGesture);
+
+    // update config using configManager and toJSON
+    configManager.setPath(
+      ["Gestures"],
+      Array.from(Gestures.values()).map(g => g.toJSON())
+    );
+
+    // addGestureListItem(gestureListItem);
+  } else {
+    const currentGesture = Gestures.get(currentItem)!;
+    currentGesture.setPattern(currentPopupPattern);
+    currentGesture.setLabel(
+      gesturePopupLabelInput.value === "" ? undefined : gesturePopupLabelInput.value
+    );
+    currentGesture.setCommand(gesturePopupCommandSelect.command!);
+
+    // update config using configManager and toJSON
+    configManager.setPath(
+      ["Gestures"],
+      Array.from(Gestures.values()).map(g => g.toJSON())
+    );
+
+    updateGestureListItem(currentItem, currentGesture);
+  }
+
+  const gesturePopup = document.getElementById("gesturePopup")! as HTMLDialogElement;
+  gesturePopup.open = false;
+}
+
+function updateGestureListItem(
+  gestureListItem: HTMLElement,
+  gesture: Gesture
+) {
+  gestureListItem.addEventListener(
+    "animationend",
+    () => {
+      gestureListItem.classList.remove("gl-item-animate-update");
+    },
+    { once: true }
+  );
+  gestureListItem.classList.add("gl-item-animate-update");
+
+  const currentGestureThumbnail = gestureListItem.querySelector(
+    ".gl-thumbnail"
+  );
+  if (!currentGestureThumbnail) return;
+
+  const newGestureThumbnail = createGestureThumbnail(gesture.getPattern());
+  newGestureThumbnail.classList.add("gl-thumbnail");
+
+  currentGestureThumbnail.replaceWith(newGestureThumbnail);
+
+  const commandField = gestureListItem.querySelector(".gl-command");
+  if (commandField) commandField.textContent = gesture.toString();
 }
