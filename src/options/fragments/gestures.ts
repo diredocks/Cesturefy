@@ -313,7 +313,8 @@ function onGesturePopupFormSubmit(event: Event) {
         pattern: currentPopupPattern,
         label: gesturePopupLabelInput.value,
         command: {
-          name: gesturePopupCommandSelect.value.name
+          name: gesturePopupCommandSelect.value.name,
+          settings: gesturePopupCommandSelect.value.settings
         }
       }
     );
