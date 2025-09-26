@@ -11,7 +11,8 @@ export class ColorPicker extends HTMLElement {
 
     this._rgba = [0, 0, 0, 0];
 
-    this.attachShadow({ mode: "open" }).innerHTML = `
+    this.shadow = this.attachShadow({ mode: "open" });
+    this.shadow.innerHTML = `
       <link rel="stylesheet" href="/options/components/color-picker.css">
 
       <div id="content"></div>
@@ -76,7 +77,7 @@ export class ColorPicker extends HTMLElement {
   }
 
   private $<T extends HTMLElement>(id: string): T {
-    return this.shadow!.getElementById(id)! as T;
+    return this.shadow.getElementById(id) as T;
   }
 
   private bindEvents() {
