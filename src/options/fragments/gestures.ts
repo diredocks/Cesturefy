@@ -8,6 +8,7 @@ import { mouseController } from "@controller/mouse";
 import { getGestureByPattern } from "@utils/match";
 import Gesture from "@model/gesture";
 import { CommandSelect } from "@options/components/command-select";
+import Pattern from "@utils/pattern";
 
 ContentLoaded.then(main);
 
@@ -48,6 +49,8 @@ function main() {
   gestureList.appendChild(fragment);
   gestureList.dataset.noResultsHint = chrome.i18n.getMessage('gestureHintNoSearchResults');
 
+  // add mouse gesture controller event listeners
+  mouseGestureControllerSetup();
 }
 
 function onSearchToggle() {
@@ -124,6 +127,7 @@ function openGesturePopup(gesture?: Gesture): void {
     const thumbnail = createGestureThumbnail(gesture.getPattern());
     patternContainer.append(thumbnail);
 
+    // FIXME: Another func is needed to exclude target gestures
     const mostSimilarGesture = getGestureByPattern(currentPopupPattern, [gesture]);
     if (mostSimilarGesture) {
       patternContainer.classList.add("alert");
@@ -309,7 +313,7 @@ function onGesturePopupFormSubmit(event: Event) {
         pattern: currentPopupPattern,
         label: gesturePopupLabelInput.value,
         command: {
-          name: gesturePopupCommandSelect.value
+          name: gesturePopupCommandSelect.value.name
         }
       }
     );
@@ -323,7 +327,7 @@ function onGesturePopupFormSubmit(event: Event) {
       Array.from(Gestures.values()).map(g => g.toJSON())
     );
 
-    // addGestureListItem(gestureListItem);
+    addGestureListItem(gestureListItem);
   } else {
     const currentGesture = Gestures.get(currentItem)!;
     currentGesture.setPattern(currentPopupPattern);
@@ -375,4 +379,208 @@ function updateGestureListItem(
 function onCommandSelectChange(this: CommandSelect, _e: Event) {
   const gesturePopupLabelInput = document.getElementById("gesturePopupLabelInput")! as HTMLInputElement;
   gesturePopupLabelInput.placeholder = chrome.i18n.getMessage(`commandLabel${this.value.name}`);
+}
+
+export function addGestureListItem(gestureListItem: HTMLElement): void {
+  const gestureList = document.getElementById("gestureContainer")! as HTMLElement;
+  const gestureAddButtonItem = gestureList.firstElementChild! as HTMLElement;
+
+  // prepend new entry, this pushes all elements by the height / width of one entry
+  gestureAddButtonItem.after(gestureListItem);
+
+  // select all visible gesture items
+  const gestureItems = gestureList.querySelectorAll<HTMLElement>(".gl-item:not([hidden])");
+
+  if (gestureItems.length > 0) {
+    const gridComputedStyle = window.getComputedStyle(gestureList);
+
+    const gridRowGap = parseFloat(gridComputedStyle.getPropertyValue("grid-row-gap"));
+    const gridColumnGap = parseFloat(gridComputedStyle.getPropertyValue("grid-column-gap"));
+
+    const gridRowSizes = gridComputedStyle
+      .getPropertyValue("grid-template-rows")
+      .split(" ")
+      .map(parseFloat)
+      .filter(n => !Number.isNaN(n));
+
+    const gridColumnSizes = gridComputedStyle
+      .getPropertyValue("grid-template-columns")
+      .split(" ")
+      .map(parseFloat)
+      .filter(n => !Number.isNaN(n));
+
+    for (let i = 0; i < gestureItems.length; i++) {
+      const gestureItem = gestureItems[i];
+
+      const gridColumnSize = gridColumnSizes[i % gridColumnSizes.length];
+      const gridRowSize = gridRowSizes[0] ?? 0;
+
+      if ((i + 1) % gridColumnSizes.length === 0) {
+        // translate last element of row one row up and to the right end
+        gestureItem.style.setProperty(
+          "transform",
+          `translate(${(gridColumnSize + gridColumnGap) * (gridColumnSizes.length - 1)}px, ${-gridRowSize - gridRowGap}px)`
+        );
+      } else {
+        gestureItem.style.setProperty("transform", `translateX(${-gridColumnSize - gridColumnGap}px)`);
+      }
+    }
+  }
+
+  // remove animation class on animation end
+  gestureListItem.addEventListener(
+    "animationend",
+    event => {
+      const target = event.currentTarget as HTMLElement;
+      target.classList.remove("gl-item-animate-add");
+
+      // remove transform so all elements move to their new position
+      for (const gestureItem of gestureItems) {
+        gestureItem.addEventListener(
+          "transitionend",
+          e => {
+            const t = e.currentTarget as HTMLElement;
+            t.style.removeProperty("transition");
+          },
+          { once: true }
+        );
+        gestureItem.style.setProperty("transition", "transform .3s");
+        gestureItem.style.removeProperty("transform");
+      }
+    },
+    { once: true }
+  );
+
+  // setup gesture item add animation
+  gestureListItem.classList.add("gl-item-animate-add");
+  gestureListItem.style.transform += `scale(1.6)`;
+
+  // trigger reflow
+  void gestureListItem.offsetHeight;
+
+  gestureListItem.style.setProperty("transition", "transform .3s");
+  gestureListItem.style.transform = gestureListItem.style.transform.replace("scale(1.6)", "");
+}
+
+function mouseGestureControllerSetup() {
+  const gesturePopupCanvas = document.getElementById("gesturePopupCanvas")! as HTMLCanvasElement;
+  const canvasContext = gesturePopupCanvas.getContext("2d")!;
+
+  mouseController.addEventListener("start", (b) => {
+    // TODO: detect if the gesture started on the recording area
+    // 
+    // if (!e.target!.closest("#gesturePopupRecordingArea")) {
+    //   // cancel gesture and event handler if the first click was not within the recording area
+    //   mouseController.cancel();
+    //   return;
+    // }
+
+    // initialize canvas properties (correct width and height are only known after the popup has been opened)
+    gesturePopupCanvas.width = gesturePopupCanvas.offsetWidth;
+    gesturePopupCanvas.height = gesturePopupCanvas.offsetHeight;
+    canvasContext.lineCap = "round";
+    canvasContext.lineJoin = "round";
+    canvasContext.lineWidth = 10;
+    canvasContext.strokeStyle = "#00aaa0";
+
+    // get first event and remove it from the array
+    const firstEvent = b.shift()!;
+    const lastEvent = b[b.length - 1] || firstEvent;
+    // translate the canvas coordiantes by the position of the canvas element
+    const clientRect = gesturePopupCanvas.getBoundingClientRect();
+    canvasContext.setTransform(1, 0, 0, 1, -clientRect.x, -clientRect.y);
+    // dradditionalArrowWidth all occurred events
+    canvasContext.beginPath();
+    canvasContext.moveTo(
+      firstEvent.clientX,
+      firstEvent.clientY
+    );
+    for (let event of b) canvasContext.lineTo(
+      event.clientX,
+      event.clientY
+    );
+    canvasContext.stroke();
+
+    canvasContext.beginPath();
+    canvasContext.moveTo(
+      lastEvent.clientX,
+      lastEvent.clientY
+    );
+  });
+
+  mouseController.addEventListener("update", (_b, e) => {
+    // include fallback if getCoalescedEvents is not defined
+    const events = e.getCoalescedEvents();
+
+    const lastEvent = events[events.length - 1];
+    for (let event of events) canvasContext.lineTo(
+      event.clientX,
+      event.clientY
+    );
+    canvasContext.stroke();
+
+    canvasContext.beginPath();
+    canvasContext.moveTo(
+      lastEvent.clientX,
+      lastEvent.clientY
+    );
+  });
+
+  mouseController.addEventListener("abort", () => {
+    // clear canvas
+    canvasContext.setTransform(1, 0, 0, 1, 0, 0);
+    canvasContext.clearRect(0, 0, gesturePopupCanvas.width, gesturePopupCanvas.height);
+  });
+
+  mouseController.addEventListener("end", (b) => {
+    // clear canvas
+    canvasContext.setTransform(1, 0, 0, 1, 0, 0);
+    canvasContext.clearRect(0, 0, gesturePopupCanvas.width, gesturePopupCanvas.height);
+
+    // setup pattern extractor
+    const patternConstructor = new Pattern(
+      configManager.get("Settings.Gesture.deviationTolerance"),
+      configManager.get("Settings.Gesture.distanceThreshold")
+    );
+
+    // gather all events in one array
+    // calling getCoalescedEvents for an event other then pointermove will return an empty array
+    const coalescedEvents = b.flatMap(event => {
+      const events = event.getCoalescedEvents?.();
+      // if events is null/undefined or empty (length == 0) return plain event
+      return (events?.length > 0) ? events : [event];
+    });
+
+    // build gesture pattern
+    for (const event of coalescedEvents) {
+      patternConstructor.addPoint(event.clientX, event.clientY);
+    }
+    // update current pattern
+    currentPopupPattern = patternConstructor.getPattern();
+
+    // update popup gesture pattern
+    const gestureThumbnail = createGestureThumbnail(currentPopupPattern);
+    const gesturePopupPatternContainer = document.getElementById("gesturePopupPatternContainer")!;
+    // remove previous pattern if any
+    if (gesturePopupPatternContainer.firstChild) gesturePopupPatternContainer.firstChild.remove();
+    gesturePopupPatternContainer.append(gestureThumbnail);
+
+    // TODO: check if there is a very similar gesture and get it
+    //
+    // const mostSimilarGesture = getMostSimilarGestureByPattern(currentPopupPattern, [currentItem]);
+    //
+    // // if there is a similar gesture report it to the user
+    // if (mostSimilarGesture) {
+    //   // activate alert symbol and change title
+    //   gesturePopupPatternContainer.classList.add("alert");
+    //   gesturePopupPatternContainer.title = browser.i18n.getMessage(
+    //     'gesturePopupNotificationSimilarGesture',
+    //     mostSimilarGesture.toString()
+    //   );
+    // }
+    // else {
+    //   gesturePopupPatternContainer.classList.remove("alert");
+    //   gesturePopupPatternContainer.title = gesturePopupPatternContainer.dataset.gestureRecordingHint;
+    // }
+  });
 }
