@@ -1,6 +1,7 @@
 import { getDistance } from "@utils/common";
 import { Point } from "@utils/types";
 import { configManager } from "@utils/config-manager";
+import { DefaultConfig } from "@utils/config";
 
 export class TraceCommand {
   private static _instance: TraceCommand;
@@ -10,8 +11,8 @@ export class TraceCommand {
   private command = document.createElement('div');
   private context: CanvasRenderingContext2D;
 
-  private traceLineWidth = 10;
-  private traceLineGrowth = true;
+  private traceLineWidth = DefaultConfig.Settings.Gesture.Trace.Style.lineWidth;
+  private traceLineGrowth = DefaultConfig.Settings.Gesture.Trace.Style.lineGrowth;
   private lastTraceWidth = 0;
   private lastPoint: Point = { x: 0, y: 0 };
 
