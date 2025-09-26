@@ -114,7 +114,7 @@ function openGesturePopup(gesture?: Gesture): void {
   );
   patternContainer.title = "";
 
-  // TODO: set currentUserMouseButton;
+  mouseController.mouseButton = configManager.getPath(['Settings', 'Gesture', 'mouseButton']);
   mouseController.enable();
 
   if (gesture) {
@@ -541,10 +541,7 @@ function mouseGestureControllerSetup() {
     canvasContext.clearRect(0, 0, gesturePopupCanvas.width, gesturePopupCanvas.height);
 
     // setup pattern extractor
-    const patternConstructor = new Pattern(
-      configManager.getPath(["Settings", "Gesture", "deviationTolerance"]),
-      configManager.getPath(["Settings", "Gesture", "distanceThreshold"])
-    );
+    const patternConstructor = new Pattern();
 
     // gather all events in one array
     // calling getCoalescedEvents for an event other then pointermove will return an empty array
