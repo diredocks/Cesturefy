@@ -1,8 +1,16 @@
 import { preventDefault, getDistance } from "@utils/common";
 import { EventEmitter } from "@utils/emitter";
 
-type Callback = (buffer: PointerEvent[], event?: PointerEvent) => void;
-type MouseEvents = Record<'register' | 'start' | 'update' | 'end' | 'abort', Callback>;
+type Callback = (buffer: PointerEvent[], event: PointerEvent) => void;
+// type MouseEvents = Record<'register' | 'start' | 'update' | 'end' | 'abort', Callback>;
+
+type MouseEvents = Record<string, (...args: any[]) => void> & {
+  register: Callback;
+  start: Callback;
+  update: Callback;
+  end: Callback;
+  abort: (buffer: PointerEvent[]) => void;
+};
 
 export enum MouseButton {
   LEFT = 1,
@@ -200,6 +208,10 @@ export class MouseController {
   private _abort() {
     this._events.dispatchEvent("abort", this._buffer);
     this._state = State.ABORTED;
+  }
+
+  public cancel() {
+    this._reset();
   }
 }
 
