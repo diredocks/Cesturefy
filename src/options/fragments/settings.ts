@@ -28,21 +28,32 @@ async function main() {
   }
 }
 
-function onChange(this: HTMLInputElement) {
+function onChange(this: HTMLElement) {
   // check if valid, if there is no validity property check if value is set
-  if ((this.validity && this.validity.valid) || (!("validity" in this) && ("value" in this))) {
+  if (
+    ("validity" in this && (this as any).validity.valid) ||
+    (!("validity" in this) && "value" in this)
+  ) {
     let value: string | number | boolean;
-    if (this.type === "checkbox") {
-      value = this.checked;
+
+    if (this instanceof HTMLInputElement) {
+      if (this.type === "checkbox") {
+        value = this.checked;
+      } else {
+        value = isNaN(this.valueAsNumber) ? this.value : this.valueAsNumber;
+      }
+    } else if (this instanceof HTMLSelectElement) {
+      // NOTE: select element can be used to seelect a enum, like mouseButton
+      const num = Number(this.value);
+      value = isNaN(num) ? this.value : num;
     } else {
-      // number / string
-      value = isNaN(this.valueAsNumber) ? this.value : this.valueAsNumber;
+      value = (this as any).value;
     }
+
     // save to config
     configManager.set(this.dataset.config!, value);
   }
 }
-
 
 function onCollapse(this: HTMLInputElement) {
   const targetElements = document.querySelectorAll<HTMLElement>(this.dataset["collapse"]!);
