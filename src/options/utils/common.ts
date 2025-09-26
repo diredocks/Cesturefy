@@ -1,4 +1,4 @@
-import { Vectors, Points } from "@utils/types";
+import { Vectors, Points, RGB, RGBA } from "@utils/types";
 
 export async function fetchJSONAsObject<T = unknown>(url: string): Promise<T> {
   const response = await fetch(url, { method: "GET" });
@@ -122,4 +122,46 @@ export function createCatmullRomSVGPath(points: Points, alpha = 0.5): SVGPathEle
   }
 
   return createSvgElement("path", { d });
+}
+
+export function clamp(number: number, min: number, max: number): number {
+  return Math.min(Math.max(number, min), max);
+}
+
+export function rgbToHSV(r: number, g: number, b: number): RGB {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const d = max - min;
+  let h = 0;
+  if (max !== min) {
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+  const s = max === 0 ? 0 : d / max;
+  return [h, s, max];
+}
+
+export function RGBAToHexA(r: number, g: number, b: number, a: number): string {
+  const arr = [r, g, b, Math.round(a * 255)].map((v) =>
+    v.toString(16).padStart(2, "0")
+  );
+  return `#${arr.join("")}`;
+}
+
+export function HexAToRGBA(hex: string): RGBA {
+  if (hex[0] === "#") hex = hex.slice(1);
+  const bigint = parseInt(hex, 16);
+  return [
+    (bigint >> 24) & 255,
+    (bigint >> 16) & 255,
+    (bigint >> 8) & 255,
+    Math.round(((bigint & 255) / 255) * 100) / 100,
+  ];
 }
