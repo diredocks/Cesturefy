@@ -10,7 +10,6 @@ const pattern = new Pattern(0.12, 10);
 
 main();
 
-// TODO: later for config
 async function main() {
   mouseController.enable();
 }

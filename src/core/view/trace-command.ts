@@ -216,16 +216,16 @@ export class TraceCommand {
   }
 
   applyConfig() {
-    // FIXME: Verboose due to @utils/config-manager
-    this.gestureTraceLineColor = configManager.get("Settings.Gesture.Trace.Style.strokeStyle");
-    this.gestureTraceLineWidth = configManager.get("Settings.Gesture.Trace.Style.lineWidth");
-    this.gestureTraceLineGrowth = configManager.get("Settings.Gesture.Trace.Style.lineGrowth");
+    // FIXME: Verbose due to @utils/config-manager
+    this.gestureTraceLineColor = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "strokeStyle"]);
+    this.gestureTraceLineWidth = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "lineWidth"]);
+    this.gestureTraceLineGrowth = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "lineGrowth"]);
 
-    this.gestureCommandFontSize = configManager.get("Settings.Gesture.Command.Style.fontSize");
-    this.gestureCommandFontColor = configManager.get("Settings.Gesture.Command.Style.fontColor");
-    this.gestureCommandBackgroundColor = configManager.get("Settings.Gesture.Command.Style.backgroundColor");
-    this.gestureCommandHorizontalPosition = configManager.get("Settings.Gesture.Command.Style.horizontalPosition");
-    this.gestureCommandVerticalPosition = configManager.get("Settings.Gesture.Command.Style.verticalPosition");
+    this.gestureCommandFontSize = configManager.getPath(["Settings", "Gesture", "Command", "Style", "fontSize"]);
+    this.gestureCommandFontColor = configManager.getPath(["Settings", "Gesture", "Command", "Style", "fontColor"]);
+    this.gestureCommandBackgroundColor = configManager.getPath(["Settings", "Gesture", "Command", "Style", "backgroundColor"]);
+    this.gestureCommandHorizontalPosition = configManager.getPath(["Settings", "Gesture", "Command", "Style", "horizontalPosition"]);
+    this.gestureCommandVerticalPosition = configManager.getPath(["Settings", "Gesture", "Command", "Style", "verticalPosition"]);
   }
 }
 
