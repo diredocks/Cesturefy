@@ -26,7 +26,10 @@ function main() {
 }
 
 mouseController.addEventListener('start', (es, e) => {
-  traceCommand.initialize(e.clientX, e.clientY);
+  if (configManager.getPath(['Settings', 'Gesture', 'Trace', 'display']) ||
+    configManager.getPath(['Settings', 'Gesture', 'Command', 'display'])) {
+    traceCommand.initialize(e.clientX, e.clientY);
+  }
 
   const coalescedEvents = es.flatMap(e => {
     const es = e.getCoalescedEvents();
@@ -56,13 +59,16 @@ mouseController.addEventListener('abort', (_es) => {
 function mouseGestureUpdate(es: (PointerEvent)[]) {
   for (const e of es) {
     const patternChange = pattern.addPoint(e.clientX, e.clientY);
-    if (patternChange) {
+    if (patternChange &&
+      configManager.getPath(['Settings', 'Gesture', 'Command', 'display'])) {
       sendBackgroundMessage('gestureChange', pattern.getPattern());
     }
   }
 
-  const points = es.map(e => ({ x: e.clientX, y: e.clientY }));
-  traceCommand.updateTrace(points);
+  if (configManager.getPath(['Settings', 'Gesture', 'Trace', 'display'])) {
+    const points = es.map(e => ({ x: e.clientX, y: e.clientY }));
+    traceCommand.updateTrace(points);
+  }
 }
 
 const handleMatchingGesture: Handler<"matchingGesture", ContentMessages> = (m) => {

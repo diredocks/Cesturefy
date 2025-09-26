@@ -68,15 +68,15 @@ export const DefaultConfig: ConfigSchema = {
       matchingAlgorithm: "Combined",
       Timeout: { active: false, duration: 1 }, // TODO
       Trace: {
-        display: true, // TODO
+        display: true,
         Style: {
           strokeStyle: "#00aaa0cc",
           lineWidth: 10,
-          lineGrowth: true, // TODO
+          lineGrowth: true,
         },
       },
       Command: {
-        display: true, // TODO
+        display: true,
         Style: {
           fontColor: "#ffffffff",
           backgroundColor: "#00000080",
