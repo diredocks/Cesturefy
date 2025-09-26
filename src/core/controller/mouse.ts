@@ -41,6 +41,7 @@ export class MouseController {
   private _state = State.PASSIVE;
   private _buffer: PointerEvent[] = [];
   private _lastClick = { time: 0, x: 0, y: 0 };
+  private _mouseButton: MouseButton = MouseButton.RIGHT;
 
   private constructor() { }
 
@@ -67,8 +68,16 @@ export class MouseController {
     this._target.removeEventListener("pointerdown", this._handlePointerDown);
   }
 
+  get mouseButton() {
+    return this._mouseButton;
+  }
+
+  set mouseButton(value: MouseButton) {
+    this._mouseButton = value;
+  }
+
   private _handlePointerDown = (e: PointerEvent) => {
-    if (e.isTrusted && e.buttons === MouseButton.RIGHT) {
+    if (e.isTrusted && e.buttons === this._mouseButton) {
       this._initialize(e);
     }
   };
@@ -130,10 +139,10 @@ export class MouseController {
   private _handlePointerMove = (e: PointerEvent) => {
     if (!e.isTrusted) return;
 
-    if (e.buttons === MouseButton.RIGHT) {
+    if (e.buttons === this._mouseButton) {
       this._update(e);
     } else if (e.button !== MouseButtonEvents.NoChanged) {
-      if (e.button === this._toSingleButton(MouseButton.RIGHT)) {
+      if (e.button === this._toSingleButton(this._mouseButton)) {
         this._terminate(e);
       } else {
         this._abort();
