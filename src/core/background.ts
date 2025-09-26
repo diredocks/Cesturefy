@@ -14,7 +14,7 @@ const applyGestures = () => {
 };
 
 configManager.addEventListener('loaded', applyGestures);
-configManager.addEventListener('changed', applyGestures);
+configManager.addEventListener('change', applyGestures);
 
 const handleGestureChange: Handler<"gestureChange", BackgroundMessages> = (m, sender) => {
   const matchedGesture = getGestureByPattern(m.data, gestures, 0.15);
