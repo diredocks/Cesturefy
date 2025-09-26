@@ -10,8 +10,6 @@ import { configManager } from "@utils/config-manager";
 const pattern = new Pattern();
 
 const applySettings = () => {
-  pattern.differenceThreshold = configManager.getPath(['Settings', 'Gesture', 'deviationTolerance']);
-  pattern.distanceThreshold = configManager.getPath(['Settings', 'Gesture', 'distanceThreshold']);
   mouseController.mouseButton = configManager.getPath(['Settings', 'Gesture', 'mouseButton']);
   mouseController.distanceThreshold = configManager.getPath(['Settings', 'Gesture', 'distanceThreshold']);
 };
