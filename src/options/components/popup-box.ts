@@ -1,3 +1,4 @@
+// TODO: Command, input as popup-box property?
 interface PopupBoxEvents {
   open: void;
   close: string | boolean | undefined;

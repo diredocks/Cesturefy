@@ -10,7 +10,7 @@ import {
 let gestures: Gesture[];
 
 const applyGestures = () => {
-  gestures = (configManager.get('Gestures') as GestureJSON[]).map(g => Gesture.fromJSON(g));
+  gestures = (configManager.get('Gestures') as GestureJSON[]).map(g => new Gesture(g));
 };
 
 configManager.addEventListener('loaded', applyGestures);
