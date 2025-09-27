@@ -23,3 +23,12 @@ export function vectorDirectionDifference(
 
   return angleDifference / Math.PI;
 }
+
+export function matchesURL(url: string, urlPattern: string): boolean {
+  const pattern = urlPattern.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, (match) =>
+    match === '*' ? '.*' : '\\' + match
+  );
+
+  const regex = new RegExp('^' + pattern + '$');
+  return regex.test(url);
+}
