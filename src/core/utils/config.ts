@@ -63,10 +63,13 @@ export const DefaultConfig: ConfigSchema = {
     Gesture: {
       mouseButton: 2,
       suppressionKey: "", // TODO
-      distanceThreshold: 10,
+      distanceThreshold: 10, // px
       deviationTolerance: 0.15,
       matchingAlgorithm: "Combined",
-      Timeout: { active: false, duration: 1 }, // TODO
+      Timeout: {
+        active: false,
+        duration: 1 // s
+      },
       Trace: {
         display: true,
         Style: {
@@ -88,7 +91,7 @@ export const DefaultConfig: ConfigSchema = {
     },
     General: {
       updateNotification: true, // TODO
-      theme: "light", // TODO
+      theme: "light",
     },
   },
   Gestures: [
@@ -107,5 +110,5 @@ export const DefaultConfig: ConfigSchema = {
       },
     },
   ],
-  Exclusions: [], // TODO
+  Exclusions: [],
 };
