@@ -7,13 +7,25 @@ This is a TODO list of commands to be implemented
 - [x]  CloseTab
 - [x]  DuplicateTab
 - [x]  NewTab
+- [x]  PageBack
+- [x]  PageForth
+- [x]  CloseLeftTabs
+- [x]  CloseOtherTabs
+- [x]  CloseRightTabs
+- [x]  ReloadTab
+- [x]  RestoreTab
+- [x]  ReloadAllTabs
+- [x]  ZoomIn
+- [x]  ZoomOut
+- [x]  ZoomReset
+- [x]  ToggleMute
+- [x]  TogglePin
+- [x]  ScrollTop
+- [x]  ScrollBottom
 
 ## What's not done yet?
 
 - [ ]  ClearBrowsingData
-- [ ]  CloseLeftTabs
-- [ ]  CloseOtherTabs
-- [ ]  CloseRightTabs
 - [ ]  CloseWindow
 - [ ]  CopyImage
 - [ ]  CopyImageURL
@@ -58,27 +70,20 @@ This is a TODO list of commands to be implemented
 - [ ]  OpenURLFromClipboardInNewPrivateWindow
 - [ ]  OpenURLFromClipboardInNewTab
 - [ ]  OpenURLFromClipboardInNewWindow
-- [ ]  PageBack
-- [ ]  PageForth
 - [ ]  PasteClipboard
 - [ ]  PopupAllTabs
 - [ ]  PopupCustomCommandList
 - [ ]  PopupRecentlyClosedTabs
 - [ ]  PopupSearchEngines
 - [ ]  PrintTab
-- [ ]  ReloadAllTabs
 - [ ]  ReloadFrame
-- [ ]  ReloadTab
-- [ ]  RestoreTab
 - [ ]  RunMultiPurposeCommand
 - [ ]  SaveImage
 - [ ]  SaveLink
 - [ ]  SaveScreenshot
 - [ ]  SaveTabAsPDF
-- [ ]  ScrollBottom
 - [ ]  ScrollPageDown
 - [ ]  ScrollPageUp
-- [ ]  ScrollTop
 - [ ]  SearchClipboard
 - [ ]  SearchClipboardInNewTab
 - [ ]  SearchTextSelection
@@ -87,14 +92,9 @@ This is a TODO list of commands to be implemented
 - [ ]  StopLoading
 - [ ]  ToggleBookmark
 - [ ]  ToggleFullscreen
-- [ ]  ToggleMute
-- [ ]  TogglePin
 - [ ]  ToggleReaderMode
 - [ ]  ToggleWindowSize
 - [ ]  ToRootURL
 - [ ]  URLLevelUp
 - [ ]  ViewImage
 - [ ]  ViewPageSourceCode
-- [ ]  ZoomIn
-- [ ]  ZoomOut
-- [ ]  ZoomReset

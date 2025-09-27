@@ -1615,6 +1615,14 @@
     "message": "Browsing data",
     "description": "Browsing data"
   },
+  "permissionLabelScripting": {
+    "message": "Scripting",
+    "description": "Scripting"
+  },
+  "permissionLabelActiveTab": {
+    "message": "ActiveTab",
+    "description": "ActiveTab"
+  },
 
   "toggleButtonOn": {
     "message": "On",

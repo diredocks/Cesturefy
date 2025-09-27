@@ -1,11 +1,13 @@
 import { fetchHTMLAsFragment } from '@options/utils/common';
 import { commands } from '@commands/index';
 import Command from '@model/command';
+import { isEmpty } from '@utils/common';
 
 const COMMAND_ITEMS = Object.entries(commands).map(([name, def]) => ({
   command: name,
   settings: def.defaults,
   group: def.group,
+  permissions: def.permissions
 }));
 
 const COMMAND_SETTING_TEMPLATES = fetchHTMLAsFragment('/options/components/command-setting-templates.html');
@@ -144,7 +146,8 @@ export class CommandSelect extends HTMLElement {
       label.textContent = chrome.i18n.getMessage(`commandLabel${commandItem.command}`);
       div.appendChild(label);
 
-      if (commandItem.settings) {
+      // add settings symbol and build info string
+      if (!isEmpty(commandItem.settings)) {
         const icon = document.createElement('span');
         icon.classList.add('cb-command-settings-icon');
         icon.title = chrome.i18n.getMessage('commandBarAdditionalSettingsText');
@@ -157,6 +160,20 @@ export class CommandSelect extends HTMLElement {
       desc.classList.add('cb-command-description');
       desc.textContent = chrome.i18n.getMessage(`commandDescription${commandItem.command}`);
       info.appendChild(desc);
+
+      // add permissions symbol and build info string
+      if (commandItem.permissions) {
+        const icon = document.createElement('span');
+        icon.classList.add('cb-command-permissions-icon');
+        icon.title = chrome.i18n.getMessage("commandBarAdditionalPermissionsText");
+
+        commandItem.permissions.forEach((permission, index) => {
+          if (index > 0) icon.title += ", ";
+          icon.title += chrome.i18n.getMessage(`permissionLabel${permission}`);
+        });
+
+        info.append(icon);
+      }
 
       li.append(div, info);
 
@@ -224,12 +241,12 @@ export class CommandSelect extends HTMLElement {
       form.insertBefore(container, saveBtn);
     }
 
-    // 插入 i18n 文本
+    // insert i18n text
     form.querySelectorAll<HTMLElement>('[data-i18n]').forEach(el => {
       el.textContent = chrome.i18n.getMessage(el.dataset.i18n!);
     });
 
-    // 设置当前值
+    // set current value
     form.querySelectorAll<HTMLInputElement>('[name]').forEach(input => {
       let value: any;
       if (this.command?.getName() === this._selectedCommand!.getName() && this.command.hasSetting(input.name)) {
@@ -365,7 +382,19 @@ export class CommandSelect extends HTMLElement {
     (li.querySelector('.cb-command-info') as HTMLElement).style.removeProperty('height');
     const data = COMMAND_ITEMS.find(c => c.command === li.dataset.command)!;
 
-    if (data.settings) {
+    // WARN: cannot test this in developer mode
+    //
+    // if the command requires permissions
+    if (data.permissions) {
+      const permissionRequest = chrome.permissions.request({
+        permissions: data.permissions,
+      });
+      // exit if permissions aren't granted
+      if (!await permissionRequest) return;
+    }
+
+    // if the command offers any settings show them
+    if (!isEmpty(data.settings)) {
       this._scrollPosition = (this.shadow.getElementById('commandsMain')!).scrollTop;
       this._selectedCommand = Command.fromJSON({ name: data.command });
       const panel = await this._buildSettingsPanel();

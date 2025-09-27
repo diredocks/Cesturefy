@@ -1,9 +1,10 @@
-import { CommandFn, CommandGroup, CommandDefinition } from "@utils/types";
+import { CommandFn, CommandGroup, CommandDefinition, CommandPermission } from "@utils/types";
 
 export function defineCommand<TSettings>(
   fn: CommandFn<TSettings>,
   defaults: Required<TSettings>,
-  group: CommandGroup
+  group: CommandGroup,
+  permissions?: CommandPermission[],
 ): CommandDefinition<TSettings> {
-  return { fn, defaults, group };
+  return { fn, defaults, group, permissions };
 }
