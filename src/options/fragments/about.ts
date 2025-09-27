@@ -23,7 +23,7 @@ function onResetButton() {
 function onBackupButton() {
   const manifest = chrome.runtime.getManifest();
   const linkElement = document.createElement("a");
-  linkElement.download = `${manifest.name} ${manifest.version} ${new Date().toDateString()}.json`;
+  linkElement.download = `${manifest.name}_${manifest.version}_${new Date().getTime()}.json`;
   // creates a json file with the current config
   linkElement.href = URL.createObjectURL(
     new Blob([JSON.stringify(configManager.toJSON(), null, '  ')], { type: 'application/json' })
