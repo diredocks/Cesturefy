@@ -478,13 +478,14 @@ function mouseGestureControllerSetup() {
     //   return;
     // }
 
+    // TODO: applying settings
     // initialize canvas properties (correct width and height are only known after the popup has been opened)
     gesturePopupCanvas.width = gesturePopupCanvas.offsetWidth;
     gesturePopupCanvas.height = gesturePopupCanvas.offsetHeight;
     canvasContext.lineCap = "round";
     canvasContext.lineJoin = "round";
     canvasContext.lineWidth = 10;
-    canvasContext.strokeStyle = "#00aaa0";
+    canvasContext.strokeStyle = "#fab12f";
 
     // get first event and remove it from the array
     const firstEvent = b.shift()!;
