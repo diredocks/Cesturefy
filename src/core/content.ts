@@ -19,6 +19,7 @@ const applySettings = () => {
   mouseController.distanceThreshold = configManager.getPath(['Settings', 'Gesture', 'distanceThreshold']);
   mouseController.isTimeoutAbort = configManager.getPath(['Settings', 'Gesture', 'Timeout', 'active']);
   mouseController.timeout = configManager.getPath(['Settings', 'Gesture', 'Timeout', 'duration']);
+  mouseController.suppressionKey = configManager.getPath(['Settings', 'Gesture', 'suppressionKey']);
   displayTrace = configManager.getPath(['Settings', 'Gesture', 'Trace', 'display']);
   displayCommand = configManager.getPath(['Settings', 'Gesture', 'Command', 'display']);
   exclusions = configManager.getPath(['Exclusions']);

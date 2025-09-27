@@ -1,6 +1,7 @@
 import { MouseButton } from "@controller/mouse";
 import { GestureJSON } from "@model/gesture";
 import { MatchingAlgorithm } from "@utils/match";
+import { SuppressionKey } from "@utils/types";
 
 export interface TimeoutSettings {
   active: boolean;
@@ -33,7 +34,7 @@ export interface CommandDisplaySettings {
 
 export interface GestureSettings {
   mouseButton: MouseButton;
-  suppressionKey: string;
+  suppressionKey: SuppressionKey;
   distanceThreshold: number;
   deviationTolerance: number;
   matchingAlgorithm: MatchingAlgorithm;
@@ -62,7 +63,7 @@ export const DefaultConfig: ConfigSchema = {
   Settings: {
     Gesture: {
       mouseButton: 2,
-      suppressionKey: "", // TODO
+      suppressionKey: '',
       distanceThreshold: 10, // px
       deviationTolerance: 0.15,
       matchingAlgorithm: "Combined",
