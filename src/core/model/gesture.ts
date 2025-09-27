@@ -65,6 +65,6 @@ export default class Gesture {
 
   static fromJSON(json: GestureJSON): Gesture {
     const command = Command.fromJSON(json.command);
-    return new Gesture(json.pattern, command, json.label || command.toString());
+    return new Gesture(json.pattern, command, json.label);
   }
 }
