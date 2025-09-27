@@ -28,7 +28,7 @@ export class ConfigManager {
   private static _instance: ConfigManager;
 
   private _storageArea: StorageArea;
-  private _storage: ConfigSchema;
+  private _storage: Partial<ConfigSchema>;
   private _defaults: ConfigSchema;
   private _autoUpdate = true;
   private _loaded: Promise<void>;
@@ -40,7 +40,7 @@ export class ConfigManager {
     }
 
     this._storageArea = storageArea;
-    this._storage = {} as ConfigSchema;
+    this._storage = {};
     this._defaults = defaults;
 
     const loadStorage = chrome.storage[this._storageArea].get();
@@ -132,13 +132,12 @@ export class ConfigManager {
     return chrome.storage[this._storageArea].clear();
   }
 
-  toJSON(): ConfigSchema {
-    // return { ...this._defaults, ...this._storage };
+  toJSON(): Partial<ConfigSchema> {
     return { ...this._storage };
   }
 
   async fromJSON(json: Partial<ConfigSchema>, persist: boolean = true): Promise<void> {
-    this._storage = { ...this._defaults, ...json };
+    this._storage = { ...json };
     if (persist) {
       await chrome.storage[this._storageArea].set(this._storage);
     }
