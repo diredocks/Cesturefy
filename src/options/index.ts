@@ -1,4 +1,5 @@
 import { fetchHTMLAsFragment } from "@options/utils/common";
+import { configManager } from "@utils/config-manager";
 
 // resources
 const res = [];
@@ -28,8 +29,15 @@ function main() {
     element.textContent = chrome.i18n.getMessage(element.dataset.i18n!);
   }
 
-  // TODO: apply onchange handler and add title to every theme button
-  // TODO: apply theme class
+  // apply onchange handler and add title to every theme button
+  for (const el of document.querySelectorAll<HTMLInputElement>('#themeSwitch .theme-button')) {
+    const themeButton = el as HTMLInputElement;
+    themeButton.addEventListener("change", onThemeButtonChange);
+    themeButton.title = chrome.i18n.getMessage(`${themeButton.value}Theme`);
+  }
+  // apply theme class
+  const themeValue = configManager.getPath(['Settings', 'General', 'theme']);
+  document.documentElement.classList.add(`${themeValue}-theme`);
 
   window.addEventListener("hashchange", onPageNavigation, true);
   // set default page if not specified
@@ -56,4 +64,21 @@ function onPageNavigation() {
     const sectionKey = nextItem.querySelector<HTMLElement>("[data-i18n]")?.dataset.i18n;
     document.title = `${manifest['name']} - ${chrome.i18n.getMessage(sectionKey!)}`;
   }
+}
+
+function onThemeButtonChange(this: HTMLInputElement, _event: Event) {
+  // remove current theme class if any
+  document.documentElement.classList.forEach((className) => {
+    if (className.endsWith('-theme')) {
+      document.documentElement.classList.remove(className);
+    }
+  });
+
+  // apply theme class + transition class
+  document.documentElement.classList.add(`${this.value}-theme`, "theme-transition");
+
+  // remove temporary transition
+  window.setTimeout(() => {
+    document.documentElement.classList.remove("theme-transition");
+  }, 400);
 }
