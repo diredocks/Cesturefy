@@ -1,0 +1,100 @@
+# Commands to be implemented
+
+This is a TODO list of commands to be implemented
+
+## What's already done?
+
+- [x]  CloseTab
+- [x]  DuplicateTab
+- [x]  NewTab
+
+## What's not done yet?
+
+- [ ]  ClearBrowsingData
+- [ ]  CloseLeftTabs
+- [ ]  CloseOtherTabs
+- [ ]  CloseRightTabs
+- [ ]  CloseWindow
+- [ ]  CopyImage
+- [ ]  CopyImageURL
+- [ ]  CopyLinkURL
+- [ ]  CopyTabURL
+- [ ]  CopyTextSelection
+- [ ]  DecreaseURLNumber
+- [ ]  EnterFullscreen
+- [ ]  ExecuteUserScript
+- [ ]  FocusFirstTab
+- [ ]  FocusLastTab
+- [ ]  FocusLeftTab
+- [ ]  FocusPreviousSelectedTab
+- [ ]  FocusRightTab
+- [ ]  IncreaseURLNumber
+- [ ]  InsertCustomText
+- [ ]  LinkToNewBookmark
+- [ ]  MaximizeWindow
+- [ ]  MinimizeWindow
+- [ ]  MoveLeftTabsToNewWindow
+- [ ]  MoveRightTabsToNewWindow
+- [ ]  MoveTabLeft
+- [ ]  MoveTabRight
+- [ ]  MoveTabToEnd
+- [ ]  MoveTabToNewWindow
+- [ ]  MoveTabToStart
+- [ ]  NewPrivateWindow
+- [ ]  NewWindow
+- [ ]  OpenAddonSettings
+- [ ]  OpenCustomURL
+- [ ]  OpenCustomURLInNewPrivateWindow
+- [ ]  OpenCustomURLInNewTab
+- [ ]  OpenCustomURLInNewWindow
+- [ ]  OpenHomepage
+- [ ]  OpenImageInNewTab
+- [ ]  OpenLink
+- [ ]  OpenLinkInNewPrivateWindow
+- [ ]  OpenLinkInNewTab
+- [ ]  OpenLinkInNewWindow
+- [ ]  OpenPrintPreview
+- [ ]  OpenURLFromClipboard
+- [ ]  OpenURLFromClipboardInNewPrivateWindow
+- [ ]  OpenURLFromClipboardInNewTab
+- [ ]  OpenURLFromClipboardInNewWindow
+- [ ]  PageBack
+- [ ]  PageForth
+- [ ]  PasteClipboard
+- [ ]  PopupAllTabs
+- [ ]  PopupCustomCommandList
+- [ ]  PopupRecentlyClosedTabs
+- [ ]  PopupSearchEngines
+- [ ]  PrintTab
+- [ ]  ReloadAllTabs
+- [ ]  ReloadFrame
+- [ ]  ReloadTab
+- [ ]  RestoreTab
+- [ ]  RunMultiPurposeCommand
+- [ ]  SaveImage
+- [ ]  SaveLink
+- [ ]  SaveScreenshot
+- [ ]  SaveTabAsPDF
+- [ ]  ScrollBottom
+- [ ]  ScrollPageDown
+- [ ]  ScrollPageUp
+- [ ]  ScrollTop
+- [ ]  SearchClipboard
+- [ ]  SearchClipboardInNewTab
+- [ ]  SearchTextSelection
+- [ ]  SearchTextSelectionInNewTab
+- [ ]  SendMessageToOtherAddon
+- [ ]  StopLoading
+- [ ]  ToggleBookmark
+- [ ]  ToggleFullscreen
+- [ ]  ToggleMute
+- [ ]  TogglePin
+- [ ]  ToggleReaderMode
+- [ ]  ToggleWindowSize
+- [ ]  ToRootURL
+- [ ]  URLLevelUp
+- [ ]  ViewImage
+- [ ]  ViewPageSourceCode
+- [ ]  ZoomIn
+- [ ]  ZoomOut
+- [ ]  ZoomReset
