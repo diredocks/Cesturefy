@@ -1,7 +1,7 @@
 import { vectorDirectionDifference } from "@utils/common";
 import { Vector, Vectors } from "@utils/types";
 import { configManager } from "@utils/config-manager";
-import { DefaultConfig } from "./config";
+import { DefaultConfig } from "@utils/config";
 
 export enum PatternStatus {
   PASSED_NO_THRESHOLD = 0,

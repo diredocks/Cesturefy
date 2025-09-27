@@ -118,6 +118,7 @@ export class ConfigManager {
     for (let i = 0; i < path.length - 1; i++) {
       const key = path[i];
       if (!(key in entry)) entry[key] = {};
+      // FIXME: constrain type same as default settings' type
       entry = entry[key];
     }
     entry[path[path.length - 1]] = value;

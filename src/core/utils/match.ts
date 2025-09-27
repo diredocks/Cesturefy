@@ -1,10 +1,35 @@
 import { vectorDirectionDifference } from "@utils/common";
 import { Vectors } from "@utils/types";
 import Gesture from "@model/gesture";
+import { DefaultConfig } from "@utils/config";
+import { configManager } from "@utils/config-manager";
 
 export type MatchingAlgorithm = 'Strict' | 'ShapeIndependent' | 'Combined';
 
-export function getGestureByPattern(
+export class Matcher {
+  private maxDeviation: number = DefaultConfig.Settings.Gesture.deviationTolerance;
+  private algorithm: MatchingAlgorithm = DefaultConfig.Settings.Gesture.matchingAlgorithm;
+
+  constructor() {
+    configManager.addEventListener('change', () => this.applyConfig());
+    configManager.addEventListener('loaded', () => this.applyConfig());
+  }
+
+  getGestureByPattern(pattern: Vectors, gestures: Gesture[]): Gesture | null {
+    return getGestureByPattern(pattern, gestures, this.maxDeviation, this.algorithm);
+  }
+
+  applyConfig() {
+    this.maxDeviation = configManager.getPath(['Settings', 'Gesture', 'deviationTolerance']);
+    this.algorithm = configManager.getPath(['Settings', 'Gesture', 'matchingAlgorithm']);
+  }
+
+  static instance = new Matcher();
+}
+
+export const matcher = Matcher.instance;
+
+function getGestureByPattern(
   pattern: Vectors, gestures: Gesture[],
   maxDeviation: number, algorithm: MatchingAlgorithm) {
   let matchedGesture: Gesture | null = null;
@@ -53,7 +78,7 @@ export function getGestureByPattern(
   return matchedGesture;
 }
 
-export function patternSimilarityByProportion(patternA: Vectors, patternB: Vectors): number {
+function patternSimilarityByProportion(patternA: Vectors, patternB: Vectors): number {
   const totalAMagnitude = patternMagnitude(patternA);
   const totalBMagnitude = patternMagnitude(patternB);
 
@@ -106,7 +131,7 @@ export function patternSimilarityByProportion(patternA: Vectors, patternB: Vecto
   return totalDifference;
 }
 
-export function patternSimilarityByDTW(patternA: Vectors, patternB: Vectors): number {
+function patternSimilarityByDTW(patternA: Vectors, patternB: Vectors): number {
   const rows = patternA.length;
   const columns = patternB.length;
 

@@ -5,7 +5,7 @@ import { configManager } from "@utils/config-manager";
 import { Vectors } from "@utils/types";
 import { createGestureThumbnail } from "@options/utils/common";
 import { mouseController } from "@controller/mouse";
-import { getGestureByPattern } from "@utils/match";
+import { matcher } from "@utils/match";
 import Gesture from "@model/gesture";
 import { CommandSelect } from "@options/components/command-select";
 import Pattern from "@utils/pattern";
@@ -127,10 +127,8 @@ function openGesturePopup(gesture?: Gesture): void {
     const thumbnail = createGestureThumbnail(gesture.getPattern());
     patternContainer.append(thumbnail);
 
-    // FIXME: Another func is needed to exclude target gestures
-    const mostSimilarGesture = getGestureByPattern(currentPopupPattern, [gesture],
-      configManager.getPath(['Settings', 'Gesture', 'deviationTolerance']),
-      configManager.getPath(['Settings', 'Gesture', 'matchingAlgorithm']));
+    // TODO: Another func is needed to exclude target gestures
+    const mostSimilarGesture = matcher.getGestureByPattern(currentPopupPattern, [gesture]);
     if (mostSimilarGesture) {
       patternContainer.classList.add("alert");
       patternContainer.title = chrome.i18n.getMessage(
