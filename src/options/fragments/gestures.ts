@@ -313,7 +313,7 @@ function onGesturePopupFormSubmit(event: Event) {
     const newGesture = Gesture.fromJSON(
       {
         pattern: currentPopupPattern,
-        label: gesturePopupLabelInput.value,
+        label: gesturePopupLabelInput.value === "" ? undefined : gesturePopupLabelInput.value,
         command: {
           name: gesturePopupCommandSelect.value.name,
           settings: gesturePopupCommandSelect.value.settings
