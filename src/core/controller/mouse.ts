@@ -1,6 +1,7 @@
 import { preventDefault, getDistance } from "@utils/common";
 import { DefaultConfig } from "@utils/config";
 import { EventEmitter } from "@utils/emitter";
+import { SuppressionKey } from "@utils/types";
 
 type Callback = (buffer: PointerEvent[], event: PointerEvent) => void;
 // type MouseEvents = Record<'register' | 'start' | 'update' | 'end' | 'abort', Callback>;
@@ -46,6 +47,7 @@ export class MouseController {
   public isTimeoutAbort: boolean = DefaultConfig.Settings.Gesture.Timeout.active;
   public mouseButton: MouseButton = DefaultConfig.Settings.Gesture.mouseButton;
   public distanceThreshold: number = DefaultConfig.Settings.Gesture.distanceThreshold; // px
+  public suppressionKey: SuppressionKey = DefaultConfig.Settings.Gesture.suppressionKey;
 
   private constructor() { }
 
@@ -73,9 +75,10 @@ export class MouseController {
   }
 
   private _handlePointerDown = (e: PointerEvent) => {
+    if (this.suppressionKey !== '' && e[this.suppressionKey]) return; // do nothing if suppressionKey is on
     if (e.isTrusted && e.buttons === this.mouseButton) {
       this._initialize(e);
-    }
+    } // on mouse button
   };
 
   private _handleContextMenu = (e: MouseEvent) => {
