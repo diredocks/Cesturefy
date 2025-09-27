@@ -7,8 +7,10 @@ import {
 } from "@utils/message";
 import { configManager } from "@utils/config-manager";
 import { DefaultConfig } from "@utils/config";
+import { matchesURL } from "@utils/common";
 
 const pattern = new Pattern();
+let exclusions: string[] = DefaultConfig.Exclusions;
 let displayTrace: boolean = DefaultConfig.Settings.Gesture.Trace.display;
 let displayCommand: boolean = DefaultConfig.Settings.Gesture.Command.display;
 
@@ -17,15 +19,21 @@ const applySettings = () => {
   mouseController.distanceThreshold = configManager.getPath(['Settings', 'Gesture', 'distanceThreshold']);
   displayTrace = configManager.getPath(['Settings', 'Gesture', 'Trace', 'display']);
   displayCommand = configManager.getPath(['Settings', 'Gesture', 'Command', 'display']);
+  exclusions = configManager.getPath(['Exclusions']);
+  main(); // TODO: eww refactor this
 };
 
 configManager.addEventListener('loaded', applySettings);
 configManager.addEventListener('change', applySettings);
 
-main();
+configManager.loaded.then(() => main());
 
 function main() {
-  mouseController.enable();
+  // NOTE: window.location.href is returning the frame URL for frames and not the tab URL
+  const isExcluded = exclusions.some(url => matchesURL(window.location.href, url));
+  if (!isExcluded) {
+    mouseController.enable();
+  }
 }
 
 mouseController.addEventListener('start', (es, e) => {
