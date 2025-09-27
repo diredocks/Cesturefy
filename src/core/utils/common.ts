@@ -32,3 +32,5 @@ export function matchesURL(url: string, urlPattern: string): boolean {
   const regex = new RegExp('^' + pattern + '$');
   return regex.test(url);
 }
+
+export const isEmpty = (obj: object) => Object.keys(obj).length === 0;

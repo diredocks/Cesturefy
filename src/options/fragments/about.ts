@@ -37,6 +37,7 @@ function onBackupButton() {
 }
 
 async function onRestoreButton(this: HTMLInputElement, _event: Event): Promise<void> {
+  // TODO: request permissions
   const file = this.files?.[0];
   if (!file || file.type !== "application/json") {
     (document.getElementById("restoreAlertWrongFile") as any).open = true;

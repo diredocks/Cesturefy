@@ -5,6 +5,14 @@
   "permissions": [
     "storage"
   ],
+  "optional_permissions": [
+    "sessions",
+    "scripting",
+    "activeTab"
+  ],
+  "optional_host_permissions": [
+    "<all_urls>"
+  ],
   "icons": {
     "32": "images/iconx32.png",
     "48": "images/iconx48.png",

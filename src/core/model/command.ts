@@ -1,5 +1,5 @@
 import { CommandName, commands } from "@commands/index";
-import { CommandFn, CommandGroup } from "@utils/types";
+import { CommandFn, CommandGroup, CommandPermission } from "@utils/types";
 
 export interface CommandJSON<TSettings = Record<string, unknown>> {
   name: string;
@@ -12,6 +12,7 @@ export default class Command<TSettings = Record<string, unknown>> {
   private _name: string;
   private _group: CommandGroup;
   private _fn: CommandFn;
+  private _permissions?: CommandPermission[];
 
   constructor(
     name: string,
@@ -19,12 +20,14 @@ export default class Command<TSettings = Record<string, unknown>> {
     fn: CommandFn,
     defaults: TSettings,
     initialSettings?: Partial<TSettings>,
+    permissions?: CommandPermission[],
   ) {
     if (initialSettings) this._settings = { ...initialSettings };
     this._defaults = { ...defaults };
     this._name = name;
     this._group = group;
     this._fn = fn;
+    this._permissions = permissions;
   }
 
   toString() {
@@ -33,6 +36,10 @@ export default class Command<TSettings = Record<string, unknown>> {
 
   getGroup() {
     return this._group;
+  }
+
+  getPermissions() {
+    return this._permissions
   }
 
   getName() {
@@ -68,6 +75,7 @@ export default class Command<TSettings = Record<string, unknown>> {
   }
 
   async execute(sender: chrome.runtime.MessageSender, data?: any) {
+    // TODO: request permissions here?
     return this._fn.call(this, sender, data);
   }
 
@@ -84,7 +92,8 @@ export default class Command<TSettings = Record<string, unknown>> {
       def.group,
       def.fn,
       def.defaults,
-      json.settings
+      json.settings,
+      def.permissions
     );
   }
 }

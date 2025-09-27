@@ -217,7 +217,6 @@ export class TraceCommand {
   }
 
   applyConfig() {
-    // FIXME: Verbose due to @utils/config-manager
     this.gestureTraceLineColor = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "strokeStyle"]);
     this.gestureTraceLineWidth = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "lineWidth"]);
     this.gestureTraceLineGrowth = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "lineGrowth"]);
