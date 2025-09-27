@@ -70,7 +70,7 @@ export const DefaultConfig: ConfigSchema = {
       Trace: {
         display: true,
         Style: {
-          strokeStyle: "#00aaa0cc",
+          strokeStyle: "#fab12fcc",
           lineWidth: 10,
           lineGrowth: true,
         },
