@@ -1,4 +1,5 @@
 import { preventDefault, getDistance } from "@utils/common";
+import { DefaultConfig } from "@utils/config";
 import { EventEmitter } from "@utils/emitter";
 
 type Callback = (buffer: PointerEvent[], event: PointerEvent) => void;
@@ -39,9 +40,12 @@ export class MouseController {
   private _state = State.PASSIVE;
   private _buffer: PointerEvent[] = [];
   private _lastClick = { time: 0, x: 0, y: 0 };
-  public mouseButton: MouseButton = MouseButton.RIGHT;
+  private _timeoutId: number | null = null;
+  private _timeout: number = 1000 * DefaultConfig.Settings.Gesture.Timeout.duration; // ms
 
-  public distanceThreshold: number = 10; // px
+  public isTimeoutAbort: boolean = DefaultConfig.Settings.Gesture.Timeout.active;
+  public mouseButton: MouseButton = DefaultConfig.Settings.Gesture.mouseButton;
+  public distanceThreshold: number = DefaultConfig.Settings.Gesture.distanceThreshold; // px
 
   private constructor() { }
 
@@ -161,6 +165,10 @@ export class MouseController {
       }
       case State.ACTIVE: {
         this._events.dispatchEvent("update", this._buffer, e);
+        if (this.isTimeoutAbort) {
+          this._clearTimeout();
+          this._startTimeout();
+        }
         break;
       }
     }
@@ -181,6 +189,8 @@ export class MouseController {
   }
 
   private _reset() {
+    this._clearTimeout();
+
     this._target.removeEventListener("contextmenu", this._handleContextMenu, true);
     this._target.removeEventListener("pointermove", this._handlePointerMove, true);
     this._target.removeEventListener("pointerup", this._handlePointerUp, true);
@@ -213,6 +223,28 @@ export class MouseController {
 
   public cancel() {
     this._reset();
+  }
+
+  get timeout() {
+    return this._timeout / 1000; // ms -> s
+  }
+
+  set timeout(value: number) {
+    this._timeout = value * 1000; // s -> ms
+  }
+
+  private _startTimeout() {
+    this._timeoutId = window.setTimeout(() => {
+      this._abort();
+    }, this._timeout);
+  }
+
+  private _clearTimeout() {
+    if (this._timeoutId === null) {
+      return;
+    }
+    clearTimeout(this._timeoutId);
+    this._timeoutId = null;
   }
 }
 
