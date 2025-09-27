@@ -1,3 +1,4 @@
+// TODO: spilit popup and item
 import { PopupBox } from "@options/components/popup-box";
 import { ContentLoaded } from "@options/index";
 import { GestureJSON } from "@model/gesture";
@@ -14,7 +15,7 @@ ContentLoaded.then(main);
 
 let currentItem: HTMLElement | null = null;
 let currentPopupPattern: Vectors | null = null;
-const Gestures: Map<HTMLElement, Gesture> = new Map();
+const GestureMap: Map<HTMLElement, Gesture> = new Map();
 
 function main() {
   const gesturePopup = document.getElementById("gesturePopup") as PopupBox;
@@ -42,7 +43,7 @@ function main() {
     const gesture = new Gesture(gestureJSON);
     const gestureListItem = createGestureListItem(gesture);
     // use the reference to the gestureItem as the Map key to the gesture object
-    Gestures.set(gestureListItem, gesture);
+    GestureMap.set(gestureListItem, gesture);
     fragment.prepend(gestureListItem);
   }
   const gestureList = document.getElementById("gestureContainer")!;
@@ -72,7 +73,7 @@ function onSearchInput() {
   const searchQuery = (document.getElementById("gestureSearchInput")! as HTMLInputElement).value.toLowerCase().trim();
   const searchQueryKeywords = searchQuery.split(" ");
 
-  for (const [gestureListItem, gesture] of Gestures) {
+  for (const [gestureListItem, gesture] of GestureMap) {
     // get the gesture string and transform all letters to lower case
     const gestureString = gesture.toString().toLowerCase();
     // check if all keywords are matching the command name
@@ -127,8 +128,9 @@ function openGesturePopup(gesture?: Gesture): void {
     const thumbnail = createGestureThumbnail(gesture.getPattern());
     patternContainer.append(thumbnail);
 
-    // TODO: Another func is needed to exclude target gestures
-    const mostSimilarGesture = matcher.getGestureByPattern(currentPopupPattern, [gesture]);
+    // exclude current gesture pattern
+    const mostSimilarGesture = matcher.getGestureByPattern(currentPopupPattern,
+      Array.from(GestureMap.values()).filter(g => g !== gesture));
     if (mostSimilarGesture) {
       patternContainer.classList.add("alert");
       patternContainer.title = chrome.i18n.getMessage(
@@ -224,21 +226,21 @@ function onItemClick(this: HTMLElement, e: MouseEvent) {
 }
 
 function handleDeleteItem(item: HTMLElement) {
-  const gesture = Gestures.get(item);
+  const gesture = GestureMap.get(item);
   if (!gesture) return;
 
-  Gestures.delete(item);
+  GestureMap.delete(item);
   removeGestureListItem(item);
 
   configManager.setPath(
     ["Gestures"],
-    Array.from(Gestures.values()).map(g => g.toJSON())
+    Array.from(GestureMap.values()).map(g => g.toJSON())
   );
 }
 
 function handleEditItem(item: HTMLElement) {
   currentItem = item;
-  openGesturePopup(Gestures.get(currentItem));
+  openGesturePopup(GestureMap.get(currentItem));
 }
 
 function removeGestureListItem(gestureListItem: HTMLElement): void {
@@ -320,17 +322,17 @@ function onGesturePopupFormSubmit(event: Event) {
     );
 
     const gestureListItem = createGestureListItem(newGesture);
-    Gestures.set(gestureListItem, newGesture);
+    GestureMap.set(gestureListItem, newGesture);
 
     // update config using configManager and toJSON
     configManager.setPath(
       ["Gestures"],
-      Array.from(Gestures.values()).map(g => g.toJSON())
+      Array.from(GestureMap.values()).map(g => g.toJSON())
     );
 
     addGestureListItem(gestureListItem);
   } else {
-    const currentGesture = Gestures.get(currentItem)!;
+    const currentGesture = GestureMap.get(currentItem)!;
     currentGesture.setPattern(currentPopupPattern);
     currentGesture.setLabel(
       gesturePopupLabelInput.value === "" ? undefined : gesturePopupLabelInput.value
@@ -340,7 +342,7 @@ function onGesturePopupFormSubmit(event: Event) {
     // update config using configManager and toJSON
     configManager.setPath(
       ["Gestures"],
-      Array.from(Gestures.values()).map(g => g.toJSON())
+      Array.from(GestureMap.values()).map(g => g.toJSON())
     );
 
     updateGestureListItem(currentItem, currentGesture);
@@ -563,22 +565,20 @@ function mouseGestureControllerSetup() {
     if (gesturePopupPatternContainer.firstChild) gesturePopupPatternContainer.firstChild.remove();
     gesturePopupPatternContainer.append(gestureThumbnail);
 
-    // TODO: check if there is a very similar gesture and get it
-    //
-    // const mostSimilarGesture = getMostSimilarGestureByPattern(currentPopupPattern, [currentItem]);
-    //
-    // // if there is a similar gesture report it to the user
-    // if (mostSimilarGesture) {
-    //   // activate alert symbol and change title
-    //   gesturePopupPatternContainer.classList.add("alert");
-    //   gesturePopupPatternContainer.title = browser.i18n.getMessage(
-    //     'gesturePopupNotificationSimilarGesture',
-    //     mostSimilarGesture.toString()
-    //   );
-    // }
-    // else {
-    //   gesturePopupPatternContainer.classList.remove("alert");
-    //   gesturePopupPatternContainer.title = gesturePopupPatternContainer.dataset.gestureRecordingHint;
-    // }
+    const mostSimilarGesture = matcher.getGestureByPattern(currentPopupPattern,
+      Array.from(GestureMap.values()));
+    // if there is a similar gesture report it to the user
+    if (mostSimilarGesture) {
+      // activate alert symbol and change title
+      gesturePopupPatternContainer.classList.add("alert");
+      gesturePopupPatternContainer.title = chrome.i18n.getMessage(
+        'gesturePopupNotificationSimilarGesture',
+        mostSimilarGesture.toString()
+      );
+    }
+    else {
+      gesturePopupPatternContainer.classList.remove("alert");
+      gesturePopupPatternContainer.title = gesturePopupPatternContainer.dataset.gestureRecordingHint ?? "";
+    }
   });
 }
