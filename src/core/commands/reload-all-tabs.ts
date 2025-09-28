@@ -31,5 +31,5 @@ export const ReloadAllTabs = defineCommand(
   {
     cache: false,
   },
-  "tabs"
+  "load"
 );
