@@ -382,11 +382,10 @@ export class CommandSelect extends HTMLElement {
     (li.querySelector('.cb-command-info') as HTMLElement).style.removeProperty('height');
     const data = COMMAND_ITEMS.find(c => c.command === li.dataset.command)!;
 
-    // WARN: cannot test this in developer mode
-    //
     // if the command requires permissions
     if (data.permissions) {
       const permissionRequest = chrome.permissions.request({
+        origins: ["<all_urls>"],
         permissions: data.permissions,
       });
       // exit if permissions aren't granted

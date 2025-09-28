@@ -14,10 +14,11 @@ function main() {
   restoreButton.addEventListener("change", onRestoreButton);
 }
 
-function onResetButton() {
+async function onResetButton() {
   const popup = document.getElementById("resetConfirm")! as PopupBox;
-  popup.addEventListener("close", (event) => {
+  popup.addEventListener("close", async (event) => {
     if (!event.detail) return;
+    await removePermissions();
     configManager.clear().then(() => window.location.reload());
   }, { once: true });
   popup.open = true;
@@ -71,5 +72,32 @@ function readJsonFile(file: File): Promise<unknown> {
     };
     reader.onerror = () => reject(new Error("File read error"));
     reader.readAsText(file);
+  });
+}
+
+export async function removePermissions() {
+  // FIXME: removing <all_urls> from origins doesnot work and IDK why
+  const manifest = chrome.runtime.getManifest();
+
+  const optionalPermissions = new Set(manifest.optional_permissions ?? []);
+  // const optionalOrigins = new Set(manifest.optional_host_permissions ?? []);
+
+  const current = await chrome.permissions.getAll();
+
+  const permsToRemove = current.permissions?.filter((p) =>
+    optionalPermissions.has(p)
+  ) ?? [];
+
+  // const originsToRemove = current.origins?.filter((o) =>
+  //   optionalOrigins.has(o)
+  // ) ?? [];
+
+  if (permsToRemove.length === 0) {
+    return false;
+  }
+
+  return await chrome.permissions.remove({
+    permissions: permsToRemove,
+    // origins: originsToRemove,
   });
 }
