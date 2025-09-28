@@ -17,7 +17,7 @@ export default class Command<TSettings = Record<string, unknown>> {
   constructor(
     name: string,
     group: CommandGroup,
-    fn: CommandFn,
+    fn: CommandFn<any>,
     defaults: TSettings,
     initialSettings?: Partial<TSettings>,
     permissions?: CommandPermission[],

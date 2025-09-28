@@ -17,7 +17,10 @@ export type CommandFn<TSettings = Record<string, unknown>> = (
 
 export type CommandGroup = 'tabs' | 'load' | 'zoom' | 'history' | 'toggle' | 'scroll' | 'focus' | 'window' | 'move' | 'url' | 'image' | 'link' | 'selection' | 'window.controls' | 'clipboard' | 'input' | 'listen' | 'capture' | 'popup' | 'advanced' | 'open';
 
-export type CommandPermission = 'tabs' | 'sessions' | 'bookmarks' | 'scripting' | 'activeTab';
+export type CommandPermission = Extract<
+  chrome.runtime.ManifestPermissions,
+  'tabs' | 'sessions' | 'bookmarks' | 'scripting' | 'activeTab'
+>;
 
 export interface CommandDefinition<TSettings> {
   fn: CommandFn<TSettings>;

@@ -1,7 +1,10 @@
+// TODO: popup close refresh
+import { CommandName, commands } from "@commands/index";
 import { PopupBox } from "@options/components/popup-box";
 import { ContentLoaded } from "@options/index";
 import { ConfigSchema } from "@utils/config";
 import { configManager } from "@utils/config-manager";
+import { CommandPermission } from "@utils/types";
 
 ContentLoaded.then(main);
 
@@ -38,24 +41,45 @@ function onBackupButton() {
 }
 
 async function onRestoreButton(this: HTMLInputElement, _event: Event): Promise<void> {
-  // TODO: request permissions
   const file = this.files?.[0];
   if (!file || file.type !== "application/json") {
-    (document.getElementById("restoreAlertWrongFile") as any).open = true;
+    const popup = document.getElementById("restoreAlertWrongFile") as any;
+    popup.addEventListener("close", () => window.location.reload(), { once: true });
+    popup.open = true;
     return;
   }
 
   try {
-    const restoredConfig = await readJsonFile(file);
+    // FIXME: mouseButton from Gesturefy is string, causing wrong behaviour
+    const restoredConfig = await readJsonFile(file) as Partial<ConfigSchema>;
+
+    const gestures = restoredConfig.Gestures ?? [];
+    const permissions = new Set<CommandPermission>();
+
+    for (const g of gestures) {
+      const def = commands[g.command.name as CommandName];
+      if (!def) throw new Error(`Command not found: ${g.command.name}`);
+      def.permissions?.forEach(p => permissions.add(p));
+    }
+
+    if (permissions.size > 0) {
+      const ok = await chrome.permissions.request({
+        origins: ["<all_urls>"],
+        permissions: [...permissions],
+      });
+      if (!ok) return;
+    }
 
     configManager.clear();
-    configManager.fromJSON(restoredConfig as Partial<ConfigSchema>);
+    configManager.fromJSON(restoredConfig);
 
     const popup = document.getElementById("restoreAlertSuccess") as any;
     popup.addEventListener("close", () => window.location.reload(), { once: true });
     popup.open = true;
   } catch {
-    (document.getElementById("restoreAlertNoConfigFile") as any).open = true;
+    const popup = document.getElementById("restoreAlertNoConfigFile") as any;
+    popup.addEventListener("close", () => window.location.reload(), { once: true });
+    popup.open = true;
   }
 }
 
