@@ -44,6 +44,8 @@ This is a TODO list of commands to be implemented
 - [x]  MaximizeWindow
 - [x]  MinimizeWindow
 - [x]  NewWindow
+- [x]  ToRootURL
+- [x]  URLLevelUp
 
 ## What's not done yet?
 
@@ -94,7 +96,5 @@ This is a TODO list of commands to be implemented
 - [ ]  SendMessageToOtherAddon
 - [ ]  ToggleBookmark
 - [ ]  ToggleReaderMode
-- [ ]  ToRootURL
-- [ ]  URLLevelUp
 - [ ]  ViewImage
 - [ ]  ViewPageSourceCode

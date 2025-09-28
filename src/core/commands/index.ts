@@ -33,6 +33,7 @@ import {
   MaximizeWindow, MinimizeWindow,
   NewWindow, ToggleFullscreen, ToggleWindowSize
 } from "@commands/window";
+import { ToRootURL, URLLevelUp } from "@commands/urls";
 
 export const commands = {
   NewTab,
@@ -75,6 +76,8 @@ export const commands = {
   MoveTabToNewWindow,
   CloseWindow,
   ReloadAllTabs,
+  ToRootURL,
+  URLLevelUp,
 } as const;
 
 export type CommandName = keyof typeof commands;
