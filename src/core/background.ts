@@ -35,9 +35,19 @@ const handleGestureEnd: Handler<"gestureEnd", BackgroundMessages> = (m, sender) 
   }
 };
 
+const handleOSRequest: Handler<"OSRequest", BackgroundMessages> = async (m, sender) => {
+  // simply ignore m, send content os type
+  sendTabMessage<"currentOS", ContentMessages>(
+    sender.tab!.id!,
+    "currentOS",
+    (await chrome.runtime.getPlatformInfo()).os,
+  );
+};
+
 const backgroundHandlers: HandlerMap<BackgroundMessages> = {
   gestureChange: handleGestureChange,
   gestureEnd: handleGestureEnd,
+  OSRequest: handleOSRequest,
 };
 
 registerHandlers(backgroundHandlers);

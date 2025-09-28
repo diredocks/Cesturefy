@@ -87,8 +87,14 @@ const handleMatchingGesture: Handler<"matchingGesture", ContentMessages> = (m) =
   traceCommand.updateCommand(m.data);
 };
 
+const handleCurrentOS: Handler<"currentOS", ContentMessages> = (m) => {
+  mouseController.currentOS = m.data;
+};
+
 const contentHandlers: HandlerMap<ContentMessages> = {
   matchingGesture: handleMatchingGesture,
+  currentOS: handleCurrentOS,
 };
 
 registerHandlers(contentHandlers);
+sendBackgroundMessage('OSRequest', true);

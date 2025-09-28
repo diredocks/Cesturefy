@@ -41,13 +41,16 @@ export class MouseController {
   private _state = State.PASSIVE;
   private _buffer: PointerEvent[] = [];
   private _lastClick = { time: 0, x: 0, y: 0 };
-  private _timeoutId: number | null = null;
-  private _timeout: number = 1000 * DefaultConfig.Settings.Gesture.Timeout.duration; // ms
+  private _abortTimeoutId: number | null = null;
+  private _abortTimeout: number = 1000 * DefaultConfig.Settings.Gesture.Timeout.duration; // ms
+  private _contextMenuTimeoutId: number | null = null;
+  private _contextMenuTimeout: number = doubleClickThreshold; // TODO: funny uh huh
 
   public isTimeoutAbort: boolean = DefaultConfig.Settings.Gesture.Timeout.active;
   public mouseButton: MouseButton = DefaultConfig.Settings.Gesture.mouseButton;
   public distanceThreshold: number = DefaultConfig.Settings.Gesture.distanceThreshold; // px
   public suppressionKey: SuppressionKey = DefaultConfig.Settings.Gesture.suppressionKey;
+  public currentOS: string = "";
 
   private constructor() { }
 
@@ -82,6 +85,17 @@ export class MouseController {
   };
 
   private _handleContextMenu = (e: MouseEvent) => {
+    // On Windows: prevent the default context menu only when moving 
+    // from PENDING to ACTIVE state. This ensures that if no gesture 
+    // is triggered, the context menu behaves normally.
+    //
+    // On macOS/Linux: prevent the context menu immediately on pointer 
+    // down, since it would otherwise appear right away.
+    if (this.currentOS === 'win') {
+      preventDefault(e);
+      return;
+    }
+
     const now = Date.now();
     const withinTime = now - this._lastClick.time < doubleClickThreshold;
     const withinDist =
@@ -102,7 +116,9 @@ export class MouseController {
     this._events.dispatchEvent("register", this._buffer, e);
     this._state = State.PENDING;
 
-    this._target.addEventListener("contextmenu", this._handleContextMenu, true);
+    if (this.currentOS !== 'win') {
+      this._target.addEventListener("contextmenu", this._handleContextMenu, true);
+    }
     this._target.addEventListener("pointermove", this._handlePointerMove, true);
     this._target.addEventListener("pointerup", this._handlePointerUp, true);
     this._target.addEventListener("visibilitychange", this._handleVisibilityChange, true);
@@ -162,6 +178,10 @@ export class MouseController {
         if (distance > this.distanceThreshold) {
           this._events.dispatchEvent("start", this._buffer, initial);
           this._state = State.ACTIVE;
+
+          if (this.currentOS === 'win') {
+            this._target.addEventListener("contextmenu", this._handleContextMenu, true);
+          }
           this._enablePreventDefault();
         }
         break;
@@ -194,7 +214,20 @@ export class MouseController {
   private _reset() {
     this._clearTimeout();
 
-    this._target.removeEventListener("contextmenu", this._handleContextMenu, true);
+    if (this.currentOS === 'win') {
+      // Ensure only one timeout exists to delay removing the contextmenu prevention.
+      // This keeps the prevention active briefly after pointer-up, avoiding menu display.
+      if (this._contextMenuTimeoutId) {
+        clearTimeout(this._contextMenuTimeoutId);
+      }
+      this._contextMenuTimeoutId = setTimeout(() => {
+        this._target.removeEventListener("contextmenu", this._handleContextMenu, true);
+      }, this._contextMenuTimeout);
+    } else {
+      // Immediately remove the contextmenu prevention for non-Windows platforms
+      this._target.removeEventListener("contextmenu", this._handleContextMenu, true);
+    }
+
     this._target.removeEventListener("pointermove", this._handlePointerMove, true);
     this._target.removeEventListener("pointerup", this._handlePointerUp, true);
     this._target.removeEventListener("visibilitychange", this._handleVisibilityChange, true);
@@ -229,25 +262,25 @@ export class MouseController {
   }
 
   get timeout() {
-    return this._timeout / 1000; // ms -> s
+    return this._abortTimeout / 1000; // ms -> s
   }
 
   set timeout(value: number) {
-    this._timeout = value * 1000; // s -> ms
+    this._abortTimeout = value * 1000; // s -> ms
   }
 
   private _startTimeout() {
-    this._timeoutId = window.setTimeout(() => {
+    this._abortTimeoutId = window.setTimeout(() => {
       this._abort();
-    }, this._timeout);
+    }, this._abortTimeout);
   }
 
   private _clearTimeout() {
-    if (this._timeoutId === null) {
+    if (this._abortTimeoutId === null) {
       return;
     }
-    clearTimeout(this._timeoutId);
-    this._timeoutId = null;
+    clearTimeout(this._abortTimeoutId);
+    this._abortTimeoutId = null;
   }
 }
 
