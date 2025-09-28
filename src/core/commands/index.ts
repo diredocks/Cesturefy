@@ -17,6 +17,9 @@ import { ToggleMute } from "@commands/toggle-mute";
 import { ScrollTop } from "@commands/scroll-top";
 import { ScrollBottom } from "@commands/scroll-bottom";
 import { ScrollPageUp, ScrollPageDown } from "@commands/scroll-page";
+import { FocusLeftTab, FocusRightTab } from "@commands/focus-left-right";
+import { FocusFirstTab, FocusLastTab } from "@commands/focus-first-last";
+import { FocusPreviousSelectedTab } from "@commands/focus-last-accessed";
 
 export const commands = {
   NewTab,
@@ -38,7 +41,12 @@ export const commands = {
   ScrollTop,
   ScrollBottom,
   ScrollPageUp,
-  ScrollPageDown
+  ScrollPageDown,
+  FocusRightTab,
+  FocusLeftTab,
+  FocusFirstTab,
+  FocusLastTab,
+  FocusPreviousSelectedTab
 } as const;
 
 export type CommandName = keyof typeof commands;

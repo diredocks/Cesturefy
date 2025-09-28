@@ -24,6 +24,11 @@ This is a TODO list of commands to be implemented
 - [x]  ScrollBottom
 - [x]  ScrollPageUp
 - [x]  ScrollPageDown
+- [x]  FocusFirstTab
+- [x]  FocusLastTab
+- [x]  FocusLeftTab
+- [x]  FocusRightTab
+- [x]  FocusPreviousSelectedTab
 
 ## What's not done yet?
 
@@ -37,11 +42,6 @@ This is a TODO list of commands to be implemented
 - [ ]  DecreaseURLNumber
 - [ ]  EnterFullscreen
 - [ ]  ExecuteUserScript
-- [ ]  FocusFirstTab
-- [ ]  FocusLastTab
-- [ ]  FocusLeftTab
-- [ ]  FocusPreviousSelectedTab
-- [ ]  FocusRightTab
 - [ ]  IncreaseURLNumber
 - [ ]  InsertCustomText
 - [ ]  LinkToNewBookmark
