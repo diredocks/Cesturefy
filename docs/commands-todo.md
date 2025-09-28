@@ -29,6 +29,7 @@ This is a TODO list of commands to be implemented
 - [x]  FocusLeftTab
 - [x]  FocusRightTab
 - [x]  FocusPreviousSelectedTab
+- [x]  StopLoading
 
 ## What's not done yet?
 
@@ -89,7 +90,6 @@ This is a TODO list of commands to be implemented
 - [ ]  SearchTextSelection
 - [ ]  SearchTextSelectionInNewTab
 - [ ]  SendMessageToOtherAddon
-- [ ]  StopLoading
 - [ ]  ToggleBookmark
 - [ ]  ToggleFullscreen
 - [ ]  ToggleReaderMode

@@ -20,10 +20,12 @@ import { ScrollPageUp, ScrollPageDown } from "@commands/scroll-page";
 import { FocusLeftTab, FocusRightTab } from "@commands/focus-left-right";
 import { FocusFirstTab, FocusLastTab } from "@commands/focus-first-last";
 import { FocusPreviousSelectedTab } from "@commands/focus-last-accessed";
+import { StopLoading } from "@commands/stop-loading";
 
 export const commands = {
   NewTab,
   DuplicateTab,
+  StopLoading,
   CloseTab,
   CloseRightTabs,
   CloseLeftTabs,
@@ -46,7 +48,7 @@ export const commands = {
   FocusLeftTab,
   FocusFirstTab,
   FocusLastTab,
-  FocusPreviousSelectedTab
+  FocusPreviousSelectedTab,
 } as const;
 
 export type CommandName = keyof typeof commands;
