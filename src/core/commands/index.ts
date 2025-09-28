@@ -34,6 +34,7 @@ import {
   NewWindow, ToggleFullscreen, ToggleWindowSize
 } from "@commands/window";
 import { ToRootURL, URLLevelUp } from "@commands/urls";
+import { OpenAddonSettings, ViewPageSourceCode } from "@commands/open";
 
 export const commands = {
   NewTab,
@@ -78,6 +79,8 @@ export const commands = {
   ReloadAllTabs,
   ToRootURL,
   URLLevelUp,
+  ViewPageSourceCode,
+  OpenAddonSettings,
 } as const;
 
 export type CommandName = keyof typeof commands;

@@ -46,6 +46,8 @@ This is a TODO list of commands to be implemented
 - [x]  NewWindow
 - [x]  ToRootURL
 - [x]  URLLevelUp
+- [x]  ViewPageSourceCode
+- [x]  OpenAddonSettings
 
 ## What's not done yet?
 
@@ -61,7 +63,6 @@ This is a TODO list of commands to be implemented
 - [ ]  InsertCustomText
 - [ ]  LinkToNewBookmark
 - [ ]  NewPrivateWindow
-- [ ]  OpenAddonSettings
 - [ ]  OpenCustomURL
 - [ ]  OpenCustomURLInNewPrivateWindow
 - [ ]  OpenCustomURLInNewTab
@@ -97,4 +98,3 @@ This is a TODO list of commands to be implemented
 - [ ]  ToggleBookmark
 - [ ]  ToggleReaderMode
 - [ ]  ViewImage
-- [ ]  ViewPageSourceCode

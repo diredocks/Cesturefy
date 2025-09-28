@@ -15,7 +15,7 @@ export type CommandFn<TSettings = Record<string, unknown>> = (
   data?: any
 ) => Promise<boolean | null>;
 
-export type CommandGroup = 'tabs' | 'load' | 'zoom' | 'history' | 'toggle' | 'scroll' | 'focus' | 'window' | 'move' | 'url' | 'image' | 'link' | 'selection' | 'window.controls' | 'clipboard' | 'input' | 'listen' | 'capture' | 'popup' | 'advanced';
+export type CommandGroup = 'tabs' | 'load' | 'zoom' | 'history' | 'toggle' | 'scroll' | 'focus' | 'window' | 'move' | 'url' | 'image' | 'link' | 'selection' | 'window.controls' | 'clipboard' | 'input' | 'listen' | 'capture' | 'popup' | 'advanced' | 'open';
 
 export type CommandPermission = 'tabs' | 'sessions' | 'bookmarks' | 'scripting' | 'activeTab';
 
