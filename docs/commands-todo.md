@@ -22,6 +22,8 @@ This is a TODO list of commands to be implemented
 - [x]  TogglePin
 - [x]  ScrollTop
 - [x]  ScrollBottom
+- [x]  ScrollPageUp
+- [x]  ScrollPageDown
 
 ## What's not done yet?
 
@@ -82,8 +84,6 @@ This is a TODO list of commands to be implemented
 - [ ]  SaveLink
 - [ ]  SaveScreenshot
 - [ ]  SaveTabAsPDF
-- [ ]  ScrollPageDown
-- [ ]  ScrollPageUp
 - [ ]  SearchClipboard
 - [ ]  SearchClipboardInNewTab
 - [ ]  SearchTextSelection

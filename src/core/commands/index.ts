@@ -16,6 +16,7 @@ import { TogglePin } from "@commands/toggle-pin";
 import { ToggleMute } from "@commands/toggle-mute";
 import { ScrollTop } from "@commands/scroll-top";
 import { ScrollBottom } from "@commands/scroll-bottom";
+import { ScrollPageUp, ScrollPageDown } from "@commands/scroll-page";
 
 export const commands = {
   NewTab,
@@ -36,6 +37,8 @@ export const commands = {
   ToggleMute,
   ScrollTop,
   ScrollBottom,
+  ScrollPageUp,
+  ScrollPageDown
 } as const;
 
 export type CommandName = keyof typeof commands;
