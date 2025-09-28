@@ -37,26 +37,28 @@ This is a TODO list of commands to be implemented
 - [x]  MoveTabToEnd
 - [x]  MoveTabToNewWindow
 - [x]  MoveTabToStart
+- [x]  EnterFullscreen
+- [x]  ToggleFullscreen
+- [x]  ToggleWindowSize
+- [x]  CloseWindow
+- [x]  MaximizeWindow
+- [x]  MinimizeWindow
+- [x]  NewWindow
 
 ## What's not done yet?
 
 - [ ]  ClearBrowsingData
-- [ ]  CloseWindow
 - [ ]  CopyImage
 - [ ]  CopyImageURL
 - [ ]  CopyLinkURL
 - [ ]  CopyTabURL
 - [ ]  CopyTextSelection
 - [ ]  DecreaseURLNumber
-- [ ]  EnterFullscreen
 - [ ]  ExecuteUserScript
 - [ ]  IncreaseURLNumber
 - [ ]  InsertCustomText
 - [ ]  LinkToNewBookmark
-- [ ]  MaximizeWindow
-- [ ]  MinimizeWindow
 - [ ]  NewPrivateWindow
-- [ ]  NewWindow
 - [ ]  OpenAddonSettings
 - [ ]  OpenCustomURL
 - [ ]  OpenCustomURLInNewPrivateWindow
@@ -91,9 +93,7 @@ This is a TODO list of commands to be implemented
 - [ ]  SearchTextSelectionInNewTab
 - [ ]  SendMessageToOtherAddon
 - [ ]  ToggleBookmark
-- [ ]  ToggleFullscreen
 - [ ]  ToggleReaderMode
-- [ ]  ToggleWindowSize
 - [ ]  ToRootURL
 - [ ]  URLLevelUp
 - [ ]  ViewImage

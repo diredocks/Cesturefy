@@ -28,6 +28,11 @@ import {
   MoveTabToEnd, MoveTabToStart,
   MoveTabToNewWindow
 } from "@commands/move-tabs";
+import {
+  CloseWindow, EnterFullscreen,
+  MaximizeWindow, MinimizeWindow,
+  NewWindow, ToggleFullscreen, ToggleWindowSize
+} from "@commands/window";
 
 export const commands = {
   NewTab,
@@ -39,7 +44,6 @@ export const commands = {
   CloseOtherTabs,
   RestoreTab,
   ReloadTab,
-  ReloadAllTabs,
   ZoomIn,
   ZoomOut,
   ZoomReset,
@@ -56,6 +60,12 @@ export const commands = {
   FocusFirstTab,
   FocusLastTab,
   FocusPreviousSelectedTab,
+  MaximizeWindow,
+  MinimizeWindow,
+  ToggleFullscreen,
+  ToggleWindowSize,
+  NewWindow,
+  EnterFullscreen,
   MoveLeftTabsToNewWindow,
   MoveRightTabsToNewWindow,
   MoveTabLeft,
@@ -63,6 +73,8 @@ export const commands = {
   MoveTabToEnd,
   MoveTabToStart,
   MoveTabToNewWindow,
+  CloseWindow,
+  ReloadAllTabs,
 } as const;
 
 export type CommandName = keyof typeof commands;
