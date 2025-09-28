@@ -21,6 +21,13 @@ import { FocusLeftTab, FocusRightTab } from "@commands/focus-left-right";
 import { FocusFirstTab, FocusLastTab } from "@commands/focus-first-last";
 import { FocusPreviousSelectedTab } from "@commands/focus-last-accessed";
 import { StopLoading } from "@commands/stop-loading";
+import {
+  MoveLeftTabsToNewWindow,
+  MoveRightTabsToNewWindow,
+  MoveTabLeft, MoveTabRight,
+  MoveTabToEnd, MoveTabToStart,
+  MoveTabToNewWindow
+} from "@commands/move-tabs";
 
 export const commands = {
   NewTab,
@@ -49,6 +56,13 @@ export const commands = {
   FocusFirstTab,
   FocusLastTab,
   FocusPreviousSelectedTab,
+  MoveLeftTabsToNewWindow,
+  MoveRightTabsToNewWindow,
+  MoveTabLeft,
+  MoveTabRight,
+  MoveTabToEnd,
+  MoveTabToStart,
+  MoveTabToNewWindow,
 } as const;
 
 export type CommandName = keyof typeof commands;

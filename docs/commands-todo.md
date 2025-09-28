@@ -30,6 +30,13 @@ This is a TODO list of commands to be implemented
 - [x]  FocusRightTab
 - [x]  FocusPreviousSelectedTab
 - [x]  StopLoading
+- [x]  MoveLeftTabsToNewWindow
+- [x]  MoveRightTabsToNewWindow
+- [x]  MoveTabLeft
+- [x]  MoveTabRight
+- [x]  MoveTabToEnd
+- [x]  MoveTabToNewWindow
+- [x]  MoveTabToStart
 
 ## What's not done yet?
 
@@ -48,13 +55,6 @@ This is a TODO list of commands to be implemented
 - [ ]  LinkToNewBookmark
 - [ ]  MaximizeWindow
 - [ ]  MinimizeWindow
-- [ ]  MoveLeftTabsToNewWindow
-- [ ]  MoveRightTabsToNewWindow
-- [ ]  MoveTabLeft
-- [ ]  MoveTabRight
-- [ ]  MoveTabToEnd
-- [ ]  MoveTabToNewWindow
-- [ ]  MoveTabToStart
 - [ ]  NewPrivateWindow
 - [ ]  NewWindow
 - [ ]  OpenAddonSettings
