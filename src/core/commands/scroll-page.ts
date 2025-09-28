@@ -37,9 +37,10 @@ const injectedCode = (scrollBy: number, scrollRatio: number, duration: number) =
   let canScroll = false;
 
   if (el) {
-    const newScrollTop = (el.scrollTop ?? 0) + scrollBy * scrollRatio * (el.clientHeight ?? 0);
     const maxScroll = (el.scrollHeight ?? 0) - (el.clientHeight ?? 0);
-    if (newScrollTop >= 0 && newScrollTop <= maxScroll) {
+    let newScrollTop = (el.scrollTop ?? 0) + scrollBy * scrollRatio * (el.clientHeight ?? 0);
+    newScrollTop = Math.max(0, Math.min(newScrollTop, maxScroll));
+    if ((el.scrollTop ?? 0) !== newScrollTop) {
       scrollToY(newScrollTop, duration, el);
       canScroll = true;
     }
