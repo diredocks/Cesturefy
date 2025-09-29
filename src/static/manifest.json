@@ -11,7 +11,9 @@
   "optional_permissions": [
     "sessions",
     "scripting",
-    "activeTab"
+    "activeTab",
+    "clipboardRead",
+    "clipboardWrite"
   ],
   "optional_host_permissions": [
     "<all_urls>"

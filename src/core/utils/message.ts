@@ -54,10 +54,12 @@ export function sendTabMessage<
 export type BackgroundMessages = {
   gestureChange: { vectors: Vectors; context: Context };
   gestureEnd: { vectors: Vectors; context: Context };
-  OSRequest: boolean;
+  OSRequest: boolean; // just a placeholder
 };
 
 export type ContentMessages = {
   matchingGesture: string | null; // NOTE: null possible due to not matched any gesture
   currentOS: string;
+  clipboardWriteText: string;
+  // clipboardReadText: boolean;
 };

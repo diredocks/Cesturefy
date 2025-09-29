@@ -20,7 +20,7 @@ export type CommandGroup = 'tabs' | 'load' | 'zoom' | 'history' | 'toggle' | 'sc
 
 export type CommandPermission = Extract<
   chrome.runtime.ManifestPermissions,
-  'tabs' | 'sessions' | 'bookmarks' | 'scripting' | 'activeTab'
+  'tabs' | 'sessions' | 'bookmarks' | 'scripting' | 'activeTab' | 'clipboardWrite' | 'clipboardRead'
 >;
 
 export interface CommandDefinition<TSettings> {

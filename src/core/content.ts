@@ -105,9 +105,14 @@ const handleCurrentOS: Handler<"currentOS", ContentMessages> = (m) => {
   mouseController.currentOS = m.data;
 };
 
+const handleClipboardWrite: Handler<"clipboardWriteText", ContentMessages> = async (m) => {
+  await navigator.clipboard.writeText(m.data);
+};
+
 const contentHandlers: HandlerMap<ContentMessages> = {
   matchingGesture: handleMatchingGesture,
   currentOS: handleCurrentOS,
+  clipboardWriteText: handleClipboardWrite,
 };
 
 registerHandlers(contentHandlers);

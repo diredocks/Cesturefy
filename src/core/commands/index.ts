@@ -35,6 +35,7 @@ import {
 } from "@commands/window";
 import { ToRootURL, URLLevelUp } from "@commands/urls";
 import { OpenAddonSettings, ViewPageSourceCode } from "@commands/open";
+import { CopyImageURL, CopyLinkURL, CopyTabURL } from "@commands/copy-url";
 
 export const commands = {
   NewTab,
@@ -81,6 +82,9 @@ export const commands = {
   URLLevelUp,
   ViewPageSourceCode,
   OpenAddonSettings,
+  CopyTabURL,
+  CopyLinkURL,
+  CopyImageURL,
 } as const;
 
 export type CommandName = keyof typeof commands;

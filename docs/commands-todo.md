@@ -48,14 +48,14 @@ This is a TODO list of commands to be implemented
 - [x]  URLLevelUp
 - [x]  ViewPageSourceCode
 - [x]  OpenAddonSettings
+- [x]  CopyImageURL
+- [x]  CopyLinkURL
+- [x]  CopyTabURL
 
 ## What's not done yet?
 
 - [ ]  ClearBrowsingData
 - [ ]  CopyImage
-- [ ]  CopyImageURL
-- [ ]  CopyLinkURL
-- [ ]  CopyTabURL
 - [ ]  CopyTextSelection
 - [ ]  DecreaseURLNumber
 - [ ]  ExecuteUserScript
