@@ -54,12 +54,12 @@ This is a TODO list of commands to be implemented
 - [x]  OpenLink
 - [x]  OpenLinkInNewTab
 - [x]  OpenLinkInNewWindow
+- [x]  CopyTextSelection
 
 ## What's not done yet?
 
 - [ ]  ClearBrowsingData
 - [ ]  CopyImage
-- [ ]  CopyTextSelection
 - [ ]  DecreaseURLNumber
 - [ ]  ExecuteUserScript
 - [ ]  IncreaseURLNumber

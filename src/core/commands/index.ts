@@ -37,6 +37,7 @@ import { ToRootURL, URLLevelUp } from "@commands/urls";
 import { OpenAddonSettings, ViewPageSourceCode } from "@commands/open";
 import { CopyImageURL, CopyLinkURL, CopyTabURL } from "@commands/copy-url";
 import { OpenURLFromClipboard, OpenURLFromClipboardInNewTab, OpenURLFromClipboardInNewWindow } from "@commands/open-clipboard";
+import { CopyTextSelection } from "@commands/copy-selection";
 
 export const commands = {
   NewTab,
@@ -89,6 +90,7 @@ export const commands = {
   OpenURLFromClipboard,
   OpenURLFromClipboardInNewTab,
   OpenURLFromClipboardInNewWindow,
+  CopyTextSelection,
 } as const;
 
 export type CommandName = keyof typeof commands;
