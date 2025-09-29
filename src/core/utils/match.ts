@@ -1,8 +1,8 @@
 import { vectorDirectionDifference } from "@utils/common";
 import { Vectors } from "@utils/types";
 import Gesture from "@model/gesture";
-import { DefaultConfig } from "@utils/config";
-import { configManager } from "@utils/config-manager";
+import { DefaultConfig } from "@model/config";
+import { configManager } from "@model/config-manager";
 
 export type MatchingAlgorithm = 'Strict' | 'ShapeIndependent' | 'Combined';
 

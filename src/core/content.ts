@@ -5,8 +5,8 @@ import {
   Handler, HandlerMap, registerHandlers,
   sendBackgroundMessage, ContentMessages
 } from "@utils/message";
-import { configManager } from "@utils/config-manager";
-import { DefaultConfig } from "@utils/config";
+import { configManager } from "@model/config-manager";
+import { DefaultConfig } from "@model/config";
 import { matchesURL } from "@utils/common";
 import Context, { MouseData } from "@model/context";
 

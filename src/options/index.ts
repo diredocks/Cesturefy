@@ -1,5 +1,5 @@
 import { fetchHTMLAsFragment } from "@options/utils/common";
-import { configManager } from "@utils/config-manager";
+import { configManager } from "@model/config-manager";
 
 // resources
 const res = [];

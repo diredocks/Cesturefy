@@ -1,5 +1,5 @@
 import Gesture, { GestureJSON } from "@model/gesture";
-import { configManager } from "@utils/config-manager";
+import { configManager } from "@model/config-manager";
 import { matcher } from "@utils/match";
 import {
   Handler, HandlerMap,

@@ -1,4 +1,4 @@
-import { ConfigSchema, DefaultConfig } from "@utils/config";
+import { ConfigSchema, DefaultConfig } from "@model/config";
 import { EventEmitter } from "@utils/emitter";
 
 export type ConfigEvents = Record<string, (...args: any[]) => void> & {

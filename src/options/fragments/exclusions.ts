@@ -1,5 +1,5 @@
 import { ContentLoaded } from "@options/index";
-import { configManager } from "@utils/config-manager";
+import { configManager } from "@model/config-manager";
 
 ContentLoaded.then(main);
 

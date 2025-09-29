@@ -1,5 +1,5 @@
 import { preventDefault, getDistance } from "@utils/common";
-import { DefaultConfig } from "@utils/config";
+import { DefaultConfig } from "@model/config";
 import { EventEmitter } from "@utils/emitter";
 import { SuppressionKey } from "@utils/types";
 

@@ -2,7 +2,7 @@
 import { PopupBox } from "@options/components/popup-box";
 import { ContentLoaded } from "@options/index";
 import { GestureJSON } from "@model/gesture";
-import { configManager } from "@utils/config-manager";
+import { configManager } from "@model/config-manager";
 import { Vectors } from "@utils/types";
 import { createGestureThumbnail } from "@options/utils/common";
 import { mouseController } from "@controller/mouse";

@@ -1,7 +1,7 @@
 import { getDistance } from "@utils/common";
 import { Point } from "@utils/types";
-import { configManager } from "@utils/config-manager";
-import { DefaultConfig } from "@utils/config";
+import { configManager } from "@model/config-manager";
+import { DefaultConfig } from "@model/config";
 
 export class TraceCommand {
   private static _instance: TraceCommand;
