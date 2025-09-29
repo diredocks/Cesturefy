@@ -13,7 +13,7 @@ const OpenLinkFn: CommandFn<OpenLinkSettings> = async function (sender, data) {
 };
 
 interface OpenLinkNewTabSettings {
-  position?: "before" | "after" | "start" | "end";
+  position?: "before" | "after" | "start" | "end" | "default";
   focus?: boolean;
 }
 

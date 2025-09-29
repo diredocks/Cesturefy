@@ -7,7 +7,7 @@ import { isHTTPURL } from "@utils/common";
 
 interface OpenURLSettings { }
 interface OpenURLNewTabSettings {
-  position?: "before" | "after" | "start" | "end";
+  position?: "before" | "after" | "start" | "end" | "default";
   focus?: boolean;
 }
 
