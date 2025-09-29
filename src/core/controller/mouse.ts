@@ -156,6 +156,9 @@ export class MouseController {
 
     if (e.buttons === this.mouseButton) {
       this._update(e);
+      // prevent text selection when using left button
+      // idk why people use this
+      if (this.mouseButton === MouseButton.LEFT) window.getSelection()?.removeAllRanges();
     } else if (e.button !== MouseButtonEvents.NoChanged) {
       if (e.button === this._toSingleButton(this.mouseButton)) {
         this._terminate(e);
