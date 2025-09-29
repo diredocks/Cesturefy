@@ -105,14 +105,20 @@ const handleCurrentOS: Handler<"currentOS", ContentMessages> = (m) => {
   mouseController.currentOS = m.data;
 };
 
-const handleClipboardWrite: Handler<"clipboardWriteText", ContentMessages> = async (m) => {
+const handleClipboardWriteText: Handler<"clipboardWriteText", ContentMessages> = async (m) => {
   await navigator.clipboard.writeText(m.data);
 };
+
+const handleClipboardReadText: Handler<"clipboardReadText", ContentMessages> = async (_m, _s, callback) => {
+  // Handler will call a callback defined BY CALLER
+  callback(await navigator.clipboard.readText());
+}
 
 const contentHandlers: HandlerMap<ContentMessages> = {
   matchingGesture: handleMatchingGesture,
   currentOS: handleCurrentOS,
-  clipboardWriteText: handleClipboardWrite,
+  clipboardWriteText: handleClipboardWriteText,
+  clipboardReadText: handleClipboardReadText,
 };
 
 registerHandlers(contentHandlers);

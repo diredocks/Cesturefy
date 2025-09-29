@@ -51,6 +51,9 @@ This is a TODO list of commands to be implemented
 - [x]  CopyImageURL
 - [x]  CopyLinkURL
 - [x]  CopyTabURL
+- [x]  OpenLink
+- [x]  OpenLinkInNewTab
+- [x]  OpenLinkInNewWindow
 
 ## What's not done yet?
 
@@ -69,10 +72,7 @@ This is a TODO list of commands to be implemented
 - [ ]  OpenCustomURLInNewWindow
 - [ ]  OpenHomepage
 - [ ]  OpenImageInNewTab
-- [ ]  OpenLink
 - [ ]  OpenLinkInNewPrivateWindow
-- [ ]  OpenLinkInNewTab
-- [ ]  OpenLinkInNewWindow
 - [ ]  OpenPrintPreview
 - [ ]  OpenURLFromClipboard
 - [ ]  OpenURLFromClipboardInNewPrivateWindow

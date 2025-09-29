@@ -28,9 +28,12 @@ export function registerHandlers<M extends MessageMap>(
   handlers: HandlerMap<M>
 ) {
   chrome.runtime.onMessage.addListener(
-    (m: Message<keyof M, M>, sender, res) => {
+    (m: Message<keyof M, M>, sender, sendResponse) => {
       const handler = handlers[m.subject];
-      if (handler) handler(m as any, sender, res);
+      if (!handler) return; // Maybe this check is not needed
+
+      const result: any = handler(m as any, sender, sendResponse);
+      if (result instanceof Promise) return true;
     }
   );
 }
@@ -46,9 +49,9 @@ export function sendBackgroundMessage<
 export function sendTabMessage<
   K extends keyof M,
   M extends MessageMap
->(tabId: number, subject: K, data: M[K]) {
+>(tabId: number, subject: K, data: M[K], callback?: any) {
   const msg: Message<K, M> = { subject, data };
-  return chrome.tabs.sendMessage(tabId, msg);
+  return chrome.tabs.sendMessage(tabId, msg, callback);
 }
 
 export type BackgroundMessages = {
@@ -61,5 +64,5 @@ export type ContentMessages = {
   matchingGesture: string | null; // NOTE: null possible due to not matched any gesture
   currentOS: string;
   clipboardWriteText: string;
-  // clipboardReadText: boolean;
+  clipboardReadText: boolean;
 };
