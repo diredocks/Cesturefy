@@ -5,15 +5,15 @@ import { defineCommand } from "@commands/commands";
 import { isHTTPURL } from "@utils/common";
 import { sendTabMessage } from "@utils/message";
 
-interface CopyURLData { }
+interface CopyURLSettings { }
 
-const CopyTabURLFn: CommandFn<CopyURLData> = async function (sender) {
+const CopyTabURLFn: CommandFn<CopyURLSettings> = async function (sender) {
   if (!sender.tab?.url) return false;
   sendTabMessage(sender.tab.id!, 'clipboardWriteText', sender.tab.url);
   return true;
 };
 
-const CopyLinkURLFn: CommandFn<CopyURLData> = async function (sender, data) {
+const CopyLinkURLFn: CommandFn<CopyURLSettings> = async function (sender, data) {
   if (!(sender.tab?.id)) return false;
 
   let url;
@@ -31,7 +31,7 @@ const CopyLinkURLFn: CommandFn<CopyURLData> = async function (sender, data) {
   return true;
 };
 
-const CopyImageURLFn: CommandFn<CopyURLData> = async function (sender, data) {
+const CopyImageURLFn: CommandFn<CopyURLSettings> = async function (sender, data) {
   if (!(sender.tab?.id)) return false;
   if (data?.target.imageData) {
     sendTabMessage(sender.tab.id, 'clipboardWriteText', data.target.imageData.src);
