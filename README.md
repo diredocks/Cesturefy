@@ -4,15 +4,17 @@
 
 Cesturefy is a Chromium adaptation of the popular [Robbendebiene/Gesturefy](https://github.com/Robbendebiene/Gesturefy) mouse gesture extension originally for Firefox, bringing the same smooth gesture control to Chrome, Edge, and other Chromium-based browsers.
 
+Get it on: [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/cesturefy/jefejapoeaijdkiilodmeagdmddhfign)
+
 ## Features
 
  - Mouse gestures (moving the mouse while holding the left, middle, or right button)
  - Customizable gesture trace and status information style
  - Light, dark and highcontrast theme
+ - (54/91) different [predefined commands](docs/commands-todo.md)
 
 ## Todo
 
-- [ ] More than 80 different [predefined commands](docs/commands-todo.md)
 - [ ] Provides special commands like popup, user script, multi purpose and cross add-on command
 - [ ] Rocker gestures (left-click while holding the right mouse button and vice versa)
 - [ ] Wheel gestures (scroll wheel while holding the left, middle, or right button)

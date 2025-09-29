@@ -33,7 +33,7 @@ export function registerHandlers<M extends MessageMap>(
       if (!handler) return; // Maybe this check is not needed
 
       const result: any = handler(m as any, sender, sendResponse);
-      if (result instanceof Promise) return true;
+      if (result instanceof Promise) return true; // FIXME: Something go wrong here
     }
   );
 }
