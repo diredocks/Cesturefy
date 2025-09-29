@@ -17,7 +17,7 @@ configManager.addEventListener('loaded', applyGestures);
 configManager.addEventListener('change', applyGestures);
 
 const handleGestureChange: Handler<"gestureChange", BackgroundMessages> = (m, sender) => {
-  const matchedGesture = matcher.getGestureByPattern(m.data, gestures);
+  const matchedGesture = matcher.getGestureByPattern(m.data.vectors, gestures);
   if (!sender.tab?.id) {
     return;
   }
@@ -29,9 +29,9 @@ const handleGestureChange: Handler<"gestureChange", BackgroundMessages> = (m, se
 };
 
 const handleGestureEnd: Handler<"gestureEnd", BackgroundMessages> = (m, sender) => {
-  const matchedGesture = matcher.getGestureByPattern(m.data, gestures);
+  const matchedGesture = matcher.getGestureByPattern(m.data.vectors, gestures);
   if (matchedGesture) {
-    matchedGesture.getCommand().execute(sender);
+    matchedGesture.getCommand().execute(sender, m.data.context);
   }
 };
 

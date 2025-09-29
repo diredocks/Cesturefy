@@ -1,3 +1,4 @@
+import Context from "@model/context";
 import { Vectors } from "@utils/types";
 
 export type MessageMap = Record<string, any>;
@@ -51,8 +52,8 @@ export function sendTabMessage<
 }
 
 export type BackgroundMessages = {
-  gestureChange: Vectors;
-  gestureEnd: Vectors;
+  gestureChange: { vectors: Vectors; context: Context };
+  gestureEnd: { vectors: Vectors; context: Context };
   OSRequest: boolean;
 };
 

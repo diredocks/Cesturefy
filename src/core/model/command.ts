@@ -1,5 +1,6 @@
 import { CommandName, commands } from "@commands/index";
 import { CommandFn, CommandGroup, CommandPermission } from "@utils/types";
+import Context from "@model/context";
 
 export interface CommandJSON<TSettings = Record<string, unknown>> {
   name: string;
@@ -74,7 +75,7 @@ export default class Command<TSettings = Record<string, unknown>> {
     this._settings = {};
   }
 
-  async execute(sender: chrome.runtime.MessageSender, data?: any) {
+  async execute(sender: chrome.runtime.MessageSender, data?: Context) {
     // TODO: request permissions here?
     return this._fn.call(this, sender, data);
   }

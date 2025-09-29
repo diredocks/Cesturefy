@@ -8,11 +8,14 @@ import {
 import { configManager } from "@utils/config-manager";
 import { DefaultConfig } from "@utils/config";
 import { matchesURL } from "@utils/common";
+import Context, { MouseData } from "@model/context";
 
 const pattern = new Pattern();
 let exclusions: string[] = DefaultConfig.Exclusions;
 let displayTrace: boolean = DefaultConfig.Settings.Gesture.Trace.display;
 let displayCommand: boolean = DefaultConfig.Settings.Gesture.Command.display;
+
+let contextData: Context;
 
 const applySettings = () => {
   mouseController.mouseButton = configManager.getPath(['Settings', 'Gesture', 'mouseButton']);
@@ -39,6 +42,11 @@ function main() {
   }
 }
 
+mouseController.addEventListener('register', (_es, e) => {
+  // collect contextual data, run as early as possible
+  contextData = Context.fromEvent(e);
+});
+
 mouseController.addEventListener('start', (es, e) => {
   if (displayTrace || displayCommand) {
     traceCommand.initialize(e.clientX, e.clientY);
@@ -58,9 +66,14 @@ mouseController.addEventListener('update', (_es, e) => {
   mouseGestureUpdate(coalescedEvents);
 });
 
-mouseController.addEventListener('end', (_es, _e) => {
-  traceCommand.terminate();
-  sendBackgroundMessage('gestureEnd', pattern.getPattern());
+mouseController.addEventListener('end', (_es, e) => {
+  traceCommand.terminate(); // safe to call even if its not displayed
+
+  // set last mouse event as endpoint
+  contextData.mouse = new MouseData({ x: e.clientX, y: e.clientY });
+  sendBackgroundMessage('gestureEnd',
+    { vectors: pattern.getPattern(), context: contextData });
+
   pattern.clear();
 });
 
@@ -73,7 +86,8 @@ function mouseGestureUpdate(es: (PointerEvent)[]) {
   for (const e of es) {
     const patternChange = pattern.addPoint(e.clientX, e.clientY);
     if (patternChange && displayCommand) {
-      sendBackgroundMessage('gestureChange', pattern.getPattern());
+      sendBackgroundMessage('gestureChange',
+        { vectors: pattern.getPattern(), context: contextData });
     }
   }
 

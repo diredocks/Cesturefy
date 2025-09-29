@@ -1,4 +1,5 @@
 import type Command from "@model/command";
+import Context from "@model/context";
 
 export interface Point {
   x: number;
@@ -12,7 +13,7 @@ export type Vectors = Vector[] | number[][];
 export type CommandFn<TSettings = Record<string, unknown>> = (
   this: Command<TSettings>,
   sender: chrome.runtime.MessageSender,
-  data?: any
+  data?: Context
 ) => Promise<boolean | null>;
 
 export type CommandGroup = 'tabs' | 'load' | 'zoom' | 'history' | 'toggle' | 'scroll' | 'focus' | 'window' | 'move' | 'url' | 'image' | 'link' | 'selection' | 'window.controls' | 'clipboard' | 'input' | 'listen' | 'capture' | 'popup' | 'advanced' | 'open';
