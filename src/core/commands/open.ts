@@ -3,7 +3,7 @@ import { defineCommand } from "@commands/commands";
 
 interface OpenSettings { }
 
-const OpenAddonSettingsFn: CommandFn<OpenSettings> = async function (sender) {
+const OpenAddonSettingsFn: CommandFn<OpenSettings> = async function () {
   await chrome.runtime.openOptionsPage();
   return true;
 }

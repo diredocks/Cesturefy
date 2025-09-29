@@ -38,6 +38,7 @@ import { OpenAddonSettings, ViewPageSourceCode } from "@commands/open";
 import { CopyImageURL, CopyLinkURL, CopyTabURL } from "@commands/copy-url";
 import { OpenURLFromClipboard, OpenURLFromClipboardInNewTab, OpenURLFromClipboardInNewWindow } from "@commands/open-clipboard";
 import { CopyTextSelection } from "@commands/copy-selection";
+import { OpenLink, OpenLinkInNewWindow, OpenLinkInNewTab } from "@commands/open-link";
 
 export const commands = {
   NewTab,
@@ -91,6 +92,9 @@ export const commands = {
   OpenURLFromClipboardInNewTab,
   OpenURLFromClipboardInNewWindow,
   CopyTextSelection,
+  OpenLink,
+  OpenLinkInNewTab,
+  OpenLinkInNewWindow,
 } as const;
 
 export type CommandName = keyof typeof commands;

@@ -55,6 +55,9 @@ This is a TODO list of commands to be implemented
 - [x]  OpenLinkInNewTab
 - [x]  OpenLinkInNewWindow
 - [x]  CopyTextSelection
+- [x]  OpenURLFromClipboard
+- [x]  OpenURLFromClipboardInNewTab
+- [x]  OpenURLFromClipboardInNewWindow
 
 ## What's not done yet?
 
@@ -74,10 +77,7 @@ This is a TODO list of commands to be implemented
 - [ ]  OpenImageInNewTab
 - [ ]  OpenLinkInNewPrivateWindow
 - [ ]  OpenPrintPreview
-- [ ]  OpenURLFromClipboard
 - [ ]  OpenURLFromClipboardInNewPrivateWindow
-- [ ]  OpenURLFromClipboardInNewTab
-- [ ]  OpenURLFromClipboardInNewWindow
 - [ ]  PasteClipboard
 - [ ]  PopupAllTabs
 - [ ]  PopupCustomCommandList
