@@ -4,7 +4,7 @@
 
 Cesturefy is a Chromium adaptation of the popular [Robbendebiene/Gesturefy](https://github.com/Robbendebiene/Gesturefy) mouse gesture extension originally for Firefox, bringing the same smooth gesture control to Chrome, Edge, and other Chromium-based browsers.
 
-#### [<img height="62" src="https://learn.microsoft.com/en-us/microsoft-edge/extensions/publish/add-ons-badge-images/microsoft-edge-add-ons-badge.png">](https://microsoftedge.microsoft.com/addons/detail/cesturefy/jefejapoeaijdkiilodmeagdmddhfign)
+#### [<img height="62" src="https://learn.microsoft.com/en-us/microsoft-edge/extensions/publish/add-ons-badge-images/microsoft-edge-add-ons-badge.png">](https://microsoftedge.microsoft.com/addons/detail/cesturefy/jefejapoeaijdkiilodmeagdmddhfign) [<img height="62" src="https://developer.chrome.com/static/docs/webstore/branding/image/HRs9MPufa1J1h5glNhut.png">](https://chromewebstore.google.com/detail/cesturefy/bifgfhokfobhebifcogneljkpaaloonp)
 
 ## Features
 
