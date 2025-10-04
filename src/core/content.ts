@@ -40,9 +40,11 @@ function main() {
   const isExcluded = exclusions.some(url => matchesURL(window.location.href, url));
   if (!isExcluded) {
     mouseController.enable();
-    // if (configManager.getPath(['Settings', 'Rocker', 'active'])) {
-    rockerController.enable();
-    // }
+    if (configManager.getPath(['Settings', 'Rocker', 'active'])) {
+      rockerController.enable();
+    } else {
+      rockerController.disable();
+    }
   }
 }
 

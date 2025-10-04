@@ -1,3 +1,4 @@
+// NOTE: Extras will reuse things we implement here
 import { ContentLoaded } from "@options/index"
 import { configManager } from "@model/config-manager";
 

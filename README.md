@@ -9,6 +9,7 @@ Cesturefy is a Chromium adaptation of the popular [Robbendebiene/Gesturefy](http
 ## Features
 
  - Mouse gestures (moving the mouse while holding the left, middle, or right button)
+ - Rocker gestures (left-click while holding the right mouse button and vice versa)
  - Customizable gesture trace and status information style
  - Light, dark and highcontrast theme
  - (54/91) different [predefined commands](docs/commands-todo.md)
@@ -16,7 +17,6 @@ Cesturefy is a Chromium adaptation of the popular [Robbendebiene/Gesturefy](http
 ## Todo
 
 - [ ] Provides special commands like popup, user script, multi purpose and cross add-on command
-- [ ] Rocker gestures (left-click while holding the right mouse button and vice versa)
 - [ ] Wheel gestures (scroll wheel while holding the left, middle, or right button)
 
 ## Limitations
