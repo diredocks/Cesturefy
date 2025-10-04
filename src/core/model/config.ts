@@ -1,7 +1,7 @@
-import { MouseButton } from "@controller/mouse";
 import { GestureJSON } from "@model/gesture";
+import { CommandJSON } from "@model/command";
 import { MatchingAlgorithm } from "@utils/match";
-import { SuppressionKey } from "@utils/types";
+import { SuppressionKey, MouseButton } from "@utils/types";
 
 export interface TimeoutSettings {
   active: boolean;
@@ -43,6 +43,12 @@ export interface GestureSettings {
   Command: CommandDisplaySettings;
 }
 
+export interface RockerSettings {
+  active: boolean;
+  leftMouseClick: CommandJSON;
+  rightMouseClick: CommandJSON;
+};
+
 export interface GeneralSettings {
   updateNotification: boolean;
   theme: string;
@@ -50,6 +56,7 @@ export interface GeneralSettings {
 
 export interface Settings {
   Gesture: GestureSettings;
+  Rocker: RockerSettings;
   General: GeneralSettings;
 }
 
@@ -88,6 +95,15 @@ export const DefaultConfig: ConfigSchema = {
           horizontalPosition: 50,
           verticalPosition: 40,
         },
+      },
+    },
+    Rocker: {
+      active: false,
+      leftMouseClick: {
+        name: "NewTab",
+      },
+      rightMouseClick: {
+        name: "CloseTab",
       },
     },
     General: {

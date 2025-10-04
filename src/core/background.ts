@@ -6,6 +6,7 @@ import {
   registerHandlers, sendTabMessage,
   BackgroundMessages, ContentMessages
 } from "@utils/message";
+import Command from "@model/command";
 
 let gestures: Gesture[];
 
@@ -35,7 +36,7 @@ const handleGestureEnd: Handler<"gestureEnd", BackgroundMessages> = (m, sender) 
   }
 };
 
-const handleOSRequest: Handler<"OSRequest", BackgroundMessages> = async (m, sender) => {
+const handleOSRequest: Handler<"OSRequest", BackgroundMessages> = async (_m, sender) => {
   // simply ignore m, send content os type
   sendTabMessage<"currentOS", ContentMessages>(
     sender.tab!.id!,
@@ -44,10 +45,21 @@ const handleOSRequest: Handler<"OSRequest", BackgroundMessages> = async (m, send
   );
 };
 
+const handleRockerLeft: Handler<"rockerLeft", BackgroundMessages> = async (m, sender) => {
+  const rockerCommand = Command.fromJSON(configManager.getPath(['Settings', 'Rocker', 'leftMouseClick']));
+  rockerCommand.execute(sender, m.data.context);
+};
+const handleRockerRight: Handler<"rockerRight", BackgroundMessages> = async (m, sender) => {
+  const rockerCommand = Command.fromJSON(configManager.getPath(['Settings', 'Rocker', 'rightMouseClick']));
+  rockerCommand.execute(sender, m.data.context);
+};
+
 const backgroundHandlers: HandlerMap<BackgroundMessages> = {
   gestureChange: handleGestureChange,
   gestureEnd: handleGestureEnd,
   OSRequest: handleOSRequest,
+  rockerLeft: handleRockerLeft,
+  rockerRight: handleRockerRight,
 };
 
 registerHandlers(backgroundHandlers);

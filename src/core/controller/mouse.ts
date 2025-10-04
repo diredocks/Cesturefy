@@ -1,7 +1,7 @@
-import { preventDefault, getDistance } from "@utils/common";
+import { preventDefault, getDistance, toSingleButton } from "@utils/common";
 import { DefaultConfig } from "@model/config";
 import { EventEmitter } from "@utils/emitter";
-import { SuppressionKey } from "@utils/types";
+import { SuppressionKey, MouseButton } from "@utils/types";
 
 type Callback = (buffer: PointerEvent[], event: PointerEvent) => void;
 // type MouseEvents = Record<'register' | 'start' | 'update' | 'end' | 'abort', Callback>;
@@ -13,12 +13,6 @@ type MouseEvents = Record<string, (...args: any[]) => void> & {
   end: Callback;
   abort: (buffer: PointerEvent[]) => void;
 };
-
-export enum MouseButton {
-  LEFT = 1,
-  RIGHT = 2,
-  MIDDLE = 4,
-}
 
 enum MouseButtonEvents {
   NoChanged = -1,
@@ -138,19 +132,6 @@ export class MouseController {
     this._target.removeEventListener("mousedown", preventDefault, true);
   }
 
-  private _toSingleButton(b: number) {
-    switch (b) {
-      case MouseButton.LEFT:
-        return 0;
-      case MouseButton.RIGHT:
-        return 2;
-      case MouseButton.MIDDLE:
-        return 1;
-      default:
-        return -1;
-    }
-  }
-
   private _handlePointerMove = (e: PointerEvent) => {
     if (!e.isTrusted) return;
 
@@ -160,7 +141,7 @@ export class MouseController {
       // idk why people use this
       if (this.mouseButton === MouseButton.LEFT) window.getSelection()?.removeAllRanges();
     } else if (e.button !== MouseButtonEvents.NoChanged) {
-      if (e.button === this._toSingleButton(this.mouseButton)) {
+      if (e.button === toSingleButton(this.mouseButton)) {
         this._terminate(e);
       } else {
         this._abort();

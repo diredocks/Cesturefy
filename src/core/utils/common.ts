@@ -1,3 +1,5 @@
+import { MouseButton } from "@utils/types";
+
 export function preventDefault(e: Event) {
   if (e.isTrusted) {
     e.preventDefault();
@@ -43,5 +45,19 @@ export function isHTTPURL(url: string | undefined | null): boolean {
     return parsed.protocol === "http:" || parsed.protocol === "https:";
   } catch {
     return false;
+  }
+}
+
+// NOTE: we really need this?
+export function toSingleButton(b: number) {
+  switch (b) {
+    case MouseButton.LEFT:
+      return 0;
+    case MouseButton.RIGHT:
+      return 2;
+    case MouseButton.MIDDLE:
+      return 1;
+    default:
+      return -1;
   }
 }

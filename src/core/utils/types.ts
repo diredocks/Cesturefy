@@ -34,3 +34,9 @@ export type RGBA = [number, number, number, number];
 export type RGB = [number, number, number];
 
 export type SuppressionKey = 'altKey' | 'ctrlKey' | 'shiftKey' | '';
+
+export enum MouseButton {
+  LEFT = 1,
+  RIGHT = 2,
+  MIDDLE = 4,
+}

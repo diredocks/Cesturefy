@@ -40,7 +40,7 @@ export function registerHandlers<M extends MessageMap>(
 
 export function sendBackgroundMessage<
   K extends keyof M,
-  M extends MessageMap
+  M extends BackgroundMessages
 >(subject: K, data: M[K]) {
   const msg: Message<K, M> = { subject, data };
   return chrome.runtime.sendMessage(msg);
@@ -48,7 +48,7 @@ export function sendBackgroundMessage<
 
 export function sendTabMessage<
   K extends keyof M,
-  M extends MessageMap
+  M extends ContentMessages
 >(tabId: number, subject: K, data: M[K], callback?: any) {
   const msg: Message<K, M> = { subject, data };
   return chrome.tabs.sendMessage(tabId, msg, callback);
@@ -58,6 +58,8 @@ export type BackgroundMessages = {
   gestureChange: { vectors: Vectors; context: Context };
   gestureEnd: { vectors: Vectors; context: Context };
   OSRequest: boolean; // just a placeholder
+  rockerLeft: { context: Context };
+  rockerRight: { context: Context };
 };
 
 export type ContentMessages = {

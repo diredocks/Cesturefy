@@ -9,6 +9,7 @@ import { configManager } from "@model/config-manager";
 import { DefaultConfig } from "@model/config";
 import { matchesURL } from "@utils/common";
 import Context, { MouseData } from "@model/context";
+import { rockerController } from "@controller/rocker";
 
 const pattern = new Pattern();
 let exclusions: string[] = DefaultConfig.Exclusions;
@@ -39,6 +40,9 @@ function main() {
   const isExcluded = exclusions.some(url => matchesURL(window.location.href, url));
   if (!isExcluded) {
     mouseController.enable();
+    // if (configManager.getPath(['Settings', 'Rocker', 'active'])) {
+    rockerController.enable();
+    // }
   }
 }
 
@@ -96,6 +100,14 @@ function mouseGestureUpdate(es: (PointerEvent)[]) {
     traceCommand.updateTrace(points);
   }
 }
+
+rockerController.addEventListener('rockerright', () => {
+  sendBackgroundMessage('rockerRight', { context: contextData });
+});
+
+rockerController.addEventListener('rockerleft', () => {
+  sendBackgroundMessage('rockerLeft', { context: contextData });
+});
 
 const handleMatchingGesture: Handler<"matchingGesture", ContentMessages> = (m) => {
   traceCommand.updateCommand(m.data);

@@ -1,7 +1,7 @@
 import { PopupBox } from "@options/components/popup-box";
 import { RGB, RGBA } from "@utils/types";
 import { clamp, rgbToHSV, RGBAToHexA, HexAToRGBA } from "@options/utils/common";
-import { MouseButton } from "@controller/mouse";
+import { MouseButton } from "@utils/types";
 
 export class ColorPicker extends HTMLElement {
   readonly shadow!: ShadowRoot; // I JUST HAVE IT
