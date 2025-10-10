@@ -1,110 +1,100 @@
-import { isObject } from "/core/utils/commons.mjs";
+import { CommandName, commands } from "@commands/index";
+import { CommandFn, CommandGroup, CommandPermission } from "@utils/types";
+import Context from "@model/context";
 
-import * as Commands from "/core/commands.mjs";
+export interface CommandJSON<TSettings = Record<string, unknown>> {
+  name: string;
+  settings?: Partial<TSettings>;
+}
 
-/**
- * This class represents a user defined command and provides easy access and manipulation methods
- * It is designed to allow easy conversation from and to JSON
- * The execute method calls the corresponding function
- **/
-export default class Command {
+export default class Command<TSettings = Record<string, unknown>> {
+  private _settings: Partial<TSettings> = {};
+  private _defaults: TSettings;
+  private _name: string;
+  private _group: CommandGroup;
+  private _fn: CommandFn;
+  private _permissions?: CommandPermission[];
 
-  /**
-   * The constructor can be passed a command name (string) and optionally a settings object
-   * Alternatively only a JSON formatted command object can be passed containing the keys: name, settings
-   **/
-  constructor (name, settings = null) {
-    let settingsPairs = []
-    // if first argument is an object assume the command data is given in JSON
-    if (arguments.length === 1 && isObject(arguments[0]) && arguments[0].hasOwnProperty("name")) {
-      this._name = arguments[0].name;
-      if (arguments[0].hasOwnProperty("settings")) {
-        // convert object to key value pairs
-        settingsPairs.push(...Object.entries(arguments[0].settings));
-      }
-    }
-    else {
-      if (typeof name !== "string") throw "The first argument must be of type string.";
-      this._name = name;
-      if (settings) {
-        if (!isObject(settings)) throw "The second argument must be an object.";
-        // convert object to key value pairs
-        settingsPairs.push(...Object.entries(settings));
-      }
-    }
-    // throw error if command function does not exist
-    if (!this._name in Commands) throw "There exists no corresponding function for the passed command name.";
-    // store settings as map
-    this._settings = new Map(settingsPairs);
+  constructor(
+    name: string,
+    group: CommandGroup,
+    fn: CommandFn<any>,
+    defaults: TSettings,
+    initialSettings?: Partial<TSettings>,
+    permissions?: CommandPermission[],
+  ) {
+    if (initialSettings) this._settings = { ...initialSettings };
+    this._defaults = { ...defaults };
+    this._name = name;
+    this._group = group;
+    this._fn = fn;
+    this._permissions = permissions;
   }
 
-  /**
-   * Converts the class instance to a JavaScript object
-   * This function is also automatically called when the JSON.stringify() option is invoked on an instance of this class
-   **/
-  toJSON () {
-    const obj = { name: this._name };
-    if (this._settings.size > 0) obj.settings = Object.fromEntries(this._settings);
-    return obj;
+  toString() {
+    return chrome.i18n.getMessage(`commandLabel${this.getName()}`)
   }
 
-  /**
-   * Returns the actual readable name of the command
-   **/
-  toString () {
-    return browser.i18n.getMessage(`commandLabel${this.getName()}`);
+  getGroup() {
+    return this._group;
   }
 
-  /**
-   * Executes the corresponding command function
-   * The command instance is set as the execution context (this value) so the command can access its methods (and therefore settings)
-   * Passes the sender and source data objects as the function arguments
-   * This function returns the return value of the command function (all command functions return a promise)
-   **/
-  execute (sender, data) {
-    if (!isObject(sender)) throw "The first argument must be an object.";
-    if (!isObject(data)) throw "The second argument must be an object.";
-    return Commands[this._name].call(
-      this,
-      sender,
-      data
-    );
+  getPermissions() {
+    return this._permissions
   }
 
-  getName () {
+  getName() {
     return this._name;
   }
 
-  setName (value) {
-    if (typeof value !== "string") throw "The passed argument must be of type string.";
+  setName(value: string) {
     this._name = value;
   }
 
-  getSetting (setting) {
-    if (typeof setting !== "string") throw "The passed argument must be of type string.";
-    return this._settings.get(setting);
+  getSetting<K extends keyof TSettings>(key: K): TSettings[K] {
+    return this._settings[key] ?? this._defaults[key] // default must exists
   }
 
-  setSetting (setting, value) {
-    if (typeof setting !== "string") throw "The first argument must be of type string.";
-    this._settings.set(setting, value);
+  setSetting<K extends keyof TSettings>(key: K, value: TSettings[K]): void {
+    this._settings[key] = value;
   }
 
-  hasSetting (setting) {
-    if (typeof setting !== "string") throw "The passed argument must be of type string.";
-    return this._settings.has(setting);
+  hasSetting<K extends keyof TSettings>(key: K): boolean {
+    return key in this._settings;
   }
 
-  deleteSetting (setting) {
-    if (typeof setting !== "string") throw "The passed argument must be of type string.";
-    return this._settings.delete(setting);
+  deleteSetting<K extends keyof TSettings>(key: K): void {
+    delete this._settings[key];
   }
 
-  hasSettings () {
-    return this._settings.size > 0;
+  hasSettings(): boolean {
+    return Object.keys(this._settings).length > 0;
   }
 
-  clearSettings () {
-    return this._settings.clear();
+  clearSettings(): void {
+    this._settings = {};
+  }
+
+  async execute(sender: chrome.runtime.MessageSender, data?: Context) {
+    // TODO: request permissions here?
+    return this._fn.call(this, sender, data);
+  }
+
+  toJSON(): CommandJSON<TSettings> {
+    return { name: this.getName(), settings: { ...this._settings } };
+  }
+
+  static fromJSON(json: CommandJSON) {
+    const def = commands[json.name as CommandName];
+    if (!def) throw new Error(`Command not found: ${json.name}`);
+
+    return new Command<typeof def.defaults>(
+      json.name as CommandName,
+      def.group,
+      def.fn,
+      def.defaults,
+      json.settings,
+      def.permissions
+    );
   }
 }

@@ -2,14 +2,14 @@
   font-weight: normal;
   font-style: normal;
   font-family: "Icons";
-  src: url("/resources/fonts/icons.woff");
+  src: url("/fonts/icons.woff");
 }
 
 @font-face {
   font-weight: normal;
   font-style: normal;
   font-family: "NunitoSans Regular";
-  src: url("/resources/fonts/NunitoSans-Regular.woff");
+  src: url("/fonts/NunitoSans-Regular.woff");
 }
 
 /* Light Theme */
@@ -23,10 +23,10 @@
   --textSecond-color: #FFF;
   --border-color: #ddd;
   --borderSecond-color: #EAEAEA;
-  --borderImage-Color: url("/resources/img/dashed_border_gray.png");
+  --borderImage-Color: url("/images/dashed_border_gray.png");
   --shadow-color: #ddd;
   --shadowSecond-color:rgba(0,0,0,0.15);
-  --highlighted-color: #00AAA0;
+  --highlighted-color: #fab12f;
   --warning-color: #FF6347;
 }
 
@@ -41,10 +41,10 @@
   --textSecond-color: #FFF;
   --border-color: #464e5e;
   --borderSecond-color: #464e5e;
-  --borderImage-Color: url("/resources/img/dashed_border_dark.png");
+  --borderImage-Color: url("/images/dashed_border_dark.png");
   --shadow-color: #464e5e;
   --shadowSecond-color: rgba(200,200,200, 0.15);
-  --highlighted-color: #00AAA0;
+  --highlighted-color: #fab12f;
   --warning-color: #FF6347;
 }
 
@@ -59,10 +59,10 @@
   --textSecond-color: #000;
   --border-color:#FFF;
   --borderSecond-color: #FFF;
-  --borderImage-Color: url("/resources/img/dashed_border_gray.png");
+  --borderImage-Color: url("/images/dashed_border_gray.png");
   --shadow-color: #FFF;
   --shadowSecond-color: rgba(255,255,255,0.15);
-  --highlighted-color: #00ff00;
+  --highlighted-color: #FA812F;
   --warning-color: #FF0000;
 }
 
@@ -89,14 +89,15 @@
 html {
   height: 100%;
   color: var(--text-color);
-  font-family: "NunitoSans Regular", "Arial", sans-serif;
 }
 
 body {
   display: flex;
   height: 100%;
   flex-direction: row;
+  font-family: "NunitoSans Regular", "Arial", sans-serif;
   background: var(--baseSecond-color);
+  font-size: 1rem;
 }
 
 input,
@@ -104,7 +105,7 @@ select,
 button,
 textarea {
   color: var(--text-color);
-  font-size: 1rem;
+  font-size: inherit;
   font-family: inherit;
 }
 
@@ -480,9 +481,9 @@ h2 {
 }
 
 .toggle-button:checked {
-  border-color: var(--highlighted-color, #00AAA0);
-  background: var(--highlighted-color, #00AAA0);
-  color: var(--textSecond-color, #FFF);
+  border-color: var(--highlighted-color);
+  background: var(--highlighted-color);
+  color: var(--textSecond-color);
 }
 
 /**
@@ -1040,7 +1041,7 @@ label.button > span {
   align-self: flex-start;
   aspect-ratio: 1/1;
   border-style: solid;
-  border-image-source: var(--borderImage-Color, url("/resources/img/dashed_border_gray.png"));
+  border-image-source: var(--borderImage-Color, url("/images/dashed_border_gray.png"));
   border-image-slice: 2;
   border-image-width: 1;
   border-image-repeat: round;

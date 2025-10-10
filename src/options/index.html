@@ -2,25 +2,26 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Gesturefy</title>
-  <link rel="icon" type="image/png" href="/resources/img/iconx32.png" sizes="16x16">
-  <link rel="stylesheet" href="/views/options/layout.css">
-  <link rel="stylesheet" id="Theme">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cesturefy</title>
+  <link rel="icon" type="image/png" href="/images/iconx32.png" sizes="16x16">
+  <link rel="stylesheet" href="index.css">
 
-  <script src="/views/options/components/command-select/main.mjs" type="module"></script>
-  <script src="/views/options/components/command-multi-select/main.mjs" type="module"></script>
-  <script src="/views/options/components/popup-box/main.mjs" type="module"></script>
-  <script src="/views/options/components/color-picker/main.mjs" type="module"></script>
+  <script src="components/popup-box.ts" type="module"></script>
+  <script src="components/command-select.ts" type="module"></script>
+  <script src="components/command-multi-select.ts" type="module"></script>
+  <script src="components/color-picker.ts" type="module"></script>
 
-  <script src="/views/options/main.mjs" type="module"></script>
-  <script src="/views/options/gestures.mjs" type="module"></script>
-  <script src="/views/options/exclusions.mjs" type="module"></script>
-  <script src="/views/options/data-management.mjs" type="module"></script>
+  <script src="index.ts" type="module"></script>
+  <script src="fragments/gestures.ts" type="module"></script>
+  <script src="fragments/settings.ts" type="module"></script>
+  <script src="fragments/exclusions.ts" type="module"></script>
+  <script src="fragments/about.ts" type="module"></script>
 </head>
 
 <body>
   <div id ="Sidebar">
-    <img class="logo" src="/resources/img/iconx96.png">
+    <img class="logo" src="/images/iconx96.png">
     <ul class="navigation">
       <li class="nav-item">
         <a href="#Gestures">
@@ -62,11 +63,11 @@
   </div>
 
   <div id="Content">
-    <div class="content" data-include="/views/options/fragments/gestures.inc" id="Gestures"></div>
-    <div class="content" data-include="/views/options/fragments/settings.inc" id="Settings"></div>
-    <div class="content" data-include="/views/options/fragments/extras.inc" id="Extras"></div>
-    <div class="content" data-include="/views/options/fragments/exclusions.inc" id="Exclusions"></div>
-    <div class="content" data-include="/views/options/fragments/about.inc" id="About"></div>
+    <div class="content" data-include="/options/fragments/gestures.html" id="Gestures"></div>
+    <div class="content" data-include="/options/fragments/settings.html" id="Settings"></div>
+    <div class="content" data-include="/options/fragments/extras.html" id="Extras"></div>
+    <div class="content" data-include="/options/fragments/exclusions.html" id="Exclusions"></div>
+    <div class="content" data-include="/options/fragments/about.html" id="About"></div>
   </div>
 </body>
 </html>

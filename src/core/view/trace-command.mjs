@@ -1,273 +1,233 @@
-import { getDistance } from "/core/utils/commons.mjs";
+import { getDistance } from "@utils/common";
+import { Point } from "@utils/types";
+import { configManager } from "@model/config-manager";
+import { DefaultConfig } from "@model/config";
 
-/**
- * MouseGestureView "singleton"
- * provides multiple functions to manipulate the overlay
- **/
+export class TraceCommand {
+  private static _instance: TraceCommand;
 
+  private overlay = document.createElement('div');
+  private canvas = document.createElement('canvas');
+  private command = document.createElement('div');
+  private context: CanvasRenderingContext2D;
 
-// public methods and variables
+  private traceLineWidth = DefaultConfig.Settings.Gesture.Trace.Style.lineWidth;
+  private traceLineGrowth = DefaultConfig.Settings.Gesture.Trace.Style.lineGrowth;
+  private lastTraceWidth = 0;
+  private lastPoint: Point = { x: 0, y: 0 };
 
+  private constructor() {
+    this.overlay.popover = 'manual';
+    this.overlay.style.cssText = `
+      all: initial !important;
+      position: fixed !important;
+      inset: 0 !important;
+      pointer-events: auto !important;
+    `;
 
-export default {
-  initialize: initialize,
-  updateGestureTrace: updateGestureTrace,
-  updateGestureCommand: updateGestureCommand,
-  terminate: terminate,
+    this.canvas.style.cssText = `
+      all: initial !important;
+      pointer-events: auto !important;
+    `;
+    this.context = this.canvas.getContext('2d')!;
 
-  // gesture Trace styles
+    this.command.style.cssText = `
+      --horizontalPosition: 0;
+      --verticalPosition: 0;
+      all: initial !important;
+      position: absolute !important;
+      top: calc(var(--verticalPosition) * 1%) !important;
+      left: calc(var(--horizontalPosition) * 1%) !important;
+      transform: translate(calc(var(--horizontalPosition) * -1%), calc(var(--verticalPosition) * -1%)) !important;
+      font-family: "NunitoSans Regular", "Arial", sans-serif !important;
+      line-height: normal !important;
+      text-shadow: 0.01em 0.01em 0.01em rgba(0,0,0,0.5) !important;
+      text-align: center !important;
+      padding: 0.4em 0.4em 0.3em !important;
+      font-weight: bold !important;
+      background-color: transparent !important;
+      width: max-content !important;
+      max-width: 50vw !important;
+      pointer-events: auto !important;
+    `;
 
-  get gestureTraceLineColor () {
-    const rgbHex = Context.fillStyle;
-    const alpha = parseFloat(Canvas.style.getPropertyValue("opacity")) || 1;
-    let aHex = Math.round(alpha * 255).toString(16);
-    // add leading zero if string length is 1
-    if (aHex.length === 1) aHex = "0" + aHex;
-    return rgbHex + aHex;
-  },
-  set gestureTraceLineColor (value) {
-    const rgbHex = value.substring(0, 7);
-    const aHex = value.slice(7);
-    const alpha = parseInt(aHex, 16)/255;
-    Context.fillStyle = rgbHex;
-    Canvas.style.setProperty("opacity", alpha, "important");
-  },
+    window.addEventListener('resize', this.maximizeCanvas, true);
+    this.maximizeCanvas();
 
-  get gestureTraceLineWidth () {
-    return gestureTraceLineWidth;
-  },
-  set gestureTraceLineWidth (value) {
-    gestureTraceLineWidth = value;
-  },
-
-  get gestureTraceLineGrowth () {
-    return gestureTraceLineGrowth;
-  },
-  set gestureTraceLineGrowth (value) {
-    gestureTraceLineGrowth = Boolean(value);
-  },
-
-  // gesture command styles
-
-  get gestureCommandFontSize () {
-    return Command.style.getPropertyValue('font-size');
-  },
-  set gestureCommandFontSize (value) {
-    Command.style.setProperty('font-size', value, 'important');
-  },
-
-  get gestureCommandFontColor () {
-    return Command.style.getPropertyValue('color');
-  },
-  set gestureCommandFontColor (value) {
-    Command.style.setProperty('color', value, 'important');
-  },
-
-  get gestureCommandBackgroundColor () {
-    return Command.style.getPropertyValue('background-color');
-  },
-  set gestureCommandBackgroundColor (value) {
-    Command.style.setProperty('background-color', value);
-  },
-
-  get gestureCommandHorizontalPosition () {
-    return parseFloat(Command.style.getPropertyValue("--horizontalPosition"));
-  },
-  set gestureCommandHorizontalPosition (value) {
-    Command.style.setProperty("--horizontalPosition", value);
-  },
-
-  get gestureCommandVerticalPosition () {
-    return parseFloat(Command.style.getPropertyValue("--verticalPosition"));
-  },
-  set gestureCommandVerticalPosition (value) {
-    Command.style.setProperty("--verticalPosition", value);
+    configManager.addEventListener("change", () => this.applyConfig());
+    configManager.addEventListener("loaded", () => this.applyConfig());
   }
-};
 
-
-/**
- * append overlay and start drawing the gesture
- **/
-function initialize (x, y) {
-  // overlay is not working in a pure svg or other xml pages thus do not append the overlay
-  if (!document.body && document.documentElement.namespaceURI !== "http://www.w3.org/1999/xhtml") {
-    return;
+  public static get instance(): TraceCommand {
+    if (!this._instance) this._instance = new TraceCommand();
+    return this._instance;
   }
-  if (document.body.tagName.toUpperCase() === "FRAMESET") {
-    document.documentElement.appendChild(Overlay);
+
+  initialize(x: number, y: number) {
+    // overlay is not working in a pure svg or other xml pages thus do not append the overlay
+    if (!document.body && document.documentElement.namespaceURI !== "http://www.w3.org/1999/xhtml") return;
+
+    document.body.appendChild(this.overlay);
+    this.overlay.showPopover();
+
+    this.lastPoint = { x, y };
   }
-  else {
-    document.body.appendChild(Overlay);
-  }
-  Overlay.showPopover();
-  // store starting point
-  lastPoint.x = x;
-  lastPoint.y = y;
-}
 
+  updateTrace(points: Point[]) {
+    if (!this.overlay.contains(this.canvas)) this.overlay.appendChild(this.canvas);
 
-/**
- * draw line for gesture
- */
-function updateGestureTrace (points) {
-  if (!Overlay.contains(Canvas)) Overlay.appendChild(Canvas);
+    const path = new Path2D();
 
-  // temporary path in order draw all segments in one call
-  const path = new Path2D();
+    for (const point of points) {
+      let startWidth = this.traceLineWidth;
+      let endWidth = this.traceLineWidth;
 
-  for (let point of points) {
-    if (gestureTraceLineGrowth && lastTraceWidth < gestureTraceLineWidth) {
-      // the length in pixels after which the line should be grown to its final width
-      // in this case the length depends on the final width defined by the user
-      const growthDistance = gestureTraceLineWidth * 50;
-      // the distance from the last point to the current
-      const distance = getDistance(lastPoint.x, lastPoint.y, point.x, point.y);
-      // cap the line width by its final width value
-      const currentTraceWidth = Math.min(
-        lastTraceWidth + distance / growthDistance * gestureTraceLineWidth,
-        gestureTraceLineWidth
-      );
-      const pathSegment = createGrowingLine(lastPoint.x, lastPoint.y, point.x, point.y, lastTraceWidth, currentTraceWidth);
-      path.addPath(pathSegment);
+      if (this.traceLineGrowth && this.lastTraceWidth < this.traceLineWidth) {
+        const growthDistance = this.traceLineWidth * 50;
+        const distance = getDistance(this.lastPoint.x, this.lastPoint.y, point.x, point.y);
+        endWidth = Math.min(
+          this.lastTraceWidth + (distance / growthDistance) * this.traceLineWidth,
+          this.traceLineWidth
+        );
+        startWidth = this.lastTraceWidth;
+        this.lastTraceWidth = endWidth;
+      }
 
-      lastTraceWidth = currentTraceWidth;
-    }
-    else {
-      const pathSegment = createGrowingLine(lastPoint.x, lastPoint.y, point.x, point.y, gestureTraceLineWidth, gestureTraceLineWidth);
-      path.addPath(pathSegment);
+      path.addPath(this.createGrowingLine(
+        this.lastPoint.x, this.lastPoint.y,
+        point.x, point.y,
+        startWidth,
+        endWidth
+      ));
+
+      this.lastPoint = { ...point };
     }
 
-    lastPoint.x = point.x;
-    lastPoint.y = point.y;
+    this.context.fill(path);
   }
-  // draw accumulated path segments
-  Context.fill(path);
-}
 
-
-/**
- * update command on match
- **/
-function updateGestureCommand (command) {
-  if (command && Overlay.isConnected) {
-    Command.textContent = command;
-    if (!Overlay.contains(Command)) Overlay.appendChild(Command);
+  updateCommand(text: string | null) {
+    if (text !== null && this.overlay.isConnected) {
+      this.command.textContent = text;
+      if (!this.overlay.contains(this.command)) this.overlay.appendChild(this.command);
+    } else {
+      this.command.remove();
+    }
   }
-  else Command.remove();
-}
 
+  terminate() {
+    this.overlay.hidePopover();
+    this.overlay.remove();
+    this.canvas.remove();
+    this.command.remove();
 
-/**
- * remove and reset overlay
- **/
-function terminate () {
-  Overlay.hidePopover();
-  Overlay.remove();
-  Canvas.remove();
-  Command.remove();
-  // clear canvas
-  Context.clearRect(0, 0, Canvas.width, Canvas.height);
-  // reset trace line width
-  lastTraceWidth = 0;
-  Command.textContent = "";
-}
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.lastTraceWidth = 0;
+    this.command.textContent = "";
+  }
 
-
-// private variables and methods
-
-// use HTML namespace so proper HTML elements will be created even in foreign doctypes/namespaces (issue #565)
-
-const Overlay = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
-      Overlay.popover = "manual";
-      Overlay.style = `
-        all: initial !important;
-        position: fixed !important;
-        inset: 0 !important;
-
-        pointer-events: none !important;
-      `;
-
-const Canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
-      Canvas.style = `
-        all: initial !important;
-
-        pointer-events: none !important;
-      `;
-
-const Context = Canvas.getContext('2d');
-
-const Command = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
-      Command.style = `
-        --horizontalPosition: 0;
-        --verticalPosition: 0;
-        all: initial !important;
-        position: absolute !important;
-        top: calc(var(--verticalPosition) * 1%) !important;
-        left: calc(var(--horizontalPosition) * 1%) !important;
-        transform: translate(calc(var(--horizontalPosition) * -1%), calc(var(--verticalPosition) * -1%)) !important;
-        font-family: "NunitoSans Regular", "Arial", sans-serif !important;
-        line-height: normal !important;
-        text-shadow: 0.01em 0.01em 0.01em rgba(0,0,0, 0.5) !important;
-        text-align: center !important;
-        padding: 0.4em 0.4em 0.3em !important;
-        font-weight: bold !important;
-        background-color: rgba(0,0,0,0) !important;
-        width: max-content !important;
-        max-width: 50vw !important;
-
-        pointer-events: none !important;
-      `;
-
-
-let gestureTraceLineWidth = 10,
-    gestureTraceLineGrowth = true;
-
-
-let lastTraceWidth = 0,
-    lastPoint = { x: 0, y: 0 };
-
-
-// resize canvas on window resize
-window.addEventListener('resize', maximizeCanvas, true);
-maximizeCanvas();
-
-
-/**
- * Adjust the canvas size to the size of the window
- **/
-function maximizeCanvas () {
-  // save context properties, because they get cleared on canvas resize
-  const tmpContext = {
-    lineCap: Context.lineCap,
-    lineJoin: Context.lineJoin,
-    fillStyle: Context.fillStyle,
-    strokeStyle: Context.strokeStyle,
-    lineWidth: Context.lineWidth
+  private maximizeCanvas = () => {
+    const { lineCap, lineJoin, fillStyle, strokeStyle, lineWidth } = this.context;
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+    Object.assign(this.context, { lineCap, lineJoin, fillStyle, strokeStyle, lineWidth });
   };
 
-  Canvas.width = window.innerWidth;
-  Canvas.height = window.innerHeight;
+  private createGrowingLine(
+    x1: number, y1: number,
+    x2: number, y2: number,
+    startWidth: number,
+    endWidth: number
+  ): Path2D {
+    const directionVectorX = x2 - x1;
+    const directionVectorY = y2 - y1;
+    const perpendicularVectorAngle = Math.atan2(directionVectorY, directionVectorX) + Math.PI / 2;
 
-  // restore previous context properties
-  Object.assign(Context, tmpContext);
+    const path = new Path2D();
+    path.arc(x1, y1, startWidth / 2, perpendicularVectorAngle, perpendicularVectorAngle + Math.PI);
+    path.arc(x2, y2, endWidth / 2, perpendicularVectorAngle + Math.PI, perpendicularVectorAngle);
+    path.closePath();
+    return path;
+  }
+
+  // Styles
+
+  get gestureTraceLineColor(): string {
+    const rgbHex = this.context.fillStyle as string;
+    const alpha = parseFloat(this.canvas.style.getPropertyValue("opacity")) || 1;
+    let aHex = Math.round(alpha * 255).toString(16);
+    if (aHex.length === 1) aHex = "0" + aHex;
+    return rgbHex + aHex;
+  }
+
+  set gestureTraceLineColor(value: string) {
+    const rgbHex = value.substring(0, 7);
+    const aHex = value.slice(7);
+    const alpha = parseInt(aHex, 16) / 255;
+    this.context.fillStyle = rgbHex;
+    this.canvas.style.setProperty("opacity", String(alpha), "important");
+  }
+
+  get gestureTraceLineWidth(): number {
+    return this.traceLineWidth;
+  }
+  set gestureTraceLineWidth(value: number) {
+    this.traceLineWidth = value;
+  }
+
+  get gestureTraceLineGrowth(): boolean {
+    return this.traceLineGrowth;
+  }
+  set gestureTraceLineGrowth(value: boolean) {
+    this.traceLineGrowth = Boolean(value);
+  }
+
+  get gestureCommandFontSize(): string {
+    return this.command.style.getPropertyValue("font-size");
+  }
+  set gestureCommandFontSize(value: string) {
+    this.command.style.setProperty("font-size", value, "important");
+  }
+
+  get gestureCommandFontColor(): string {
+    return this.command.style.getPropertyValue("color");
+  }
+  set gestureCommandFontColor(value: string) {
+    this.command.style.setProperty("color", value, "important");
+  }
+
+  get gestureCommandBackgroundColor(): string {
+    return this.command.style.getPropertyValue("background-color");
+  }
+  set gestureCommandBackgroundColor(value: string) {
+    this.command.style.setProperty("background-color", value, "important");
+  }
+
+  get gestureCommandHorizontalPosition(): number {
+    return parseFloat(this.command.style.getPropertyValue("--horizontalPosition"));
+  }
+  set gestureCommandHorizontalPosition(value: number) {
+    this.command.style.setProperty("--horizontalPosition", String(value));
+  }
+
+  get gestureCommandVerticalPosition(): number {
+    return parseFloat(this.command.style.getPropertyValue("--verticalPosition"));
+  }
+  set gestureCommandVerticalPosition(value: number) {
+    this.command.style.setProperty("--verticalPosition", String(value));
+  }
+
+  applyConfig() {
+    this.gestureTraceLineColor = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "strokeStyle"]);
+    this.gestureTraceLineWidth = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "lineWidth"]);
+    this.gestureTraceLineGrowth = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "lineGrowth"]);
+
+    this.gestureCommandFontSize = configManager.getPath(["Settings", "Gesture", "Command", "Style", "fontSize"]);
+    this.gestureCommandFontColor = configManager.getPath(["Settings", "Gesture", "Command", "Style", "fontColor"]);
+    this.gestureCommandBackgroundColor = configManager.getPath(["Settings", "Gesture", "Command", "Style", "backgroundColor"]);
+    this.gestureCommandHorizontalPosition = configManager.getPath(["Settings", "Gesture", "Command", "Style", "horizontalPosition"]);
+    this.gestureCommandVerticalPosition = configManager.getPath(["Settings", "Gesture", "Command", "Style", "verticalPosition"]);
+  }
 }
 
-
-/**
- * creates a growing line from a starting point and strike width to an end point and stroke width
- * returns a path 2d object
- **/
-function createGrowingLine (x1, y1, x2, y2, startWidth, endWidth) {
-  // calculate direction vector of point 1 and 2
-  const directionVectorX = x2 - x1,
-        directionVectorY = y2 - y1;
-  // calculate angle of perpendicular vector
-  const perpendicularVectorAngle = Math.atan2(directionVectorY, directionVectorX) + Math.PI/2;
-  // construct shape
-  const path = new Path2D();
-        path.arc(x1, y1, startWidth/2, perpendicularVectorAngle, perpendicularVectorAngle + Math.PI);
-        path.arc(x2, y2, endWidth/2, perpendicularVectorAngle + Math.PI, perpendicularVectorAngle);
-        path.closePath();
-  return path;
-}
+export const traceCommand = TraceCommand.instance;

@@ -1,127 +1,94 @@
-// getter for module path
-const MODULE_DIR = (() => {
-  const urlPath = new URL(import.meta.url).pathname;
-  return urlPath.slice(0, urlPath.lastIndexOf("/") + 1);
-})();
+// TODO: Command, input as popup-box property?
+interface PopupBoxEvents {
+  open: void;
+  close: string | boolean | undefined;
+}
 
+type PopupBoxEventMap = {
+  [K in keyof PopupBoxEvents]: CustomEvent<PopupBoxEvents[K]>;
+};
 
-/**
- * Custom element - <popup-box>
- * Accepts two sepcial attributes (and properties):
- * open : boolean - opens or closes the popup
- * type : confirm, alert, prompt, custom (default) - defines the functionality/purpose of the popup
- * Dispatches 2 custom events:
- * close : detail value depends on the popup type
- * open : detail value is always null
- * Special property:
- * value : contains the same value as the detail value of the event
- **/
-class PopupBox extends HTMLElement {
+type PopupType = "alert" | "confirm" | "prompt" | "custom";
 
-  /**
-   * Construcor
-   * Create shadow root and load stylesheet by appending it to the shadow DOM
-   **/
+export class PopupBox extends HTMLElement {
+  private _loaded: Promise<void>;
+  public value: string | boolean | undefined;
+
   constructor() {
     super();
-
-    this.attachShadow({mode: 'open'}).innerHTML = `
-      <link id="popupStylesheet" rel="stylesheet" href="${MODULE_DIR}layout.css">
+    this.attachShadow({ mode: "open" }).innerHTML = `
+      <link rel="stylesheet" href="/options/components/popup-box.css">
     `;
-    // add a promise and resolve it when the stylesheet is loaded
-    this._loaded = new Promise ((resolve) => {
-      this.shadowRoot.getElementById("popupStylesheet").onload = resolve;
+
+    // Wait for stylesheets
+    this._loaded = new Promise(resolve => {
+      const sheet = this.shadowRoot!.querySelector<HTMLLinkElement>("link");
+      if (!sheet) {
+        resolve();
+      } else if (sheet.sheet) {
+        resolve(); // loaded
+      } else {
+        sheet.onload = () => resolve();
+      }
     });
   }
 
-  /**
-   * Set observable attributes
-   **/
-  static get observedAttributes() {
-    return ['type', 'open'];
+  static get observedAttributes(): string[] {
+    return ["type", "open"];
   }
 
-  /**
-   * Handles the standard connected callback
-   * Opens the popup if the element gets appended to the DOM and the open attribute is set
-   **/
-  connectedCallback () {
+  connectedCallback(): void {
     if (this.open && this.isConnected) this._openPopupBox();
   }
 
-
-  /**
-   * Handles the standard disconnected callback
-   * Removes all popup elements from the shadow DOM
-   **/
-  disconnectedCallback () {
-    const popupOverlay = this.shadowRoot.getElementById("popupOverlay");
-    const popupWrapper = this.shadowRoot.getElementById("popupWrapper");
-    // remove popup elements
-    if (popupOverlay) popupOverlay.remove();
-    if (popupWrapper) popupWrapper.remove();
+  disconnectedCallback(): void {
+    this.shadowRoot?.getElementById("popupOverlay")?.remove();
+    this.shadowRoot?.getElementById("popupWrapper")?.remove();
   }
 
-
-  /**
-   * Handles the standard attribute change callback
-   * Open/close the popup on open attribute change
-   * Replace the popup if the popup type changes
-   **/
-  attributeChangedCallback (name, oldValue, newValue) {
-    // do nothing if element is not appended to the DOM
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (!this.isConnected) return;
 
     switch (name) {
-      case 'open': {
-        if (this.hasAttribute('open')) {
-          // if previous value was not set open popup
-          // == checks for null and undefined
+      case "open":
+        if (this.hasAttribute("open")) {
           if (oldValue == null) this._openPopupBox();
-        }
-        else {
+        } else {
           this._closePopupBox();
         }
-      } break;
+        break;
 
-      case 'type': {
-        // remove old popup elements
-        const popupOverlay = this.shadowRoot.getElementById("popupOverlay");
-        const popupWrapper = this.shadowRoot.getElementById("popupWrapper");
-        if (popupOverlay) popupOverlay.remove();
-        if (popupWrapper) popupWrapper.remove();
-        // create and add new popup
-        const popupFragment = this._buildPopupBox();
-        this.shadowRoot.append(popupFragment);
+      case "type": {
+        this.shadowRoot?.getElementById("popupOverlay")?.remove();
+        this.shadowRoot?.getElementById("popupWrapper")?.remove();
+        const frag = this._buildPopupBox();
+        this.shadowRoot?.append(frag);
       } break;
     }
   }
 
-
-  get open () {
-    return this.hasAttribute('open');
+  get open(): boolean {
+    return this.hasAttribute("open");
   }
 
-  set open (value) {
-    if (value) this.setAttribute('open', '');
-    else this.removeAttribute('open');
+  set open(value: boolean) {
+    if (value) {
+      this.setAttribute("open", "");
+    } else {
+      this.removeAttribute("open");
+    }
   }
 
-  get type () {
-    return this.getAttribute('type') || 'custom';
+  get type(): PopupType {
+    return (this.getAttribute("type") as PopupType) || "custom";
   }
 
-  set type (value) {
-    this.setAttribute('type', value);
+  set type(value: PopupType) {
+    this.setAttribute("type", value);
   }
 
-
-  /**
-   * Constructs the main command bar structure and popupOverlay
-   * Returns it as a document fragment
-   **/
-  _buildPopupBox () {
-    const template = document.createElement('template');
+  private _buildPopupBox(): DocumentFragment {
+    const template = document.createElement("template");
     template.innerHTML = `
       <div id="popupOverlay"></div>
       <div id="popupWrapper">
@@ -136,175 +103,138 @@ class PopupBox extends HTMLElement {
       </div>
     `;
 
-    // register event handlers
-    const popupOverlay = template.content.getElementById("popupOverlay");
-          popupOverlay.addEventListener("click", this._handleCloseButtonClick.bind(this), { once: true });
-    const popupBoxCloseButton = template.content.getElementById("popupBoxCloseButton");
-          popupBoxCloseButton.addEventListener("click", this._handleCloseButtonClick.bind(this), { once: true });
+    const popupOverlay = template.content.getElementById("popupOverlay")!;
+    const closeBtn = template.content.getElementById("popupBoxCloseButton")!;
+    const footer = template.content.getElementById("popupBoxFooter")!;
 
-    const popupBoxFooter = template.content.getElementById("popupBoxFooter");
+    popupOverlay.addEventListener("click", () => this._handleCloseButtonClick());
+    closeBtn.addEventListener("click", () => this._handleCloseButtonClick());
 
-    // add popup type dependent inputs
     switch (this.type) {
       case "alert": {
-        const popupBoxConfirmButton = document.createElement("button");
-              popupBoxConfirmButton.id = "popupBoxConfirmButton";
-              popupBoxConfirmButton.textContent = browser.i18n.getMessage("buttonConfirm");
-              popupBoxConfirmButton.addEventListener("click", this._handleCloseButtonClick.bind(this), { once: true });
-        popupBoxFooter.append(popupBoxConfirmButton);
+        const btn = document.createElement("button");
+        btn.id = "popupBoxConfirmButton";
+        btn.textContent = chrome.i18n.getMessage("buttonConfirm");
+        btn.addEventListener("click", () => this._handleCloseButtonClick());
+        footer.append(btn);
       } break;
 
       case "confirm": {
-        const popupBoxConfirmButton = document.createElement("button");
-              popupBoxConfirmButton.id = "popupBoxConfirmButton";
-              popupBoxConfirmButton.textContent = browser.i18n.getMessage("buttonConfirm");
-              popupBoxConfirmButton.addEventListener("click", this._handleConfirmButtonClick.bind(this), { once: true });
-        const popupBoxCancelButton = document.createElement("button");
-              popupBoxCancelButton.id = "popupBoxCancelButton";
-              popupBoxCancelButton.textContent = browser.i18n.getMessage("buttonCancel");
-              popupBoxCancelButton.addEventListener("click", this._handleCancelButtonClick.bind(this), { once: true });
-        popupBoxFooter.append(popupBoxCancelButton, popupBoxConfirmButton);
+        const confirmBtn = document.createElement("button");
+        confirmBtn.id = "popupBoxConfirmButton";
+        confirmBtn.textContent = chrome.i18n.getMessage("buttonConfirm");
+        confirmBtn.addEventListener("click", () => this._handleConfirmButtonClick());
+
+        const cancelBtn = document.createElement("button");
+        cancelBtn.id = "popupBoxCancelButton";
+        cancelBtn.textContent = chrome.i18n.getMessage("buttonCancel");
+        cancelBtn.addEventListener("click", () => this._handleCancelButtonClick());
+
+        footer.append(cancelBtn, confirmBtn);
       } break;
 
       case "prompt": {
-        const popupBoxInput = document.createElement("input");
-              popupBoxInput.id = "popupBoxInput";
-              popupBoxInput.addEventListener("keypress", this._handleInputKeypress.bind(this));
-        const popupBoxConfirmButton = document.createElement("button");
-              popupBoxConfirmButton.id = "popupBoxConfirmButton";
-              popupBoxConfirmButton.textContent = browser.i18n.getMessage("buttonConfirm");
-              popupBoxConfirmButton.addEventListener("click", this._handleConfirmButtonClick.bind(this), { once: true });
-        popupBoxFooter.append(popupBoxInput, popupBoxConfirmButton);
+        const input = document.createElement("input");
+        input.id = "popupBoxInput";
+        input.addEventListener("keypress", e => this._handleInputKeypress(e));
+
+        const btn = document.createElement("button");
+        btn.id = "popupBoxConfirmButton";
+        btn.textContent = chrome.i18n.getMessage("buttonConfirm");
+        btn.addEventListener("click", () => this._handleConfirmButtonClick());
+
+        footer.append(input, btn);
       } break;
     }
 
     return template.content;
   }
 
+  private async _openPopupBox(): Promise<void> {
+    await this._loaded;
+    this.value = undefined;
 
-  /**
-   * Builds and opens the popup
-   * Dispatches the open event listener
-   **/
-  _openPopupBox () {
-    this._loaded.then(() => {
-      // delete old value if any
-      delete this.value;
+    const frag = this._buildPopupBox();
+    const overlay = frag.getElementById("popupOverlay")!;
+    const box = frag.getElementById("popupBox")!;
 
-      const popupFragment = this._buildPopupBox();
+    overlay.classList.add("po-hide");
+    box.classList.add("pb-hide");
 
-      const popupOverlay = popupFragment.getElementById("popupOverlay");
-      const popupBox = popupFragment.getElementById("popupBox");
+    this.shadowRoot!.append(frag);
 
-      popupOverlay.classList.add("po-hide");
-      popupBox.classList.add("pb-hide");
+    // Force reflow
+    void box.offsetHeight;
 
-      // append to shadow dom
-      this.shadowRoot.append(popupFragment);
-
-      // trigger reflow
-      popupBox.offsetHeight;
-
-      // cleanup classes after animation
-      popupOverlay.addEventListener("transitionend", function removePopupOverlay(event) {
-        // prevent the event from firing for child transitions
-        if (event.currentTarget === event.target) {
-          popupOverlay.removeEventListener("transitionend", removePopupOverlay);
-          popupOverlay.classList.remove("po-show");
-        }
-      });
-      popupBox.addEventListener("animationend", function removePopupBox(event) {
-        // prevent the event from firing for child transitions
-        if (event.currentTarget === event.target) {
-          popupBox.removeEventListener("transitionend", removePopupBox);
-          popupBox.classList.remove("pb-show");
-        }
-      });
-
-      // start show animation
-      popupOverlay.classList.replace("po-hide", "po-show");
-      popupBox.classList.replace("pb-hide", "pb-show");
-
-      // dispatch custom open event
-      this.dispatchEvent(new CustomEvent("open"));
-    });
-  }
-
-
-  /**
-   * Closes the popup and removes it from the shadow dom
-   * Dispatches the close event listener with the given value as detail
-   **/
-  _closePopupBox () {
-    const popupOverlay = this.shadowRoot.getElementById("popupOverlay");
-    const popupWrapper = this.shadowRoot.getElementById("popupWrapper");
-    const popupBox = this.shadowRoot.getElementById("popupBox");
-
-    popupOverlay.addEventListener("transitionend", function removePopupOverlay(event) {
-      // prevent the event from firing for child transitions
-      if (event.currentTarget === event.target) {
-        popupOverlay.removeEventListener("transitionend", removePopupOverlay);
-        popupOverlay.remove();
+    overlay.addEventListener("transitionend", e => {
+      if (e.currentTarget === e.target) {
+        overlay.classList.remove("po-show");
       }
     });
-    popupBox.addEventListener("transitionend", function removePopupBox(event) {
-      // prevent the event from firing for child transitions
-      if (event.currentTarget === event.target) {
-        popupBox.removeEventListener("transitionend", removePopupBox);
-        popupWrapper.remove();
+    box.addEventListener("animationend", e => {
+      if (e.currentTarget === e.target) {
+        box.classList.remove("pb-show");
       }
     });
 
-    // start hide animation
-    popupOverlay.classList.add("po-hide");
-    popupBox.classList.add("pb-hide");
+    overlay.classList.replace("po-hide", "po-show");
+    box.classList.replace("pb-hide", "pb-show");
 
-    // dispatch custom close event
-    this.dispatchEvent(new CustomEvent("close", {
-      detail: this.value
-    }));
+    this.dispatchEvent(new CustomEvent("open"));
   }
 
+  private _closePopupBox(): void {
+    const overlay = this.shadowRoot!.getElementById("popupOverlay")!;
+    const wrapper = this.shadowRoot!.getElementById("popupWrapper")!;
+    const box = this.shadowRoot!.getElementById("popupBox")!;
 
-  /**
-   * Listenes for the close button click, closes the popup and passes null as the detail value
-   **/
-  _handleCloseButtonClick (event) {
-    // remove open attribute and close popup
+    overlay.addEventListener("transitionend", e => {
+      if (e.currentTarget === e.target) overlay.remove();
+    });
+    box.addEventListener("transitionend", e => {
+      if (e.currentTarget === e.target) wrapper.remove();
+    });
+
+    overlay.classList.add("po-hide");
+    box.classList.add("pb-hide");
+
+    this.dispatchEvent(new CustomEvent("close", { detail: this.value }));
+  }
+
+  private _handleCloseButtonClick(): void {
     this.open = false;
   }
 
-
-  /**
-   * Listenes for the confirm button click, closes the popup and passes the input value or true as the detail value
-   **/
-  _handleConfirmButtonClick (event) {
-    const popupBoxInput = this.shadowRoot.getElementById("popupBoxInput");
-    // set value either to true or to the input value if type "prompt" was used
-    this.value = popupBoxInput ? popupBoxInput.value : true;
-    // remove open attribute and close popup
+  private _handleConfirmButtonClick(): void {
+    const input = this.shadowRoot?.getElementById("popupBoxInput") as HTMLInputElement | null;
+    this.value = input ? input.value : true;
     this.open = false;
   }
 
-
-  /**
-   * Listenes for the cancel button click, closes the popup and passes false as the detail value
-   **/
-  _handleCancelButtonClick (event) {
-    // set value to false
+  private _handleCancelButtonClick(): void {
     this.value = false;
-    // remove open attribute and close popup
     this.open = false;
   }
 
+  private _handleInputKeypress(event: KeyboardEvent): void {
+    if (event.key === "Enter") this._handleConfirmButtonClick();
+  }
 
-  /**
-   * Listenes for the enter key press and runs the cofirm button function
-   **/
-  _handleInputKeypress (event) {
-     if (event.key === "Enter") this._handleConfirmButtonClick();
+  addEventListener<K extends keyof PopupBoxEventMap>(
+    type: K,
+    listener: (this: PopupBox, ev: PopupBoxEventMap[K]) => any,
+    options?: boolean | AddEventListenerOptions
+  ): void {
+    super.addEventListener(type, listener as EventListener, options);
+  }
+
+  removeEventListener<K extends keyof PopupBoxEventMap>(
+    type: K,
+    listener: (this: PopupBox, ev: PopupBoxEventMap[K]) => any,
+    options?: boolean | EventListenerOptions
+  ): void {
+    super.removeEventListener(type, listener as EventListener, options);
   }
 }
 
-// define custom element
-window.customElements.define('popup-box', PopupBox);
+customElements.define("popup-box", PopupBox);

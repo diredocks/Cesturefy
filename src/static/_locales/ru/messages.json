@@ -1,15 +1,15 @@
 {
   "extensionDescription": {
-    "message": "Навигация, управление и просмотр быстрее с помощью мыши! Дополнение, настраиваемое мышью, с различными командами.",
-    "description": "Navigate, operate, and browse faster with mouse gestures! A customizable mouse gesture add-on with a variety of different commands."
+    "message": "Gesturefy для браузеров на основе Chromium",
+    "description": "Gesturefy for Chromium-based browsers "
   },
   "addonUpdateNotificationTitle": {
     "message": "Расширение $NAME$ было обновлено!",
-    "description": "Gesturefy add-on has been updated!",
+    "description": "Cesturefy add-on has been updated!",
     "placeholders": {
       "name": {
         "content": "$1",
-        "example": "Gesturefy"
+        "example": "Cesturefy"
       }
     }
   },
@@ -216,8 +216,8 @@
     "description": "Vertical screen position from 0 (top) to 100 (bottom)."
   },
   "settingDescriptionUpdateNotification": {
-    "message": "Отображает уведомление при обновлении Gesturefy.",
-    "description": "Shows a notification when Gesturefy is updated."
+    "message": "Отображает уведомление при обновлении Cesturefy.",
+    "description": "Shows a notification when Cesturefy is updated."
   },
   "gestureCreateNewButton": {
     "message": "Новый жест",
@@ -284,8 +284,8 @@
     "description": "Information:"
   },
   "exclusionsTextInformation": {
-    "message": "Добавьте шаблоны URL-адресов для которых Gesturefy будет отключен. Шаблон позволяет использовать «*» для подстановочных знаков и должно быть в виде <scheme>://<host><path>.",
-    "description": "Add URL match patterns to disable Gesturefy for certain websites. The match pattern allows \"*\" wildcards and must be in the form of <scheme>://<host><path>."
+    "message": "Добавьте шаблоны URL-адресов для которых Cesturefy будет отключен. Шаблон позволяет использовать «*» для подстановочных знаков и должно быть в виде <scheme>://<host><path>.",
+    "description": "Add URL match patterns to disable Cesturefy for certain websites. The match pattern allows \"*\" wildcards and must be in the form of <scheme>://<host><path>."
   },
   "exclusionsPlaceholderURL": {
     "message": "Введите шаблон URL-адреса",
@@ -336,8 +336,8 @@
     "description": "Add-on page"
   },
   "aboutRestoreNotificationNoConfigFile": {
-    "message": "Выбранный файл не является файлом конфигурации Gesturefy.",
-    "description": "The selected file is not a valid Gesturefy config file."
+    "message": "Выбранный файл не является файлом конфигурации Cesturefy.",
+    "description": "The selected file is not a valid Cesturefy config file."
   },
   "aboutRestoreNotificationWrongFile": {
     "message": "Выбранный файл не соответствует требуемому типу.",
@@ -644,8 +644,8 @@
     "description": "Open URL from clipboard in new private window"
   },
   "commandLabelOpenAddonSettings": {
-    "message": "Открыть настройки Gesturefy",
-    "description": "Open Gesturefy settings"
+    "message": "Открыть настройки Cesturefy",
+    "description": "Open Cesturefy settings"
   },
   "commandLabelOpenLink": {
     "message": "Открыть ссылку",
@@ -1008,8 +1008,8 @@
     "description": "If the clipboard contains a URL, it will be opened in a new private window."
   },
   "commandDescriptionOpenAddonSettings": {
-    "message": "Открыть страницу настроек Gesturefy.",
-    "description": "Opens the Gesturefy settings page."
+    "message": "Открыть страницу настроек Cesturefy.",
+    "description": "Opens the Cesturefy settings page."
   },
   "commandDescriptionOpenLink": {
     "message": "Открывает выделенный адрес или ссылку, на которой начался жест.",
@@ -1341,7 +1341,7 @@
   },
   "commandSettingDescriptionZoomStep": {
     "message": "Шаг масштаба или несколько уровней разделенных запятыми в процентах. Если не указано, используются уровни масштаба по умолчанию.",
-    "description": "The zoom step or multiple comma separated levels in percentage. If omitted, Gesturefy's default zoom levels are used."
+    "description": "The zoom step or multiple comma separated levels in percentage. If omitted, Cesturefy's default zoom levels are used."
   },
   "commandSettingDescriptionScrollDuration": {
     "message": "Продолжительность анимации прокрутки в миллисекундах.",
@@ -1462,8 +1462,8 @@
     "description": "The specified extension ID either does not belong to an existing add-on or the add-on does not receive messages. Click here for more information."
   },
   "commandErrorNotificationMessageMissingIncognitoPermissions": {
-    "message": "Gesturefy не имеет разрешения на режим инкогнито. Нажмите здесь для получения дополнительной информации.",
-    "description": "Gesturefy does not have permission for incognito mode. Click here for more information."
+    "message": "Cesturefy не имеет разрешения на режим инкогнито. Нажмите здесь для получения дополнительной информации.",
+    "description": "Cesturefy does not have permission for incognito mode. Click here for more information."
   },
   "commandBarTitle": {
     "message": "Панель команд",
@@ -1630,8 +1630,8 @@
     "description": "High contrast theme"
   },
   "welcomePageUpperSectionReference": {
-    "message": "Установка Gesturefy успешно завершена.",
-    "description": "Gesturefy has been successfully installed."
+    "message": "Установка Cesturefy успешно завершена.",
+    "description": "Cesturefy has been successfully installed."
   },
   "welcomePageUpperSectionHeadline": {
     "message": "Никогда не делали жест мышью?\n Попробуйте сделать его прямо сейчас!",
@@ -1658,16 +1658,16 @@
     "description": "Congratulations, you successfully accomplished your very first mouse gesture!"
   },
   "welcomePageLowerSectionGetStartedText": {
-    "message": "Создавайте столько жестов, сколько хотите, в соответствии с вашим индивидуальным стилем просмотра интернета и сделайте ежедневный просмотр страниц проще, быстрее и удобнее. Начните прямо сейчас и настройте Gesturefy!",
-    "description": "Create as many gestures as you want to suit your individual browsing style and make your daily browsing easier, faster and a lot more fun. Get started now and personalize Gesturefy!"
+    "message": "Создавайте столько жестов, сколько хотите, в соответствии с вашим индивидуальным стилем просмотра интернета и сделайте ежедневный просмотр страниц проще, быстрее и удобнее. Начните прямо сейчас и настройте Cesturefy!",
+    "description": "Create as many gestures as you want to suit your individual browsing style and make your daily browsing easier, faster and a lot more fun. Get started now and personalize Cesturefy!"
   },
   "welcomePageLowerSectionGetStartedLink": {
     "message": "Настройте ваши жесты",
     "description": "Set Up Your Gestures"
   },
   "welcomePageLowerSectionLearnMoreText": {
-    "message": "Все еще непонятно? Нажмите на ссылку ниже, чтобы быстро разобраться с Gesturefy и запустить руководство по устранению неполадок.",
-    "description": "Still confused? Click the link below for a quick break-down and if you can't get Gesturefy up and running you can also find a troubleshooting guide there."
+    "message": "Все еще непонятно? Нажмите на ссылку ниже, чтобы быстро разобраться с Cesturefy и запустить руководство по устранению неполадок.",
+    "description": "Still confused? Click the link below for a quick break-down and if you can't get Cesturefy up and running you can also find a troubleshooting guide there."
   },
   "welcomePageLowerSectionLearnMoreLink": {
     "message": "Узнать больше",

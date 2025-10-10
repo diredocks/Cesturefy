@@ -1,15 +1,15 @@
 {
   "extensionDescription": {
-    "message": "滑鼠手勢使你的導航、操作、等瀏覽網路體驗更加快速流暢! 不只可自訂滑鼠手勢，還支援執行多種指令",
-    "description": "Navigate, operate, and browse faster with mouse gestures! A customizable mouse gesture add-on with a variety of different commands."
+    "message": "廣受好評的 Gesturefy，現已登陸基於 Chromium 的瀏覽器",
+    "description": "Gesturefy for Chromium-based browsers "
   },
   "addonUpdateNotificationTitle": {
     "message": "$NAME$ 已經完成更新！",
-    "description": "Gesturefy add-on has been updated!",
+    "description": "Cesturefy add-on has been updated!",
     "placeholders": {
       "name": {
         "content": "$1",
-        "example": "Gesturefy"
+        "example": "Cesturefy"
       }
     }
   },
@@ -216,8 +216,8 @@
     "description": "Vertical screen position from 0 (top) to 100 (bottom)."
   },
   "settingDescriptionUpdateNotification": {
-    "message": "當 Gesturefy 更新後顯示一個通知",
-    "description": "Shows a notification when Gesturefy is updated."
+    "message": "當 Cesturefy 更新後顯示一個通知",
+    "description": "Shows a notification when Cesturefy is updated."
   },
   "gestureCreateNewButton": {
     "message": "新手勢",
@@ -284,8 +284,8 @@
     "description": "Information:"
   },
   "exclusionsTextInformation": {
-    "message": "新增網址比對樣式使Gesturefy在符合條件的網站自動關閉。比對樣式允許使用 \"*\" 萬用字元，並且必須為 <scheme>://<host><path>的格式。",
-    "description": "Add URL match patterns to disable Gesturefy for certain websites. The match pattern allows \"*\" wildcards and must be in the form of <scheme>://<host><path>."
+    "message": "新增網址比對樣式使Cesturefy在符合條件的網站自動關閉。比對樣式允許使用 \"*\" 萬用字元，並且必須為 <scheme>://<host><path>的格式。",
+    "description": "Add URL match patterns to disable Cesturefy for certain websites. The match pattern allows \"*\" wildcards and must be in the form of <scheme>://<host><path>."
   },
   "exclusionsPlaceholderURL": {
     "message": "輸入網址比對樣式",
@@ -336,8 +336,8 @@
     "description": "Add-on page"
   },
   "aboutRestoreNotificationNoConfigFile": {
-    "message": "所選的檔案不是有效的 Gesturefy設定組態檔案",
-    "description": "The selected file is not a valid Gesturefy config file."
+    "message": "所選的檔案不是有效的 Cesturefy設定組態檔案",
+    "description": "The selected file is not a valid Cesturefy config file."
   },
   "aboutRestoreNotificationWrongFile": {
     "message": "選取的檔案格式並不符合，無法進行還原",
@@ -644,8 +644,8 @@
     "description": "Open URL from clipboard in new private window"
   },
   "commandLabelOpenAddonSettings": {
-    "message": "開啟 Gesturefy 設定頁",
-    "description": "Open Gesturefy settings"
+    "message": "開啟 Cesturefy 設定頁",
+    "description": "Open Cesturefy settings"
   },
   "commandLabelOpenLink": {
     "message": "開啟鏈結",
@@ -1008,8 +1008,8 @@
     "description": "If the clipboard contains a URL, it will be opened in a new private window."
   },
   "commandDescriptionOpenAddonSettings": {
-    "message": "開啟 Gesturefy 的設定頁",
-    "description": "Opens the Gesturefy settings page."
+    "message": "開啟 Cesturefy 的設定頁",
+    "description": "Opens the Cesturefy settings page."
   },
   "commandDescriptionOpenLink": {
     "message": "開啟選取的的或手勢起點上的鏈結",
@@ -1340,8 +1340,8 @@
     "description": "Determines if the cache should be reloaded or not."
   },
   "commandSettingDescriptionZoomStep": {
-    "message": "縮放步階或多個以分號分隔的百分比。若為空，則Gesturefy將使用預設的縮放步階。",
-    "description": "The zoom step or multiple comma separated levels in percentage. If omitted, Gesturefy's default zoom levels are used."
+    "message": "縮放步階或多個以分號分隔的百分比。若為空，則Cesturefy將使用預設的縮放步階。",
+    "description": "The zoom step or multiple comma separated levels in percentage. If omitted, Cesturefy's default zoom levels are used."
   },
   "commandSettingDescriptionScrollDuration": {
     "message": "使用多少時間滑動到頁面頂部/底部，時間單位為毫秒",
@@ -1462,8 +1462,8 @@
     "description": "The specified extension ID either does not belong to an existing add-on or the add-on does not receive messages. Click here for more information."
   },
   "commandErrorNotificationMessageMissingIncognitoPermissions": {
-    "message": "Gesturefy沒有匿名模式的權限，點擊此以獲得更多資訊。",
-    "description": "Gesturefy does not have permission for incognito mode. Click here for more information."
+    "message": "Cesturefy沒有匿名模式的權限，點擊此以獲得更多資訊。",
+    "description": "Cesturefy does not have permission for incognito mode. Click here for more information."
   },
   "commandBarTitle": {
     "message": "指令清單",
@@ -1630,8 +1630,8 @@
     "description": "High contrast theme"
   },
   "welcomePageUpperSectionReference": {
-    "message": "Gesturefy已成功安裝",
-    "description": "Gesturefy has been successfully installed."
+    "message": "Cesturefy已成功安裝",
+    "description": "Cesturefy has been successfully installed."
   },
   "welcomePageUpperSectionHeadline": {
     "message": "從來沒試過滑鼠手勢? \n 現在就來試試看!",
@@ -1658,16 +1658,16 @@
     "description": "Congratulations, you successfully accomplished your very first mouse gesture!"
   },
   "welcomePageLowerSectionGetStartedText": {
-    "message": "配合你個人的瀏覽網路習慣，建立你所想要的手勢，使你的日常上網更加簡單、快速並且更充滿樂趣。 現在就來個人化你的Gesturefy!",
-    "description": "Create as many gestures as you want to suit your individual browsing style and make your daily browsing easier, faster and a lot more fun. Get started now and personalize Gesturefy!"
+    "message": "配合你個人的瀏覽網路習慣，建立你所想要的手勢，使你的日常上網更加簡單、快速並且更充滿樂趣。 現在就來個人化你的Cesturefy!",
+    "description": "Create as many gestures as you want to suit your individual browsing style and make your daily browsing easier, faster and a lot more fun. Get started now and personalize Cesturefy!"
   },
   "welcomePageLowerSectionGetStartedLink": {
     "message": "設定你的手勢",
     "description": "Set Up Your Gestures"
   },
   "welcomePageLowerSectionLearnMoreText": {
-    "message": "還是覺得困惑? 點擊下方連結閱讀快速引導，如果有其他Gesturefy的問題，那裡也有故障排除指南",
-    "description": "Still confused? Click the link below for a quick break-down and if you can't get Gesturefy up and running you can also find a troubleshooting guide there."
+    "message": "還是覺得困惑? 點擊下方連結閱讀快速引導，如果有其他Cesturefy的問題，那裡也有故障排除指南",
+    "description": "Still confused? Click the link below for a quick break-down and if you can't get Cesturefy up and running you can also find a troubleshooting guide there."
   },
   "welcomePageLowerSectionLearnMoreLink": {
     "message": "瞭解更多資訊",

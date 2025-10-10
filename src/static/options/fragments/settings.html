@@ -26,7 +26,7 @@
       <div class="ol-input">
         <div class="select-wrapper">
           <select data-config="Settings.Gesture.suppressionKey" class="select-field">
-            <option value="" data-i18n="settingLabelNoneKey"></option>
+            <option value="none" data-i18n="settingLabelNoneKey"></option>
             <option value="altKey" data-i18n="settingLabelAltKey"></option>
             <option value="ctrlKey" data-i18n="settingLabelCtrlKey"></option>
             <option value="shiftKey" data-i18n="settingLabelShiftKey"></option>
@@ -79,9 +79,10 @@
         <div class="ol-input">
           <div class="select-wrapper">
             <select data-config="Settings.Gesture.matchingAlgorithm" class="select-field">
-              <option value="combined" data-i18n="settingLabelMatchingAlgorithmCombined"></option>
-              <option value="strict" data-i18n="settingLabelMatchingAlgorithmStrict"></option>
-              <option value="shape-independent" data-i18n="settingLabelMatchingAlgorithmShapeIndependent"></option>
+              <!-- NOTE: value should start with captital letter -->
+              <option value="Combined" data-i18n="settingLabelMatchingAlgorithmCombined"></option>
+              <option value="Strict" data-i18n="settingLabelMatchingAlgorithmStrict"></option>
+              <option value="ShapeIndependent" data-i18n="settingLabelMatchingAlgorithmShapeIndependent"></option>
             </select>
           </div>
         </div>

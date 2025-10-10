@@ -1,216 +1,135 @@
-import { toSingleButton } from "/core/utils/commons.mjs";
+import { DefaultConfig } from "@model/config";
+import { toSingleButton } from "@utils/common";
+import { EventEmitter } from "@utils/emitter";
+import { MouseButton } from "@utils/types";
 
-// global static variables
+type WheelCallback = (event: WheelEvent) => void;
 
-const LEFT_MOUSE_BUTTON = 1;
-const RIGHT_MOUSE_BUTTON = 2;
-const MIDDLE_MOUSE_BUTTON = 4;
+type WheelEvents = {
+  wheelup: WheelCallback;
+  wheeldown: WheelCallback;
+};
 
-/**
- * WheelGestureController "singleton"
- * provides 2 events: on wheelup and wheeldown
- * events can be added via addEventListener and removed via removeEventListener
- * on default the controller is disabled and must be enabled via enable()
- **/
+export class WheelController {
+  private static _instance: WheelController;
 
+  private _target: Window = window;
+  private _preventDefault = true;
+  private _lastMouseup = 0;
+  private _accumulatedDeltaY = 0;
+  private _events = new EventEmitter<WheelEvents>();
 
-// public methods and variables
+  public mouseButton: MouseButton = DefaultConfig.Settings.Wheel.mouseButton;
+  public wheelSensitivity = DefaultConfig.Settings.Wheel.wheelSensitivity;
 
+  private constructor() { }
 
-export default {
-  enable: enable,
-  disable: disable,
-  addEventListener: addEventListener,
-  hasEventListener: hasEventListener,
-  removeEventListener: removeEventListener,
-
-  get targetElement () {
-    return targetElement;
-  },
-  set targetElement (value) {
-    targetElement = value;
-  },
-
-  get mouseButton () {
-    return mouseButton;
-  },
-  set mouseButton (value) {
-    mouseButton = Number(value);
-  },
-
-  get wheelSensitivity () {
-    return wheelSensitivity;
-  },
-  set wheelSensitivity (value) {
-    wheelSensitivity = Number(value);
+  public static get instance(): WheelController {
+    if (!this._instance) {
+      this._instance = new WheelController();
+    }
+    return this._instance;
   }
-}
 
+  addEventListener<K extends keyof WheelEvents>(event: K, cb: WheelEvents[K]) {
+    this._events.addEventListener(event, cb);
+  }
 
-/**
- * Add callbacks to the given events
- **/
-function addEventListener (event, callback) {
-  // if event exists add listener (duplicates won't be added)
-  if (event in events) events[event].add(callback);
-};
+  removeEventListener<K extends keyof WheelEvents>(event: K, cb: WheelEvents[K]) {
+    this._events.removeEventListener(event, cb);
+  }
 
+  enable() {
+    this._target.addEventListener("wheel", this._handleWheel, { capture: true, passive: false });
+    this._target.addEventListener("mousedown", this._handleMousedown);
+    this._target.addEventListener("mouseup", this._handleMouseup);
+    this._target.addEventListener("click", this._handleClick);
+    this._target.addEventListener("contextmenu", this._handleContextmenu);
+    this._target.addEventListener("visibilitychange", this._handleVisibilitychange);
+  }
 
-/**
- * Check if an event listener is registered
- **/
-function hasEventListener (event, callback) {
-  // if event exists check for listener
-  if (event in events) events[event].has(callback);
-};
+  disable() {
+    this._preventDefault = true;
+    this._target.removeEventListener("wheel", this._handleWheel, { capture: true });
+    this._target.removeEventListener("mousedown", this._handleMousedown);
+    this._target.removeEventListener("mouseup", this._handleMouseup);
+    this._target.removeEventListener("click", this._handleClick);
+    this._target.removeEventListener("contextmenu", this._handleContextmenu);
+    this._target.removeEventListener("visibilitychange", this._handleVisibilitychange);
+  }
 
-
-/**
- * Remove callbacks from the given events
- **/
-function removeEventListener (event, callback) {
-  // if event exists remove listener
-  if (event in events) events[event].delete(callback);
-};
-
-
-/**
- * Add the document event listener
- **/
-function enable () {
-  targetElement.addEventListener('wheel', handleWheel, {capture: true, passive: false});
-  targetElement.addEventListener('mousedown', handleMousedown, true);
-  targetElement.addEventListener('mouseup', handleMouseup, true);
-  targetElement.addEventListener('click', handleClick, true);
-  targetElement.addEventListener('contextmenu', handleContextmenu, true);
-  targetElement.addEventListener('visibilitychange', handleVisibilitychange, true);
-};
-
-
-/**
- * Remove the event listeners and resets the handler
- **/
-function disable () {
-  preventDefault = true;
-  targetElement.removeEventListener('wheel', handleWheel, {capture: true, passive: false});
-  targetElement.removeEventListener('mousedown', handleMousedown, true);
-  targetElement.removeEventListener('mouseup', handleMouseup, true);
-  targetElement.removeEventListener('click', handleClick, true);
-  targetElement.removeEventListener('contextmenu', handleContextmenu, true);
-  targetElement.removeEventListener('visibilitychange', handleVisibilitychange, true);
-}
-
-// private variables and methods
-
-// holds all custom module event callbacks
-const events = {
-  'wheelup': new Set(),
-  'wheeldown': new Set()
-};
-
-let targetElement = window,
-    mouseButton = LEFT_MOUSE_BUTTON,
-    wheelSensitivity = 2;
-
-// keep preventDefault true for the special case that the contextmenu or click is fired without a previous mousedown
-let preventDefault = true;
-
-let lastMouseup = 0;
-
-let accumulatedDeltaY = 0;
-
-
-/**
- * Handles mousedown which will detect the target and handle prevention
- **/
-function handleMousedown (event) {
-  if (event.isTrusted) {
-    // always disable prevention on mousedown
-    preventDefault = false;
-
-    // always reset the accumulated detlaY
-    accumulatedDeltaY = 0;
+  private _handleMousedown = (e: MouseEvent) => {
+    if (!e.isTrusted) return;
+    this._preventDefault = false;
+    this._accumulatedDeltaY = 0;
 
     // prevent middle click scroll
-    if (mouseButton === MIDDLE_MOUSE_BUTTON && event.buttons === MIDDLE_MOUSE_BUTTON) event.preventDefault();
-  }
-}
+    if (this.mouseButton === MouseButton.MIDDLE && e.buttons === MouseButton.MIDDLE) {
+      e.preventDefault();
+    }
+  };
 
+  private _handleWheel = (e: WheelEvent) => {
+    if (!e.isTrusted) return;
+    if (e.buttons !== this.mouseButton || e.deltaY === 0) return;
 
-/**
- * Handles mousewheel up and down and prevents scrolling if needed
- **/
-function handleWheel (event) {
-  if (event.isTrusted && event.buttons === mouseButton && event.deltaY !== 0) {
-
-    // check if the sign is different and reset the accumulated value
-    if ((accumulatedDeltaY < 0) !== (event.deltaY < 0)) accumulatedDeltaY = 0
-
-    accumulatedDeltaY += event.deltaY;
-
-    if (Math.abs(accumulatedDeltaY) >= wheelSensitivity) {
-      // dispatch all bound functions on wheel up/down and pass the appropriate event
-      if (accumulatedDeltaY < 0) {
-        events['wheelup'].forEach((callback) => callback(event));
-      }
-      else if (accumulatedDeltaY > 0) {
-        events['wheeldown'].forEach((callback) => callback(event));
-      }
-
-      // reset accumulated deltaY if it reaches the sensitivity value
-      accumulatedDeltaY = 0;
+    // reset if direction changed
+    if ((this._accumulatedDeltaY < 0) !== (e.deltaY < 0)) {
+      this._accumulatedDeltaY = 0;
     }
 
-    event.stopPropagation();
-    event.preventDefault();
-    // enable prevention
-    preventDefault = true;
-  }
+    this._accumulatedDeltaY += e.deltaY;
+
+    if (Math.abs(this._accumulatedDeltaY) >= this.wheelSensitivity) {
+      if (this._accumulatedDeltaY < 0) {
+        this._events.dispatchEvent("wheelup", e);
+      } else {
+        this._events.dispatchEvent("wheeldown", e);
+      }
+
+      this._accumulatedDeltaY = 0;
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+    this._preventDefault = true;
+  };
+
+  private _handleMouseup = (e: MouseEvent) => {
+    this._lastMouseup = e.timeStamp;
+  };
+
+  private _handleVisibilitychange = () => {
+    this._preventDefault = true;
+    this._accumulatedDeltaY = 0;
+  };
+
+  private _handleContextmenu = (e: MouseEvent) => {
+    if (!e.isTrusted) return;
+    if (
+      this._preventDefault &&
+      e.button === toSingleButton(this.mouseButton) &&
+      this.mouseButton === MouseButton.RIGHT
+    ) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  };
+
+  private _handleClick = (e: MouseEvent) => {
+    if (
+      !e.isTrusted ||
+      !this._preventDefault ||
+      e.button !== toSingleButton(this.mouseButton) ||
+      !(this.mouseButton === MouseButton.LEFT || this.mouseButton === MouseButton.MIDDLE)
+    ) return;
+
+    // only prevent real click (not enter/label trigger)
+    if (e.detail && e.timeStamp === this._lastMouseup) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  };
 }
 
-
-/**
- * This is only needed to distinguish between true mouse click events and other click events fired by pressing enter or by clicking labels
- * Other property values like screen position or target could be used in the same manner
- **/
-function handleMouseup(event) {
-  lastMouseup = event.timeStamp;
-}
-
-
-/**
- * This is only needed for tab changing actions
- * Because the wheel gesture is executed in a different tab as where click/contextmenu needs to be prevented
- **/
-function handleVisibilitychange() {
-  // keep preventDefault true for the special case that the contextmenu or click is fired without a previous mousedown
-  preventDefault = true;
-  // always reset the accumulated detlaY
-  accumulatedDeltaY = 0;
-}
-
-
-/**
- * Handles and prevents context menu if needed
- **/
-function handleContextmenu (event) {
-  if (event.isTrusted && preventDefault && event.button === toSingleButton(mouseButton) && mouseButton === RIGHT_MOUSE_BUTTON) {
-    // prevent contextmenu
-    event.stopPropagation();
-    event.preventDefault();
-  }
-}
-
-
-/**
- * Handles and prevents click event if needed
- **/
-function handleClick (event) {
-  // event.detail because a click event can be fired without clicking (https://stackoverflow.com/questions/4763638/enter-triggers-button-click)
-  // timeStamp check ensures that the click is fired by mouseup
-  if (event.isTrusted && preventDefault && event.button === toSingleButton(mouseButton) && (mouseButton === LEFT_MOUSE_BUTTON || mouseButton === MIDDLE_MOUSE_BUTTON) && event.detail && event.timeStamp === lastMouseup) {
-    // prevent left and middle click
-    event.stopPropagation();
-    event.preventDefault();
-  }
-}
+export const wheelController = WheelController.instance;

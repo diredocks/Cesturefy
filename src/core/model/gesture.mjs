@@ -1,74 +1,70 @@
-import { isObject } from "/core/utils/commons.mjs";
+import { Vectors } from "@utils/types";
+import Command from "@model/command";
 
-import Command from "/core/models/command.mjs";
+export interface GestureJSON {
+  pattern: Vectors;
+  command: ReturnType<Command["toJSON"]>;
+  label?: string;
+}
 
-/**
- * This class represents a user defined gesture and provides easy access and manipulation methods
- * It is designed to allow easy conversation from and to JSON
- **/
 export default class Gesture {
-  constructor (pattern, command, label = "") {
-    // if first argument is an object assume the gesture data is given in JSON
-    if (arguments.length === 1 && isObject(arguments[0]) && arguments[0].hasOwnProperty("pattern") && arguments[0].hasOwnProperty("command")) {
-      this._label = arguments[0].label || "";
-      this._pattern = arguments[0].pattern;
-      this._command = new Command(arguments[0].command);
-    }
-    else {
-      if (!Array.isArray(pattern)) throw "The first argument must be an array.";
-      if (!command instanceof Command) throw "The second argument must be an instance of the Command class.";
-      if (typeof label !== "string") throw "The third argument must be of type string.";
+  private _pattern: Vectors;
+  private _command: Command;
+  private _label?: string;
 
-      this._pattern = pattern;
+  constructor(pattern: Vectors, command: Command, label?: string);
+  constructor(json: GestureJSON);
+  constructor(patternOrJson: Vectors | GestureJSON, command?: Command, label?: string) {
+    if (Array.isArray(patternOrJson)) {
+      this._pattern = patternOrJson;
+      if (!command) throw new Error("Command must be provided.");
       this._command = command;
       this._label = label;
+    } else {
+      this._pattern = patternOrJson.pattern;
+      this._command = Command.fromJSON(patternOrJson.command);
+      this._label = patternOrJson.label;
     }
   }
 
-  /**
-   * Converts the class instance to a JavaScript object
-   * This function is also automatically called when the JSON.stringify() option is invoked on an instance of this class
-   **/
-  toJSON () {
-    const obj = {
-      pattern: this._pattern,
-      command: this._command.toJSON()
-    };
-    if (this._label) obj.label = this._label;
-    return obj;
+  toString(): string {
+    return this._label ?? this.getCommand().toString();
   }
 
-  /**
-   * Returns the gesture specific label if set, or the readable name of the command
-   **/
-  toString () {
-    return this._label || this._command.toString();
-  }
-
-  getLabel () {
+  getLabel(): string | undefined {
     return this._label;
   }
 
-  setLabel (value) {
-    if (typeof value !== "string") throw "The passed argument must be of type string.";
+  setLabel(value: string | undefined) {
     this._label = value;
   }
 
-  getPattern () {
+  getPattern(): Vectors {
     return this._pattern;
   }
 
-  setPattern (value) {
-    if (!Array.isArray(value)) throw "The passed argument must be an array.";
+  setPattern(value: Vectors): void {
     this._pattern = value;
   }
 
-  getCommand () {
+  getCommand(): Command {
     return this._command;
   }
 
-  setCommand (value) {
-    if (!value instanceof Command) throw "The passed argument must be an instance of the Command class.";
+  setCommand(value: Command): void {
     this._command = value;
+  }
+
+  toJSON(): GestureJSON {
+    return {
+      pattern: this._pattern,
+      command: this._command.toJSON(),
+      label: this._label,
+    };
+  }
+
+  static fromJSON(json: GestureJSON): Gesture {
+    const command = Command.fromJSON(json.command);
+    return new Gesture(json.pattern, command, json.label);
   }
 }

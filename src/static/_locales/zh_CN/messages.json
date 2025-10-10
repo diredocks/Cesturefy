@@ -1,15 +1,15 @@
 {
   "extensionDescription": {
-    "message": "具有大量自定义功能的鼠标手势扩展，令浏览和操作更加便捷迅速。",
-    "description": "Navigate, operate, and browse faster with mouse gestures! A customizable mouse gesture add-on with a variety of different commands."
+    "message": "广受好评的 Gesturefy，现已登陆基于 Chromium 的浏览器",
+    "description": "Gesturefy for Chromium-based browsers "
   },
   "addonUpdateNotificationTitle": {
     "message": "$NAME$ 已完成更新！",
-    "description": "Gesturefy add-on has been updated!",
+    "description": "Cesturefy add-on has been updated!",
     "placeholders": {
       "name": {
         "content": "$1",
-        "example": "Gesturefy"
+        "example": "Cesturefy"
       }
     }
   },
@@ -216,8 +216,8 @@
     "description": "Vertical screen position from 0 (top) to 100 (bottom)."
   },
   "settingDescriptionUpdateNotification": {
-    "message": "Gesturefy 更新后显示通知",
-    "description": "Shows a notification when Gesturefy is updated."
+    "message": "Cesturefy 更新后显示通知",
+    "description": "Shows a notification when Cesturefy is updated."
   },
   "gestureCreateNewButton": {
     "message": "新建手势",
@@ -284,8 +284,8 @@
     "description": "Information:"
   },
   "exclusionsTextInformation": {
-    "message": "添加网址（URL）匹配模式以在特定网站禁用 Gesturefy。在匹配模式中可以使用 \"*\" 通配符，格式必须为 <协议>://<域名><路径>。",
-    "description": "Add URL match patterns to disable Gesturefy for certain websites. The match pattern allows \"*\" wildcards and must be in the form of <scheme>://<host><path>."
+    "message": "添加网址（URL）匹配模式以在特定网站禁用 Cesturefy。在匹配模式中可以使用 \"*\" 通配符，格式必须为 <协议>://<域名><路径>。",
+    "description": "Add URL match patterns to disable Cesturefy for certain websites. The match pattern allows \"*\" wildcards and must be in the form of <scheme>://<host><path>."
   },
   "exclusionsPlaceholderURL": {
     "message": "输入 URL 匹配模式",
@@ -336,8 +336,8 @@
     "description": "Add-on page"
   },
   "aboutRestoreNotificationNoConfigFile": {
-    "message": "所选的文件不是有效的 Gesturefy 配置文件",
-    "description": "The selected file is not a valid Gesturefy config file."
+    "message": "所选的文件不是有效的 Cesturefy 配置文件",
+    "description": "The selected file is not a valid Cesturefy config file."
   },
   "aboutRestoreNotificationWrongFile": {
     "message": "所选文件与所需的文件类型不匹配",
@@ -644,8 +644,8 @@
     "description": "Open URL from clipboard in new private window"
   },
   "commandLabelOpenAddonSettings": {
-    "message": "打开 Gesturefy 设置",
-    "description": "Open Gesturefy settings"
+    "message": "打开 Cesturefy 设置",
+    "description": "Open Cesturefy settings"
   },
   "commandLabelOpenLink": {
     "message": "打开链接",
@@ -1008,8 +1008,8 @@
     "description": "If the clipboard contains a URL, it will be opened in a new private window."
   },
   "commandDescriptionOpenAddonSettings": {
-    "message": "打开 Gesturefy 设置页面。",
-    "description": "Opens the Gesturefy settings page."
+    "message": "打开 Cesturefy 设置页面。",
+    "description": "Opens the Cesturefy settings page."
   },
   "commandDescriptionOpenLink": {
     "message": "打开所选的网址或手势起始点的链接中的文件。",
@@ -1340,8 +1340,8 @@
     "description": "Determines if the cache should be reloaded or not."
   },
   "commandSettingDescriptionZoomStep": {
-    "message": "请输入缩放步进的百分比，或者输入多个缩放等级百分比，用英文逗号分隔。如果留空则使用 Gesturefy 的默认设置。",
-    "description": "The zoom step or multiple comma separated levels in percentage. If omitted, Gesturefy's default zoom levels are used."
+    "message": "请输入缩放步进的百分比，或者输入多个缩放等级百分比，用英文逗号分隔。如果留空则使用 Cesturefy 的默认设置。",
+    "description": "The zoom step or multiple comma separated levels in percentage. If omitted, Cesturefy's default zoom levels are used."
   },
   "commandSettingDescriptionScrollDuration": {
     "message": "滚动动画的持续时间（毫秒）。",
@@ -1462,8 +1462,8 @@
     "description": "The specified extension ID either does not belong to an existing add-on or the add-on does not receive messages. Click here for more information."
   },
   "commandErrorNotificationMessageMissingIncognitoPermissions": {
-    "message": "Gesturefy 没有隐私模式的权限。点击此处了解更多信息。",
-    "description": "Gesturefy does not have permission for incognito mode. Click here for more information."
+    "message": "Cesturefy 没有隐私模式的权限。点击此处了解更多信息。",
+    "description": "Cesturefy does not have permission for incognito mode. Click here for more information."
   },
   "commandBarTitle": {
     "message": "命令栏",
@@ -1631,7 +1631,7 @@
   },
   "welcomePageUpperSectionReference": {
     "message": "Gestufy 安装成功",
-    "description": "Gesturefy has been successfully installed."
+    "description": "Cesturefy has been successfully installed."
   },
   "welcomePageUpperSectionHeadline": {
     "message": "还没用过鼠标手势？\n赶紧来试试吧！",
@@ -1658,16 +1658,16 @@
     "description": "Congratulations, you successfully accomplished your very first mouse gesture!"
   },
   "welcomePageLowerSectionGetStartedText": {
-    "message": "你可以根据个人的浏览习惯创建手势，让浏览网页更加便捷、迅速、有趣。赶紧来配置个性化的 Gesturefy 吧！",
-    "description": "Create as many gestures as you want to suit your individual browsing style and make your daily browsing easier, faster and a lot more fun. Get started now and personalize Gesturefy!"
+    "message": "你可以根据个人的浏览习惯创建手势，让浏览网页更加便捷、迅速、有趣。赶紧来配置个性化的 Cesturefy 吧！",
+    "description": "Create as many gestures as you want to suit your individual browsing style and make your daily browsing easier, faster and a lot more fun. Get started now and personalize Cesturefy!"
   },
   "welcomePageLowerSectionGetStartedLink": {
     "message": "设置手势",
     "description": "Set Up Your Gestures"
   },
   "welcomePageLowerSectionLearnMoreText": {
-    "message": "如果还是没搞懂，可以点击下方链接查看快速引导。如果 Gesturefy 无法运行，也可以点击该链接查看故障排除指南。",
-    "description": "Still confused? Click the link below for a quick break-down and if you can't get Gesturefy up and running you can also find a troubleshooting guide there."
+    "message": "如果还是没搞懂，可以点击下方链接查看快速引导。如果 Cesturefy 无法运行，也可以点击该链接查看故障排除指南。",
+    "description": "Still confused? Click the link below for a quick break-down and if you can't get Cesturefy up and running you can also find a troubleshooting guide there."
   },
   "welcomePageLowerSectionLearnMoreLink": {
     "message": "了解更多",

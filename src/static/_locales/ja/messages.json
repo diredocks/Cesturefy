@@ -1,20 +1,20 @@
 {
   "extensionDescription": {
-    "message": "Navigate, operate, and browse faster with mouse gestures! A customizable mouse gesture add-on with a variety of different commands.",
-    "description": "Navigate, operate, and browse faster with mouse gestures! A customizable mouse gesture add-on with a variety of different commands."
+    "message": "Chromium ベースのブラウザ用 Gesturefy",
+    "description": "Gesturefy for Chromium-based browsers "
   },
   "addonUpdateNotificationTitle": {
-    "message": "$NAME$ add-on has been updated!",
-    "description": "Gesturefy add-on has been updated!",
+    "message": "$NAME$ アドオンが更新されました。",
+    "description": "Cesturefy add-on has been updated!",
     "placeholders": {
       "name": {
         "content": "$1",
-        "example": "Gesturefy"
+        "example": "Cesturefy"
       }
     }
   },
   "addonUpdateNotificationMessage": {
-    "message": "The new version number is $VERSION$. Click here to view the changelog.",
+    "message": "新しいバージョン名は $VERSION$ です。ここをクリックすると更新履歴を表示します。",
     "description": "The new version number is $VERSION$. Click here to view the changelog.",
     "placeholders": {
       "version": {
@@ -24,71 +24,71 @@
     }
   },
   "navigationSettings": {
-    "message": "Settings",
+    "message": "設定",
     "description": "Settings"
   },
   "navigationGestures": {
-    "message": "Gestures",
+    "message": "ジェスチャー",
     "description": "Gestures"
   },
   "navigationExtras": {
-    "message": "Extras",
+    "message": "その他",
     "description": "Extras"
   },
   "navigationExclusions": {
-    "message": "Exclusions",
+    "message": "除外リスト",
     "description": "Exclusions"
   },
   "navigationAbout": {
-    "message": "About",
+    "message": "情報",
     "description": "About"
   },
   "settingLabelMouseButton": {
-    "message": "Activation button",
+    "message": "実行ボタン",
     "description": "Activation button"
   },
   "settingLabelMouseButtonLeft": {
-    "message": "left",
+    "message": "左",
     "description": "left"
   },
   "settingLabelMouseButtonRight": {
-    "message": "right",
+    "message": "右",
     "description": "right"
   },
   "settingLabelMouseButtonMiddle": {
-    "message": "middle",
+    "message": "中央",
     "description": "middle"
   },
   "settingLabelMatchingAlgorithm": {
-    "message": "Matching algorithm",
+    "message": "マッチングアルゴリズム",
     "description": "Matching algorithm"
   },
   "settingLabelMatchingAlgorithmCombined": {
-    "message": "Combined",
+    "message": "組み合わせ",
     "description": "Combined"
   },
   "settingLabelMatchingAlgorithmStrict": {
-    "message": "Strict",
+    "message": "厳密",
     "description": "Strict"
   },
   "settingLabelMatchingAlgorithmShapeIndependent": {
-    "message": "Shape-Independent",
+    "message": "大ざっぱ",
     "description": "Shape-Independent"
   },
   "settingLabelTimeoutActive": {
-    "message": "Activate idle timeout",
+    "message": "アイドルタイムアウトを有効にする",
     "description": "Activate idle timeout"
   },
   "settingLabelTimeoutDuration": {
-    "message": "Duration",
+    "message": "継続時間",
     "description": "Duration"
   },
   "settingLabelSuppressionKey": {
-    "message": "Deactivation key",
+    "message": "無効化キー",
     "description": "Deactivation key"
   },
   "settingLabelNoneKey": {
-    "message": "None",
+    "message": "なし",
     "description": "None"
   },
   "settingLabelAltKey": {
@@ -104,379 +104,379 @@
     "description": "Shift"
   },
   "settingLabelAdvancedSettings": {
-    "message": "Advanced settings",
+    "message": "詳細設定",
     "description": "Advanced settings"
   },
   "settingLabelDistanceThreshold": {
-    "message": "Distance threshold",
+    "message": "移動距離のしきい値",
     "description": "Distance threshold"
   },
   "settingLabelDeviationTolerance": {
-    "message": "Deviation tolerance",
+    "message": "ずれの許容値",
     "description": "Deviation tolerance"
   },
   "settingLabelDisplayTrace": {
-    "message": "Display gesture trace",
+    "message": "ジェスチャーの軌跡を表示する",
     "description": "Display gesture trace"
   },
   "settingLabelTraceColor": {
-    "message": "Line color",
+    "message": "線の色",
     "description": "Line color"
   },
   "settingLabelTraceWidth": {
-    "message": "Line width",
+    "message": "線の太さ",
     "description": "Line width"
   },
   "settingLabelTraceGrowth": {
-    "message": "Line growth",
+    "message": "線の伸長",
     "description": "Line growth"
   },
   "settingLabelDisplayCommand": {
-    "message": "Display command",
+    "message": "コマンドを表示する",
     "description": "Display command"
   },
   "settingLabelCommandFontColor": {
-    "message": "Font color",
+    "message": "フォントの色",
     "description": "Font color"
   },
   "settingLabelCommandBackgroundColor": {
-    "message": "Background color",
+    "message": "背景の色",
     "description": "Background color"
   },
   "settingLabelCommandFontSize": {
-    "message": "Font size",
+    "message": "フォントサイズ",
     "description": "Font size"
   },
   "settingLabelCommandHorizontalPosition": {
-    "message": "Horizontal position",
+    "message": "水平位置",
     "description": "Horizontal position"
   },
   "settingLabelCommandVerticalPosition": {
-    "message": "Vertical position",
+    "message": "垂直位置",
     "description": "Vertical position"
   },
   "settingLabelUpdateNotification": {
-    "message": "Display update notification",
+    "message": "更新の通知を表示する",
     "description": "Display update notification"
   },
   "settingDescriptionMouseButton": {
-    "message": "Captures a new mouse gesture while the button is held down.",
+    "message": "ボタンが押されている間、マウスジェスチャーの検出を行います。",
     "description": "Captures a new mouse gesture while the button is held down."
   },
   "settingDescriptionMatchingAlgorithm": {
-    "message": "Determines how the gestures are compared to find the best matching gesture.",
+    "message": "最も一致するジェスチャーを見つけるための、ジェスチャーの比較方法を指定します。",
     "description": "Determines how the gestures are compared to find the best matching gesture."
   },
   "settingDescriptionMatchingAlgorithmLink": {
-    "message": "Learn about the differences here",
+    "message": "両者の違いはこちらを参照してください",
     "description": "Learn about the differences here"
   },
   "settingDescriptionTimeoutActive": {
-    "message": "Cancels the gesture after the mouse has not been moved for the specified time.",
+    "message": "指定した時間、マウスを動かさなかった場合は、ジェスチャーをキャンセルします。",
     "description": "Cancels the gesture after the mouse has not been moved for the specified time."
   },
   "settingDescriptionTimeoutDuration": {
-    "message": "The duration in seconds until the gesture is cancelled.",
+    "message": "ジェスチャーがキャンセルされるまでの時間(秒)です。",
     "description": "The duration in seconds until the gesture is cancelled."
   },
   "settingDescriptionSuppressionKey": {
-    "message": "Prevents a gesture from being triggered while the modifier key is pressed.",
+    "message": "修飾キーが押されている間、ジェスチャーを実行しないようにします。",
     "description": "Prevents a gesture from being triggered while the modifier key is pressed."
   },
   "settingDescriptionDistanceThreshold": {
-    "message": "The minimum distance the mouse must be moved until the start of a gesture is recognized.",
+    "message": "ジェスチャーの開始として認識されるまでの、最小マウス移動距離です。",
     "description": "The minimum distance the mouse must be moved until the start of a gesture is recognized."
   },
   "settingDescriptionDeviationTolerance": {
-    "message": "The permissible gesture deviation that should still be recognized as a match.",
+    "message": "一致していると認識される、ジェスチャーのずれの許容範囲です。",
     "description": "The permissible gesture deviation that should still be recognized as a match."
   },
   "settingDescriptionDisplayTrace": {
-    "message": "Displays a trace along the mouse movement.",
+    "message": "マウスの動きに沿って軌跡を表示します。",
     "description": "Displays a trace along the mouse movement."
   },
   "settingDescriptionTraceGrowth": {
-    "message": "Determines if the line thickness should grow.",
+    "message": "線の太さが伸長するかどうかを指定します。",
     "description": "Determines if the line thickness should grow."
   },
   "settingDescriptionDisplayCommand": {
-    "message": "Displays the command of the currently matching gesture if available.",
+    "message": "現在のジェスチャーに一致するコマンドを表示します。",
     "description": "Displays the command of the currently matching gesture if available."
   },
   "settingDescriptionCommandFontSize": {
-    "message": "Accepts every CSS Unit like: em, px, pt, %, vh etc.",
+    "message": "em、px、pt、%、vh などの CSS の単位が有効です。",
     "description": "Accepts every CSS Unit like: em, px, pt, %, vh etc."
   },
   "settingDescriptionCommandHorizontalPosition": {
-    "message": "Horizontal screen position from 0 (left) to 100 (right).",
+    "message": "表示される水平位置です (0 (左) ～ 100 (右))。",
     "description": "Horizontal screen position from 0 (left) to 100 (right)."
   },
   "settingDescriptionCommandVerticalPosition": {
-    "message": "Vertical screen position from 0 (top) to 100 (bottom).",
+    "message": "表示される垂直位置です (0 (上) ～ 100 (下))。",
     "description": "Vertical screen position from 0 (top) to 100 (bottom)."
   },
   "settingDescriptionUpdateNotification": {
-    "message": "Shows a notification when Gesturefy is updated.",
-    "description": "Shows a notification when Gesturefy is updated."
+    "message": "Cesturefy が更新された際に通知を表示します。",
+    "description": "Shows a notification when Cesturefy is updated."
   },
   "gestureCreateNewButton": {
-    "message": "New Gesture",
+    "message": "新しいジェスチャー",
     "description": "New Gesture"
   },
   "gestureSearchPlaceholder": {
-    "message": "Search gestures",
+    "message": "ジェスチャーを検索",
     "description": "Search gestures"
   },
   "gestureHintNoSearchResults": {
-    "message": "No search results found",
+    "message": "見つかりませんでした",
     "description": "No search results found"
   },
   "extraLabelRockerActive": {
-    "message": "Rocker gesture",
+    "message": "ロッカージェスチャー",
     "description": "Rocker gesture"
   },
   "extraLabelRockerRightMouseClick": {
-    "message": "Right mouse click",
+    "message": "左クリックした状態で右クリック",
     "description": "Right mouse click"
   },
   "extraLabelRockerLeftMouseClick": {
-    "message": "Left mouse click",
+    "message": "右クリックした状態で左クリック",
     "description": "Left mouse click"
   },
   "extraDescriptionRockerActive": {
-    "message": "This gesture is performed either by holding the right mouse button and clicking the left or vice versa.",
+    "message": "このジェスチャーは、マウスの右ボタンを押しながら左ボタンをクリックするか、もしくはその逆の動作で実行されます。",
     "description": "This gesture is performed either by holding the right mouse button and clicking the left or vice versa."
   },
   "extraLabelWheelActive": {
-    "message": "Wheel gesture",
+    "message": "ホイールジェスチャー",
     "description": "Wheel gesture"
   },
   "extraLabelWheelMouseButton": {
-    "message": "Wheel gesture mouse button",
+    "message": "ホイールジェスチャーに使用するマウスボタン",
     "description": "Wheel gesture mouse button"
   },
   "extraLabelWheelSensitivity": {
-    "message": "Mouse wheel sensitivity",
+    "message": "マウスホイールの感度",
     "description": "Mouse wheel sensitivity"
   },
   "extraLabelWheelUp": {
-    "message": "Wheel up",
+    "message": "ホイールの上回転",
     "description": "Wheel up"
   },
   "extraLabelWheelDown": {
-    "message": "Wheel down",
+    "message": "ホイールの下回転",
     "description": "Wheel down"
   },
   "extraDescriptionWheelActive": {
-    "message": "Scroll up or down while holding the wheel gesture trigger button.",
+    "message": "ホイールジェスチャーボタンを押しながらマウスホイールを上下にスクロールします。",
     "description": "Scroll up or down while holding the wheel gesture trigger button."
   },
   "extraDescriptionWheelMouseButton": {
-    "message": "The mouse button which triggers the wheel gesture.",
+    "message": "このボタンでホイールジェスチャーを実行します。",
     "description": "The mouse button which triggers the wheel gesture."
   },
   "extraDescriptionWheelSensitivity": {
-    "message": "The minimal amount the mouse wheel must be scrolled until the gesture is triggered.",
+    "message": "ジェスチャーの実行に必要な最小マウスホイールスクロール量です。",
     "description": "The minimal amount the mouse wheel must be scrolled until the gesture is triggered."
   },
   "exclusionsLabelInformation": {
-    "message": "Information:",
+    "message": "インフォメーション:",
     "description": "Information:"
   },
   "exclusionsTextInformation": {
-    "message": "Add URL match patterns to disable Gesturefy for certain websites. The match pattern allows \"*\" wildcards and must be in the form of <scheme>://<host><path>.",
-    "description": "Add URL match patterns to disable Gesturefy for certain websites. The match pattern allows \"*\" wildcards and must be in the form of <scheme>://<host><path>."
+    "message": "URL マッチパターンを追加することで、特定のウェブサイトで Cesturefy を無効にします。マッチパターンは <scheme>://<host><path> 形式である必要があり、ワイルドカード \"*\" を使用できます。",
+    "description": "Add URL match patterns to disable Cesturefy for certain websites. The match pattern allows \"*\" wildcards and must be in the form of <scheme>://<host><path>."
   },
   "exclusionsPlaceholderURL": {
-    "message": "Enter URL match pattern",
+    "message": "URL マッチパターンを入力してください",
     "description": "Enter URL match pattern"
   },
   "exclusionsAddButton": {
-    "message": "Add",
+    "message": "追加",
     "description": "Add"
   },
   "exclusionsNotificationAlreadyExists": {
-    "message": "URL pattern already exists.",
+    "message": "URL パターンはすでに存在します。",
     "description": "URL pattern already exists."
   },
   "exclusionsHintNoEntries": {
-    "message": "No entries available",
+    "message": "利用可能なエントリーはありません",
     "description": "No entries available"
   },
   "aboutBackup": {
-    "message": "Backup",
+    "message": "バックアップ",
     "description": "Backup"
   },
   "aboutRestore": {
-    "message": "Restore",
+    "message": "復元",
     "description": "Restore"
   },
   "aboutReset": {
-    "message": "Reset",
+    "message": "リセット",
     "description": "Reset"
   },
   "aboutLicense": {
-    "message": "License:",
+    "message": "ライセンス:",
     "description": "License:"
   },
   "aboutContributors": {
-    "message": "Contributors:",
+    "message": "貢献者:",
     "description": "Contributors:"
   },
   "aboutLinkBug": {
-    "message": "Report a bug",
+    "message": "バグを報告",
     "description": "Report a bug"
   },
   "aboutLinkCode": {
-    "message": "Source code",
+    "message": "ソースコード",
     "description": "Source code"
   },
   "aboutLinkAddon": {
-    "message": "Add-on page",
+    "message": "アドオンのページ",
     "description": "Add-on page"
   },
   "aboutRestoreNotificationNoConfigFile": {
-    "message": "The selected file is not a valid Gesturefy config file.",
-    "description": "The selected file is not a valid Gesturefy config file."
+    "message": "選択されたファイルは、有効な Cesturefy 設定ファイルではありません。",
+    "description": "The selected file is not a valid Cesturefy config file."
   },
   "aboutRestoreNotificationWrongFile": {
-    "message": "The selected file does not match the required file type.",
+    "message": "選択されたファイルは、復元に必要なファイル形式ではありません。",
     "description": "The selected file does not match the required file type."
   },
   "aboutRestoreNotificationConfirm": {
-    "message": "All settings including gestures will be replaced by the selected config file.",
+    "message": "選択した設定ファイルによって、ジェスチャーを含むすべての設定が置き換えられます。",
     "description": "All settings including gestures will be replaced by the selected config file."
   },
   "aboutRestoreNotificationSuccess": {
-    "message": "The selected config has been successfully restored.",
+    "message": "選択された設定の復元に成功しました。",
     "description": "The selected config has been successfully restored."
   },
   "aboutResetNotificationConfirm": {
-    "message": "All settings including gestures will be reset. This cannot be undone!",
+    "message": "ジェスチャーを含むすべての設定をリセットします。この操作は元に戻すことができません。",
     "description": "All settings including gestures will be reset. This cannot be undone!"
   },
   "commandLabelToggleBookmark": {
-    "message": "Toggle bookmark",
+    "message": "ブックマークを設定/解除",
     "description": "Toggle bookmark"
   },
   "commandLabelDuplicateTab": {
-    "message": "Duplicate tab",
+    "message": "タブを複製",
     "description": "Duplicate tab"
   },
   "commandLabelNewTab": {
-    "message": "New tab",
+    "message": "新しいタブ",
     "description": "New tab"
   },
   "commandLabelReloadTab": {
-    "message": "Reload tab",
+    "message": "タブを再読み込み",
     "description": "Reload tab"
   },
   "commandLabelReloadFrame": {
-    "message": "Reload frame",
+    "message": "フレームを再読み込み",
     "description": "Reload frame"
   },
   "commandLabelStopLoading": {
-    "message": "Stop loading",
+    "message": "読み込みを中止",
     "description": "Stop loading"
   },
   "commandLabelCloseTab": {
-    "message": "Close tab",
+    "message": "タブを閉じる",
     "description": "Close tab"
   },
   "commandLabelRestoreTab": {
-    "message": "Restore tab",
+    "message": "タブを復元",
     "description": "Restore tab"
   },
   "commandLabelZoomIn": {
-    "message": "Zoom in",
+    "message": "ズームイン",
     "description": "Zoom in"
   },
   "commandLabelZoomOut": {
-    "message": "Zoom out",
+    "message": "ズームアウト",
     "description": "Zoom out"
   },
   "commandLabelZoomReset": {
-    "message": "Zoom reset",
+    "message": "ズームをリセット",
     "description": "Zoom reset"
   },
   "commandLabelPageBack": {
-    "message": "Page back",
+    "message": "ページを戻る",
     "description": "Page back"
   },
   "commandLabelPageForth": {
-    "message": "Page forward",
+    "message": "ページを進む",
     "description": "Page forward"
   },
   "commandLabelTogglePin": {
-    "message": "Toggle pinned tab",
+    "message": "タブのピン留めを切り替え",
     "description": "Toggle pinned tab"
   },
   "commandLabelToggleMute": {
-    "message": "Toggle mute",
+    "message": "音声ミュートを切り替え",
     "description": "Toggle mute"
   },
   "commandLabelToggleReaderMode": {
-    "message": "Toggle reader mode",
+    "message": "リーダーモードを切り替え",
     "description": "Toggle reader mode"
   },
   "commandLabelScrollTop": {
-    "message": "Scroll to the top",
+    "message": "上までスクロール",
     "description": "Scroll to the top"
   },
   "commandLabelScrollBottom": {
-    "message": "Scroll to the bottom",
+    "message": "下までスクロール",
     "description": "Scroll to the bottom"
   },
   "commandLabelScrollPageDown": {
-    "message": "Scroll page down",
+    "message": "ページを下へスクロール",
     "description": "Scroll page down"
   },
   "commandLabelScrollPageUp": {
-    "message": "Scroll page up",
+    "message": "ページを上へスクロール",
     "description": "Scroll page up"
   },
   "commandLabelFocusRightTab": {
-    "message": "Focus right tab",
+    "message": "右のタブにフォーカス",
     "description": "Focus right tab"
   },
   "commandLabelFocusLeftTab": {
-    "message": "Focus left tab",
+    "message": "左のタブにフォーカス",
     "description": "Focus left tab"
   },
   "commandLabelFocusFirstTab": {
-    "message": "Focus first tab",
+    "message": "最初のタブにフォーカス",
     "description": "Focus first tab"
   },
   "commandLabelFocusLastTab": {
-    "message": "Focus last tab",
+    "message": "最後のタブにフォーカス",
     "description": "Focus last tab"
   },
   "commandLabelFocusPreviousSelectedTab": {
-    "message": "Focus previous selected tab",
+    "message": "前に選択していたタブにフォーカス",
     "description": "Focus previous selected tab"
   },
   "commandLabelMaximizeWindow": {
-    "message": "Maximize window",
+    "message": "ウィンドウを最大化",
     "description": "Maximize window"
   },
   "commandLabelMinimizeWindow": {
-    "message": "Minimize window",
+    "message": "ウィンドウを最小化",
     "description": "Minimize window"
   },
   "commandLabelToggleWindowSize": {
-    "message": "Toggle window size",
+    "message": "ウィンドウサイズを切り替え",
     "description": "Toggle window size"
   },
   "commandLabelToggleFullscreen": {
-    "message": "Toggle full screen",
+    "message": "フルスクリーンを切り替え",
     "description": "Toggle full screen"
   },
   "commandLabelNewWindow": {
-    "message": "New window",
+    "message": "新しいウィンドウ",
     "description": "New window"
   },
   "commandLabelNewPrivateWindow": {
-    "message": "New private window",
+    "message": "新しいプライベートウィンドウ",
     "description": "New private window"
   },
   "commandLabelEnterFullscreen": {
@@ -484,11 +484,11 @@
     "description": "Enter full screen"
   },
   "commandLabelMoveTabToStart": {
-    "message": "Move tab to start",
+    "message": "タブを先頭に移動",
     "description": "Move tab to start"
   },
   "commandLabelMoveTabToEnd": {
-    "message": "Move tab to end",
+    "message": "タブを末尾に移動",
     "description": "Move tab to end"
   },
   "commandLabelMoveTabRight": {
@@ -500,123 +500,123 @@
     "description": "Move tab left"
   },
   "commandLabelMoveTabToNewWindow": {
-    "message": "Move tab to new window",
+    "message": "タブを新しいウィンドウに移動",
     "description": "Move tab to new window"
   },
   "commandLabelMoveLeftTabsToNewWindow": {
-    "message": "Move left tabs to new window",
+    "message": "左のタブを新しいウィンドウに移動",
     "description": "Move left tabs to new window"
   },
   "commandLabelMoveRightTabsToNewWindow": {
-    "message": "Move right tabs to new window",
+    "message": "右のタブを新しいウィンドウに移動",
     "description": "Move right tabs to new window"
   },
   "commandLabelCloseWindow": {
-    "message": "Close window",
+    "message": "ウィンドウを閉じる",
     "description": "Close window"
   },
   "commandLabelReloadAllTabs": {
-    "message": "Reload all",
+    "message": "すべて再読み込み",
     "description": "Reload all"
   },
   "commandLabelToRootURL": {
-    "message": "To root URL",
+    "message": "URL のルートへ移動する",
     "description": "To root URL"
   },
   "commandLabelURLLevelUp": {
-    "message": "URL level up",
+    "message": "URL の階層を上る",
     "description": "URL level up"
   },
   "commandLabelIncreaseURLNumber": {
-    "message": "Increase URL number",
+    "message": "URL の数値を増やす",
     "description": "Increase URL number"
   },
   "commandLabelDecreaseURLNumber": {
-    "message": "Decrease URL number",
+    "message": "URL の数値を減らす",
     "description": "Decrease URL number"
   },
   "commandLabelOpenImageInNewTab": {
-    "message": "Open image in new tab",
+    "message": "画像を新しいタブで開く",
     "description": "Open image in new tab"
   },
   "commandLabelOpenLinkInNewTab": {
-    "message": "Open link in new tab",
+    "message": "リンクを新しいタブで開く",
     "description": "Open link in new tab"
   },
   "commandLabelOpenLinkInNewWindow": {
-    "message": "Open link in new window",
+    "message": "リンクを新しいウィンドウで開く",
     "description": "Open link in new window"
   },
   "commandLabelOpenLinkInNewPrivateWindow": {
-    "message": "Open link in new private window",
+    "message": "リンクを新しいプライベートウィンドウで開く",
     "description": "Open link in new private window"
   },
   "commandLabelSearchTextSelection": {
-    "message": "Search text selection",
+    "message": "選択範囲のテキストを検索",
     "description": "Search text selection"
   },
   "commandLabelSearchClipboard": {
-    "message": "Search clipboard",
+    "message": "クリップボードの内容を検索",
     "description": "Search clipboard"
   },
   "commandLabelSearchTextSelectionInNewTab": {
-    "message": "Search text selection in new tab",
+    "message": "選択範囲のテキストを新しいタブで検索",
     "description": "Search text selection in new tab"
   },
   "commandLabelSearchClipboardInNewTab": {
-    "message": "Search clipboard in new tab",
+    "message": "クリップボードの内容を新しいタブで検索",
     "description": "Search clipboard in new tab"
   },
   "commandLabelCloseRightTabs": {
-    "message": "Close right tabs",
+    "message": "右側のタブを閉じる",
     "description": "Close right tabs"
   },
   "commandLabelCloseLeftTabs": {
-    "message": "Close left tabs",
+    "message": "左側のタブを閉じる",
     "description": "Close left tabs"
   },
   "commandLabelCloseOtherTabs": {
-    "message": "Close other tabs",
+    "message": "他のタブを閉じる",
     "description": "Close other tabs"
   },
   "commandLabelSaveTabAsPDF": {
-    "message": "Save as PDF",
+    "message": "PDF として保存",
     "description": "Save as PDF"
   },
   "commandLabelSaveImage": {
-    "message": "Save image",
+    "message": "画像を保存",
     "description": "Save image"
   },
   "commandLabelSaveLink": {
-    "message": "Save link",
+    "message": "リンクを保存",
     "description": "Save link"
   },
   "commandLabelPrintTab": {
-    "message": "Print",
+    "message": "印刷",
     "description": "Print"
   },
   "commandLabelOpenPrintPreview": {
-    "message": "Print preview",
+    "message": "印刷プレビュー",
     "description": "Print preview"
   },
   "commandLabelOpenHomepage": {
-    "message": "Open homepage",
+    "message": "ホームページを開く",
     "description": "Open homepage"
   },
   "commandLabelOpenCustomURLInNewTab": {
-    "message": "Open custom URL in new tab",
+    "message": "カスタム URL を新しいタブで開く",
     "description": "Open custom URL in new tab"
   },
   "commandLabelOpenCustomURL": {
-    "message": "Open custom URL",
+    "message": "カスタム URL を開く",
     "description": "Open custom URL"
   },
   "commandLabelOpenCustomURLInNewWindow": {
-    "message": "Open custom URL in new window",
+    "message": "カスタム URL を新しいウィンドウで開く",
     "description": "Open custom URL in new window"
   },
   "commandLabelOpenCustomURLInNewPrivateWindow": {
-    "message": "Open custom URL in new private window",
+    "message": "カスタム URL を新しいプライベートウィンドウで開く",
     "description": "Open custom URL in new private window"
   },
   "commandLabelInsertCustomText": {
@@ -624,223 +624,223 @@
     "description": "Insert custom text"
   },
   "commandLabelPasteClipboard": {
-    "message": "Paste clipboard",
+    "message": "クリップボードから貼り付け",
     "description": "Paste clipboard"
   },
   "commandLabelOpenURLFromClipboard": {
-    "message": "Open URL from clipboard",
+    "message": "クリップボードから URL を開く",
     "description": "Open URL from clipboard"
   },
   "commandLabelOpenURLFromClipboardInNewTab": {
-    "message": "Open URL from clipboard in new tab",
+    "message": "クリップボードから URL を新しいタブで開く",
     "description": "Open URL from clipboard in new tab"
   },
   "commandLabelOpenURLFromClipboardInNewWindow": {
-    "message": "Open URL from clipboard in new window",
+    "message": "クリップボードから URL を新しいウィンドウで開く",
     "description": "Open URL from clipboard in new window"
   },
   "commandLabelOpenURLFromClipboardInNewPrivateWindow": {
-    "message": "Open URL from clipboard in new private window",
+    "message": "クリップボードから URL を新しいプライベートウィンドウで開く",
     "description": "Open URL from clipboard in new private window"
   },
   "commandLabelOpenAddonSettings": {
-    "message": "Open Gesturefy settings",
-    "description": "Open Gesturefy settings"
+    "message": "Cesturefy の設定を開く",
+    "description": "Open Cesturefy settings"
   },
   "commandLabelOpenLink": {
-    "message": "Open link",
+    "message": "リンクを開く",
     "description": "Open link"
   },
   "commandLabelViewImage": {
-    "message": "View image",
+    "message": "画像を表示",
     "description": "View image"
   },
   "commandLabelLinkToNewBookmark": {
-    "message": "Link to bookmark",
+    "message": "リンクをブックマーク",
     "description": "Link to bookmark"
   },
   "commandLabelSaveScreenshot": {
-    "message": "Save screenshot",
+    "message": "スクリーンショットを保存",
     "description": "Save screenshot"
   },
   "commandLabelCopyTabURL": {
-    "message": "Copy tab URL",
+    "message": "タブの URL をコピー",
     "description": "Copy tab URL"
   },
   "commandLabelCopyLinkURL": {
-    "message": "Copy link URL",
+    "message": "リンクの URL をコピー",
     "description": "Copy link URL"
   },
   "commandLabelCopyImageURL": {
-    "message": "Copy image URL",
+    "message": "画像の URL をコピー",
     "description": "Copy image URL"
   },
   "commandLabelCopyTextSelection": {
-    "message": "Copy text selection",
+    "message": "選択範囲のテキストをコピー",
     "description": "Copy text selection"
   },
   "commandLabelCopyImage": {
-    "message": "Copy image",
+    "message": "画像をコピー",
     "description": "Copy image"
   },
   "commandLabelViewPageSourceCode": {
-    "message": "View page source",
+    "message": "ページのソースを表示",
     "description": "View page source"
   },
   "commandLabelPopupAllTabs": {
-    "message": "[Popup] All tabs",
+    "message": "[Popup] すべてのタブ",
     "description": "[Popup] All tabs"
   },
   "commandLabelPopupRecentlyClosedTabs": {
-    "message": "[Popup] Recently closed tabs",
+    "message": "[Popup] 最近閉じたタブ",
     "description": "[Popup] Recently closed tabs"
   },
   "commandLabelPopupSearchEngines": {
-    "message": "[Popup] Search engines",
+    "message": "[Popup] 検索エンジン",
     "description": "[Popup] Search engines"
   },
   "commandLabelPopupCustomCommandList": {
-    "message": "[Popup] Custom command list",
+    "message": "[Popup] カスタムコマンドリスト",
     "description": "[Popup] Custom command list"
   },
   "commandLabelSendMessageToOtherAddon": {
-    "message": "Send message to other add-on",
+    "message": "他のアドオンにメッセージを送る",
     "description": "Send message to other add-on"
   },
   "commandLabelExecuteUserScript": {
-    "message": "Execute user script",
+    "message": "ユーザースクリプトを実行",
     "description": "Execute user script"
   },
   "commandLabelClearBrowsingData": {
-    "message": "Clear browsing data",
+    "message": "ブラウジングデータを消去",
     "description": "Clear browsing data"
   },
   "commandLabelRunMultiPurposeCommand": {
-    "message": "Run multi purpose command",
+    "message": "複数コマンドを実行",
     "description": "Run multi purpose command"
   },
   "commandDescriptionToggleBookmark": {
-    "message": "Adds or removes a bookmark.",
+    "message": "ブックマークの追加またはその削除を行います。",
     "description": "Adds or removes a bookmark."
   },
   "commandDescriptionDuplicateTab": {
-    "message": "Duplicates the current tab.",
+    "message": "現在のタブを複製します。",
     "description": "Duplicates the current tab."
   },
   "commandDescriptionNewTab": {
-    "message": "Opens a new tab.",
+    "message": "新しいタブを開きます。",
     "description": "Opens a new tab."
   },
   "commandDescriptionReloadTab": {
-    "message": "Reloads the current page.",
+    "message": "現在のページを再読み込みします。",
     "description": "Reloads the current page."
   },
   "commandDescriptionReloadFrame": {
-    "message": "Reloads the frame on which the gesture started.",
+    "message": "ジェスチャーの始点にあるフレームを再読み込みします。",
     "description": "Reloads the frame on which the gesture started."
   },
   "commandDescriptionStopLoading": {
-    "message": "Stops the current page from loading.",
+    "message": "現在のページの読み込みを中止します。",
     "description": "Stops the current page from loading."
   },
   "commandDescriptionCloseTab": {
-    "message": "Closes the current tab.",
+    "message": "現在のタブを閉じます。",
     "description": "Closes the current tab."
   },
   "commandDescriptionRestoreTab": {
-    "message": "Restores the last closed tab.",
+    "message": "最後に閉じたタブを復元します。",
     "description": "Restores the last closed tab."
   },
   "commandDescriptionZoomIn": {
-    "message": "Zooms into the current tab.",
+    "message": "現在のタブをズームインします。",
     "description": "Zooms into the current tab."
   },
   "commandDescriptionZoomOut": {
-    "message": "Zooms out of the current tab.",
+    "message": "現在のタブをズームアウトします。",
     "description": "Zooms out of the current tab."
   },
   "commandDescriptionZoomReset": {
-    "message": "Resets the current zoom level.",
+    "message": "現在のズームレベルをリセットします。",
     "description": "Resets the current zoom level."
   },
   "commandDescriptionPageBack": {
-    "message": "Returns to the previous page of the history.",
+    "message": "履歴の前のページへ戻ります。",
     "description": "Returns to the previous page of the history."
   },
   "commandDescriptionPageForth": {
-    "message": "Goes a page forward in the history.",
+    "message": "履歴の次のページへ進みます。",
     "description": "Goes a page forward in the history."
   },
   "commandDescriptionTogglePin": {
-    "message": "Pins or unpins the current Tab.",
+    "message": "現在のタブをピン留めまたはピン留めを外します。",
     "description": "Pins or unpins the current Tab."
   },
   "commandDescriptionToggleMute": {
-    "message": "Mutes or unmutes the current tab.",
+    "message": "現在のタブをミュートまたはミュートを解除します。",
     "description": "Mutes or unmutes the current tab."
   },
   "commandDescriptionToggleReaderMode": {
-    "message": "Activates or deactivates the reader view if available.",
+    "message": "リーダービューを有効または無効にします (利用可能な場合)。",
     "description": "Activates or deactivates the reader view if available."
   },
   "commandDescriptionScrollTop": {
-    "message": "Scrolls to the top of the page.",
+    "message": "ページの一番上へスクロールします。",
     "description": "Scrolls to the top of the page."
   },
   "commandDescriptionScrollBottom": {
-    "message": "Scrolls to the bottom of the page.",
+    "message": "ページの一番下へスクロールします。",
     "description": "Scrolls to the bottom of the page."
   },
   "commandDescriptionScrollPageDown": {
-    "message": "Scrolls down by the length of the current view.",
+    "message": "現在表示されている部分の下までスクロールします。",
     "description": "Scrolls down by the length of the current view."
   },
   "commandDescriptionScrollPageUp": {
-    "message": "Scrolls up by the length of the current view.",
+    "message": "現在表示されている部分の上までスクロールします。",
     "description": "Scrolls up by the length of the current view."
   },
   "commandDescriptionFocusRightTab": {
-    "message": "Switches to the right tab of the current tab.",
+    "message": "現在のタブの右側のタブに切り替えます。",
     "description": "Switches to the right tab of the current tab."
   },
   "commandDescriptionFocusLeftTab": {
-    "message": "Switches to the left tab of the current tab.",
+    "message": "現在のタブの左側のタブに切り替えます。",
     "description": "Switches to the left tab of the current tab."
   },
   "commandDescriptionFocusFirstTab": {
-    "message": "Switches to the far left tab.",
+    "message": "ピン留めされていない一番左のタブに切り替えます。",
     "description": "Switches to the far left tab."
   },
   "commandDescriptionFocusLastTab": {
-    "message": "Switches to the far right tab.",
+    "message": "一番右のタブに切り替えます。",
     "description": "Switches to the far right tab."
   },
   "commandDescriptionFocusPreviousSelectedTab": {
-    "message": "Switches to the last active tab.",
+    "message": "最後のアクティブなタブに切り替えます。",
     "description": "Switches to the last active tab."
   },
   "commandDescriptionMaximizeWindow": {
-    "message": "Maximizes the current window.",
+    "message": "現在のウィンドウを最大化します。",
     "description": "Maximizes the current window."
   },
   "commandDescriptionMinimizeWindow": {
-    "message": "Minimizes the current window.",
+    "message": "現在のウィンドウを最小化します。",
     "description": "Minimizes the current window."
   },
   "commandDescriptionToggleWindowSize": {
-    "message": "Switches between maximized and normal window size.",
+    "message": "通常のウィンドウサイズと最大化を切り替えます。",
     "description": "Switches between maximized and normal window size."
   },
   "commandDescriptionToggleFullscreen": {
-    "message": "Activates or deactivates full screen mode.",
+    "message": "フルスクリーンモードを有効または無効にします。",
     "description": "Activates or deactivates full screen mode."
   },
   "commandDescriptionNewWindow": {
-    "message": "Opens a new empty window.",
+    "message": "新しい空のウィンドウを開きます。",
     "description": "Opens a new empty window."
   },
   "commandDescriptionNewPrivateWindow": {
-    "message": "Opens a new empty private window.",
+    "message": "新しい空のプライベートウィンドウを開きます。",
     "description": "Opens a new empty private window."
   },
   "commandDescriptionEnterFullscreen": {
@@ -848,11 +848,11 @@
     "description": "Activates full screen mode for the current window."
   },
   "commandDescriptionMoveTabToStart": {
-    "message": "Moves the current tab to the start of the tab strip.",
+    "message": "現在のタブをタブバーの先頭に移動します。",
     "description": "Moves the current tab to the start of the tab strip."
   },
   "commandDescriptionMoveTabToEnd": {
-    "message": "Moves the current tab to the end of the tab strip.",
+    "message": "現在のタブをタブバーの末尾に移動します。",
     "description": "Moves the current tab to the end of the tab strip."
   },
   "commandDescriptionMoveTabRight": {
@@ -864,123 +864,123 @@
     "description": "Moves the current tab leftwards inside the tab strip."
   },
   "commandDescriptionMoveTabToNewWindow": {
-    "message": "Moves the current tab to a new window.",
+    "message": "現在のタブを新しいウィンドウに移動します。",
     "description": "Moves the current tab to a new window."
   },
   "commandDescriptionMoveLeftTabsToNewWindow": {
-    "message": "Moves all tabs to the left of the current tab to a new window.",
+    "message": "現在のタブの左側にあるすべてのタブを新しいウィンドウに移動します。",
     "description": "Moves all tabs to the left of the current tab to a new window."
   },
   "commandDescriptionMoveRightTabsToNewWindow": {
-    "message": "Moves all tabs to the right of the current tab to a new window.",
+    "message": "現在のタブの右側にあるすべてのタブを新しいウィンドウに移動します。",
     "description": "Moves all tabs to the right of the current tab to a new window."
   },
   "commandDescriptionCloseWindow": {
-    "message": "Closes the current window.",
+    "message": "現在のウィンドウを閉じます。",
     "description": "Closes the current window."
   },
   "commandDescriptionReloadAllTabs": {
-    "message": "Reloads all tabs.",
+    "message": "すべてのタブを再読み込みします。",
     "description": "Reloads all tabs."
   },
   "commandDescriptionToRootURL": {
-    "message": "Goes to the main page of the website.",
+    "message": "ウェブサイトのメインページへ移動します。",
     "description": "Goes to the main page of the website."
   },
   "commandDescriptionURLLevelUp": {
-    "message": "Goes up the URL hierarchy for one level.",
+    "message": "1つ上の階層の URL へ移動します。",
     "description": "Goes up the URL hierarchy for one level."
   },
   "commandDescriptionIncreaseURLNumber": {
-    "message": "Increases a number in the URL.",
+    "message": "URL 内の数値を増加させます。",
     "description": "Increases a number in the URL."
   },
   "commandDescriptionDecreaseURLNumber": {
-    "message": "Decreases a number in the URL.",
+    "message": "URL 内の数値を減少させます。",
     "description": "Decreases a number in the URL."
   },
   "commandDescriptionOpenImageInNewTab": {
-    "message": "Opens the image on which the gesture started in a new tab.",
+    "message": "ジェスチャーの始点にある画像を新しいタブで開きます。",
     "description": "Opens the image on which the gesture started in a new tab."
   },
   "commandDescriptionOpenLinkInNewTab": {
-    "message": "Opens either a selected url or the link on which the gesture started in a new tab.",
+    "message": "選択された URL またはジェスチャーの始点にあるリンクを新しいタブで開きます。",
     "description": "Opens either a selected url or the link on which the gesture started in a new tab."
   },
   "commandDescriptionOpenLinkInNewWindow": {
-    "message": "Opens either a selected url or the link on which the gesture started in a new window.",
+    "message": "選択された URL またはジェスチャーの始点にあるリンクを新しいウィンドウで開きます。",
     "description": "Opens either a selected url or the link on which the gesture started in a new window."
   },
   "commandDescriptionOpenLinkInNewPrivateWindow": {
-    "message": "Opens either a selected url or the link on which the gesture started in a new private window.",
+    "message": "選択された URL またはジェスチャーの始点にあるリンクを新しいプライベートウィンドウで開きます。",
     "description": "Opens either a selected url or the link on which the gesture started in a new private window."
   },
   "commandDescriptionSearchTextSelection": {
-    "message": "Starts a web search of the selected text in the current tab.",
+    "message": "現在のタブで、選択されたテキストのウェブ検索を開始します。",
     "description": "Starts a web search of the selected text in the current tab."
   },
   "commandDescriptionSearchClipboard": {
-    "message": "Starts a web search of the clipboard text in the current tab.",
+    "message": "現在のタブで、クリップボードにあるテキストのウェブ検索を開始します。",
     "description": "Starts a web search of the clipboard text in the current tab."
   },
   "commandDescriptionSearchTextSelectionInNewTab": {
-    "message": "Starts a web search of the selected text in a new tab.",
+    "message": "新しいタブを開いて、選択されたテキストのウェブ検索を開始します。",
     "description": "Starts a web search of the selected text in a new tab."
   },
   "commandDescriptionSearchClipboardInNewTab": {
-    "message": "Starts a web search of the clipboard text in a new tab.",
+    "message": "新しいタブを開いて、クリップボードにあるテキストのウェブ検索を開始します。",
     "description": "Starts a web search of the clipboard text in a new tab."
   },
   "commandDescriptionCloseRightTabs": {
-    "message": "Closes all tabs on the right side of the current tab.",
+    "message": "現在のタブの右側にあるすべてのタブを閉じます。",
     "description": "Closes all tabs on the right side of the current tab."
   },
   "commandDescriptionCloseLeftTabs": {
-    "message": "Closes all tabs on the left side of the current tab except the pinned tabs.",
+    "message": "現在のタブの左側にある、ピン留めされたタブを除いたすべてのタブを閉じます。",
     "description": "Closes all tabs on the left side of the current tab except the pinned tabs."
   },
   "commandDescriptionCloseOtherTabs": {
-    "message": "Closes all tabs except of the current tab and pinned tabs.",
+    "message": "現在のタブとピン留めされたタブを除いたすべてのタブを閉じます。",
     "description": "Closes all tabs except of the current tab and pinned tabs."
   },
   "commandDescriptionSaveTabAsPDF": {
-    "message": "Saves the current page as a pdf file.",
+    "message": "現在のページを PDF ファイルとして保存します。",
     "description": "Saves the current page as a pdf file."
   },
   "commandDescriptionSaveImage": {
-    "message": "Downloads the image on which the gesture started.",
+    "message": "ジェスチャーの始点にある画像をダウンロードします。",
     "description": "Downloads the image on which the gesture started."
   },
   "commandDescriptionSaveLink": {
-    "message": "Downloads either a selected url or the link on which the gesture started.",
+    "message": "選択された URL またはジェスチャーの始点にあるリンクをダウンロードします。",
     "description": "Downloads either a selected url or the link on which the gesture started."
   },
   "commandDescriptionPrintTab": {
-    "message": "Prints the current page by prompting the print dialog.",
+    "message": "印刷ダイアログを表示して現在のページを印刷します。",
     "description": "Prints the current page by prompting the print dialog."
   },
   "commandDescriptionOpenPrintPreview": {
-    "message": "Opens the print preview of the current page.",
+    "message": "現在のページの印刷プレビューを開きます。",
     "description": "Opens the print preview of the current page."
   },
   "commandDescriptionOpenHomepage": {
-    "message": "Works like the homepage button.",
+    "message": "ホームページボタンのように動作します。",
     "description": "Works like the homepage button."
   },
   "commandDescriptionOpenCustomURLInNewTab": {
-    "message": "Opens the specified URL in a new tab.",
+    "message": "指定した URL を新しいタブで開きます。",
     "description": "Opens the specified URL in a new tab."
   },
   "commandDescriptionOpenCustomURL": {
-    "message": "Opens the specified URL in the current tab.",
+    "message": "指定した URL を現在のタブで開きます。",
     "description": "Opens the specified URL in the current tab."
   },
   "commandDescriptionOpenCustomURLInNewWindow": {
-    "message": "Opens the specified URL in a new window.",
+    "message": "指定した URL を新しいウィンドウで開きます。",
     "description": "Opens the specified URL in a new window."
   },
   "commandDescriptionOpenCustomURLInNewPrivateWindow": {
-    "message": "Opens the specified URL in a new private window.",
+    "message": "指定した URL を新しいプライベートウィンドウで開きます。",
     "description": "Opens the specified URL in a new private window."
   },
   "commandDescriptionInsertCustomText": {
@@ -988,207 +988,207 @@
     "description": "Inserts the specified text at the caret position of the input element on which the gesture started."
   },
   "commandDescriptionPasteClipboard": {
-    "message": "Inserts the current clipboard text at the caret position of the input element on which the gesture started.",
+    "message": "現在クリップボードにあるテキストを、ジェスチャーの始点にある入力要素のキャレット位置に挿入します。",
     "description": "Inserts the current clipboard text at the caret position of the input element on which the gesture started."
   },
   "commandDescriptionOpenURLFromClipboard": {
-    "message": "If the clipboard contains a URL, it will be opened in the current tab.",
+    "message": "クリップボードに URL がある場合は、現在のタブで開きます。",
     "description": "If the clipboard contains a URL, it will be opened in the current tab."
   },
   "commandDescriptionOpenURLFromClipboardInNewTab": {
-    "message": "If the clipboard contains a URL, it will be opened in a new tab.",
+    "message": "クリップボードに URL がある場合は、新しいタブで開きます。",
     "description": "If the clipboard contains a URL, it will be opened in a new tab."
   },
   "commandDescriptionOpenURLFromClipboardInNewWindow": {
-    "message": "If the clipboard contains a URL, it will be opened in a new window.",
+    "message": "クリップボードに URL がある場合は、新しいウィンドウで開きます。",
     "description": "If the clipboard contains a URL, it will be opened in a new window."
   },
   "commandDescriptionOpenURLFromClipboardInNewPrivateWindow": {
-    "message": "If the clipboard contains a URL, it will be opened in a new private window.",
+    "message": "クリップボードに URL がある場合は、新しいプライベートウィンドウで開きます。",
     "description": "If the clipboard contains a URL, it will be opened in a new private window."
   },
   "commandDescriptionOpenAddonSettings": {
-    "message": "Opens the Gesturefy settings page.",
-    "description": "Opens the Gesturefy settings page."
+    "message": "Cesturefy の設定ページを開きます。",
+    "description": "Opens the Cesturefy settings page."
   },
   "commandDescriptionOpenLink": {
-    "message": "Opens either a selected url or the link on which the gesture started.",
+    "message": "選択された URL またはジェスチャーの始点にあるリンクを開きます。",
     "description": "Opens either a selected url or the link on which the gesture started."
   },
   "commandDescriptionViewImage": {
-    "message": "Opens the image on which the gesture started.",
+    "message": "ジェスチャーの始点にある画像を開きます。",
     "description": "Opens the image on which the gesture started."
   },
   "commandDescriptionLinkToNewBookmark": {
-    "message": "Saves either a selected url or the link on which the gesture started as a bookmark.",
+    "message": "選択された URL またはジェスチャーの始点にあるリンクをブックマークとして保存します。",
     "description": "Saves either a selected url or the link on which the gesture started as a bookmark."
   },
   "commandDescriptionSaveScreenshot": {
-    "message": "Saves the current visible website area as an image.",
+    "message": "ウェブサイトの現在表示されている部分を画像として保存します。",
     "description": "Saves the current visible website area as an image."
   },
   "commandDescriptionCopyTabURL": {
-    "message": "Copies the URL of the current tab to clipboard.",
+    "message": "現在のタブの URL をクリップボードにコピーします。",
     "description": "Copies the URL of the current tab to clipboard."
   },
   "commandDescriptionCopyLinkURL": {
-    "message": "Copies either a selected url or the link on which the gesture started to clipboard.",
+    "message": "選択された URL またはジェスチャーの始点にあるリンクをクリップボードにコピーします。",
     "description": "Copies either a selected url or the link on which the gesture started to clipboard."
   },
   "commandDescriptionCopyImageURL": {
-    "message": "Copies the URL of the image on which the gesture started to clipboard.",
+    "message": "ジェスチャーの始点にある画像の URL をクリップボードにコピーします。",
     "description": "Copies the URL of the image on which the gesture started to clipboard."
   },
   "commandDescriptionCopyTextSelection": {
-    "message": "Copies the current text selection to clipboard.",
+    "message": "現在選択中のテキストをクリップボードにコピーします。",
     "description": "Copies the current text selection to clipboard."
   },
   "commandDescriptionCopyImage": {
-    "message": "Copies the image on which the gesture started to clipboard.",
+    "message": "ジェスチャーの始点にある画像をクリップボードにコピーします。",
     "description": "Copies the image on which the gesture started to clipboard."
   },
   "commandDescriptionViewPageSourceCode": {
-    "message": "Opens a new tab containing the source code of the page.",
+    "message": "ページのソースコードを新しいタブで開きます。",
     "description": "Opens a new tab containing the source code of the page."
   },
   "commandDescriptionPopupAllTabs": {
-    "message": "Opens a popup containing a list of all currently open tabs and offers the possibility to switch to one of them.",
+    "message": "現在開いているタブの一覧を含むポップアップを表示して、その中の一つに切り替えることができます。",
     "description": "Opens a popup containing a list of all currently open tabs and offers the possibility to switch to one of them."
   },
   "commandDescriptionPopupRecentlyClosedTabs": {
-    "message": "Opens a popup containing a list of all recently closed tabs and offers the possibility to restore one of them.",
+    "message": "最近閉じたタブの一覧を含むポップアップを表示して、その中の一つを復元することができます。",
     "description": "Opens a popup containing a list of all recently closed tabs and offers the possibility to restore one of them."
   },
   "commandDescriptionPopupSearchEngines": {
-    "message": "Opens a popup containing a list of all installed search engines and offers the possibility to search the selected text with one of them.",
+    "message": "インストールされている検索エンジンの一覧を含むポップアップを表示して、その中の一つで選択されたテキストを検索することができます。",
     "description": "Opens a popup containing a list of all installed search engines and offers the possibility to search the selected text with one of them."
   },
   "commandDescriptionPopupCustomCommandList": {
-    "message": "Opens a popup containing a custom list of multiple commands and offers the possibility to run one of them.",
+    "message": "コマンド一覧のポップアップを表示して、その中の一つを実行することができます。",
     "description": "Opens a popup containing a custom list of multiple commands and offers the possibility to run one of them."
   },
   "commandDescriptionSendMessageToOtherAddon": {
-    "message": "Sends a custom message to another add-on. This allows the use of other add-ons functionality.",
+    "message": "他のアドオンにカスタムメッセージを送信します。これにより、他のアドオンの機能を使用できます。",
     "description": "Sends a custom message to another add-on. This allows the use of other add-ons functionality."
   },
   "commandDescriptionExecuteUserScript": {
-    "message": "Executes custom JavaScript code in the current webpage.",
+    "message": "現在のウェブページで、カスタムした JavaScript コードを実行します。",
     "description": "Executes custom JavaScript code in the current webpage."
   },
   "commandDescriptionClearBrowsingData": {
-    "message": "Removes the specified browsing data.",
+    "message": "指定したブラウジングデータを削除します。",
     "description": "Removes the specified browsing data."
   },
   "commandDescriptionRunMultiPurposeCommand": {
-    "message": "Combines multiple commands into one and executes the first command which runs successfully under the given context/conditions.",
+    "message": "複数のコマンドを一つにまとめ、特定の状況/状態で実行可能な最初のコマンドを実行します。",
     "description": "Combines multiple commands into one and executes the first command which runs successfully under the given context/conditions."
   },
   "commandSettingLabelNewTabPosition": {
-    "message": "New tab position",
+    "message": "新しいタブの位置",
     "description": "New tab position"
   },
   "commandSettingLabelNewTabPositionDefault": {
-    "message": "default",
+    "message": "既定",
     "description": "default"
   },
   "commandSettingLabelNewTabPositionBefore": {
-    "message": "before",
+    "message": "前",
     "description": "before"
   },
   "commandSettingLabelNewTabPositionAfter": {
-    "message": "after",
+    "message": "後",
     "description": "after"
   },
   "commandSettingLabelNewTabPositionStart": {
-    "message": "start",
+    "message": "最初",
     "description": "start"
   },
   "commandSettingLabelNewTabPositionEnd": {
-    "message": "end",
+    "message": "最後",
     "description": "end"
   },
   "commandSettingLabelNewTabFocus": {
-    "message": "Focus new tab",
+    "message": "新しいタブにフォーカス",
     "description": "Focus new tab"
   },
   "commandSettingLabelTabNextFocus": {
-    "message": "Next tab",
+    "message": "次のタブ",
     "description": "Next tab"
   },
   "commandSettingLabelTabNextFocusDefault": {
-    "message": "default",
+    "message": "既定",
     "description": "default"
   },
   "commandSettingLabelTabNextFocusPrevious": {
-    "message": "previous",
+    "message": "前のタブ",
     "description": "previous"
   },
   "commandSettingLabelTabNextFocusNext": {
-    "message": "next",
+    "message": "次のタブ",
     "description": "next"
   },
   "commandSettingLabelTabNextFocusRecently": {
-    "message": "last focused",
+    "message": "最後にフォーカスされたタブ",
     "description": "last focused"
   },
   "commandSettingLabelTabClosePinned": {
-    "message": "Close pinned tabs",
+    "message": "ピン留めされたタブを閉じる",
     "description": "Close pinned tabs"
   },
   "commandSettingLabelRestoreCurrentWindow": {
-    "message": "Current window only",
+    "message": "現在のウィンドウのみ",
     "description": "Current window only"
   },
   "commandSettingLabelReloadCache": {
-    "message": "Reload cache",
+    "message": "キャッシュを再読み込み",
     "description": "Reload cache"
   },
   "commandSettingLabelZoomStep": {
-    "message": "Zoom step",
+    "message": "拡大/縮小率",
     "description": "Zoom step"
   },
   "commandSettingLabelScrollDuration": {
-    "message": "Scroll duration",
+    "message": "スクロール時間",
     "description": "Scroll duration"
   },
   "commandSettingLabelScrollProportion": {
-    "message": "Scroll proportion",
+    "message": "スクロールの割合",
     "description": "Scroll proportion"
   },
   "commandSettingLabelFocusIncludePinned": {
-    "message": "Include pinned tabs",
+    "message": "ピン留めされたタブを含める",
     "description": "Include pinned tabs"
   },
   "commandSettingLabelTabCycling": {
-    "message": "Tab cycling",
+    "message": "タブを循環",
     "description": "Tab cycling"
   },
   "commandSettingLabelExcludeDiscarded": {
-    "message": "Exclude discarded tabs",
+    "message": "破棄されているタブを除外する",
     "description": "Exclude discarded tabs"
   },
   "commandSettingLabelOpenEmptyTab": {
-    "message": "Open empty tab",
+    "message": "空のタブを開く",
     "description": "Open empty tab"
   },
   "commandSettingLabelOpenEmptySearch": {
-    "message": "Open empty search",
+    "message": "空のまま検索する",
     "description": "Open empty search"
   },
   "commandSettingLabelOpenEmptyWindow": {
-    "message": "Open empty window",
+    "message": "空のウィンドウを開く",
     "description": "Open empty window"
   },
   "commandSettingLabelSearchEngineURL": {
-    "message": "Search engine URL",
+    "message": "検索エンジンの URL",
     "description": "Search engine URL"
   },
   "commandSettingLabelSavePromptDialog": {
-    "message": "Prompt dialog",
+    "message": "プロンプトダイアログ",
     "description": "Prompt dialog"
   },
   "commandSettingLabelCustomURL": {
-    "message": "Custom URL",
+    "message": "カスタム URL",
     "description": "Custom URL"
   },
   "commandSettingLabelCustomText": {
@@ -1196,43 +1196,43 @@
     "description": "Custom text"
   },
   "commandSettingLabelAddonId": {
-    "message": "Add-on ID",
+    "message": "アドオン ID",
     "description": "Add-on ID"
   },
   "commandSettingLabelAddonMessage": {
-    "message": "Message",
+    "message": "メッセージ",
     "description": "Message"
   },
   "commandSettingLabelParseMessage": {
-    "message": "Parse message",
+    "message": "メッセージをパース",
     "description": "Parse message"
   },
   "commandSettingLabelTabOrder": {
-    "message": "Tab order",
+    "message": "タブの並び",
     "description": "Tab order"
   },
   "commandSettingLabelTabOrderNone": {
-    "message": "none (default)",
+    "message": "なし (既定)",
     "description": "none (default)"
   },
   "commandSettingLabelTabOrderLastAccessedAsc": {
-    "message": "last accessed ascending",
+    "message": "アクセス順 (昇順)",
     "description": "last accessed ascending"
   },
   "commandSettingLabelTabOrderLastAccessedDesc": {
-    "message": "last accessed descending",
+    "message": "アクセス順 (降順)",
     "description": "last accessed descending"
   },
   "commandSettingLabelTabOrderAlphabeticallyAsc": {
-    "message": "alphabetically ascending",
+    "message": "アルファベット順 (昇順)",
     "description": "alphabetically ascending"
   },
   "commandSettingLabelTabOrderAlphabeticallyDesc": {
-    "message": "alphabetically descending",
+    "message": "アルファベット順 (降順)",
     "description": "alphabetically descending"
   },
   "commandSettingLabelTabIncludeCurrent": {
-    "message": "Include current tab",
+    "message": "現在のタブを含める",
     "description": "Include current tab"
   },
   "commandSettingLabelTabShift": {
@@ -1240,59 +1240,59 @@
     "description": "Shift"
   },
   "commandSettingLabelNewWindowFocus": {
-    "message": "Focus new window",
+    "message": "新しいウィンドウにフォーカス",
     "description": "Focus new window"
   },
   "commandSettingLabelUserScriptWarning": {
-    "message": "Careful!",
+    "message": "注意!",
     "description": "Careful!"
   },
   "commandSettingLabelUserScriptCode": {
-    "message": "User script code",
+    "message": "ユーザースクリプトコード",
     "description": "User script code"
   },
   "commandSettingLabelTargetFrame": {
-    "message": "Target frame",
+    "message": "ターゲットフレーム",
     "description": "Target frame"
   },
   "commandSettingLabelTargetFrameSourceFrame": {
-    "message": "Source frame",
+    "message": "ソースフレーム",
     "description": "Source frame"
   },
   "commandSettingLabelTargetFrameAllFrames": {
-    "message": "All frames",
+    "message": "すべてのフレーム",
     "description": "All frames"
   },
   "commandSettingLabelTargetFrameTopFrame": {
-    "message": "Top-level frame",
+    "message": "トップレベルフレーム",
     "description": "Top-level frame"
   },
   "commandSettingLabelCustomMatchPattern": {
-    "message": "Custom match pattern",
+    "message": "マッチパターンの指定",
     "description": "Custom match pattern"
   },
   "commandSettingLabelCommandSelection": {
-    "message": "Command selection",
+    "message": "コマンドの選択",
     "description": "Command selection"
   },
   "commandSettingLabelBrowsingDataCache": {
-    "message": "Cache",
+    "message": "キャッシュ",
     "description": "Cache"
   },
   "commandSettingLabelBrowsingDataCookies": {
-    "message": "Cookies",
+    "message": "Cookie",
     "description": "Cookies"
   },
   "commandSettingLabelBrowsingDataDownloads": {
-    "message": "Downloads",
+    "message": "ダウンロードの履歴",
     "description": "Downloads"
   },
   "commandSettingLabelBrowsingDataFormData": {
-    "message": "Form data",
+    "message": "フォームの入力履歴",
     "description": "Form data"
   },
   "commandSettingLabelBrowsingDataHistory": {
-    "message": "History",
+    "message": "履歴",
     "description": "History"
   },
   "commandSettingLabelBrowsingDataIndexedDB": {
@@ -1300,63 +1300,63 @@
     "description": "IndexedDB"
   },
   "commandSettingLabelBrowsingDataLocalStorage": {
-    "message": "Local Storage",
+    "message": "ローカルストレージ",
     "description": "Local Storage"
   },
   "commandSettingLabelBrowsingDataPasswords": {
-    "message": "Passwords",
+    "message": "パスワード",
     "description": "Passwords"
   },
   "commandSettingLabelBrowsingDataPluginData": {
-    "message": "Plugin data",
+    "message": "プラグインデータ",
     "description": "Plugin data"
   },
   "commandSettingLabelBrowsingDataServiceWorkers": {
-    "message": "Service Workers",
+    "message": "Service Worker",
     "description": "Service Workers"
   },
   "commandSettingDescriptionNewTabPosition": {
-    "message": "Determines the position of the new tab relative to the current tab.",
+    "message": "現在のタブを基準にした新しいタブの位置を指定します。",
     "description": "Determines the position of the new tab relative to the current tab."
   },
   "commandSettingDescriptionNewTabFocus": {
-    "message": "Determines if the opened tab should gain focus or not.",
+    "message": "開いたタブがフォーカスされるかどうかを指定します。",
     "description": "Determines if the opened tab should gain focus or not."
   },
   "commandSettingDescriptionTabNextFocus": {
-    "message": "Determines which tab should be focused next.",
+    "message": "次にフォーカスされるタブを指定します。",
     "description": "Determines which tab should be focused next."
   },
   "commandSettingDescriptionTabClosePinned": {
-    "message": "Determines if pinned tabs can be closed or not.",
+    "message": "ピン留めされたタブを閉じるかどうかを指定します。",
     "description": "Determines if pinned tabs can be closed or not."
   },
   "commandSettingDescriptionRestoreCurrentWindow": {
-    "message": "Determines if only tabs which belong to the current window should be restored.",
+    "message": "タブの復元を現在のウィンドウのみにするかどうかを指定します。",
     "description": "Determines if only tabs which belong to the current window should be restored."
   },
   "commandSettingDescriptionReloadCache": {
-    "message": "Determines if the cache should be reloaded or not.",
+    "message": "キャッシュを再読み込みするかどうかを指定します。",
     "description": "Determines if the cache should be reloaded or not."
   },
   "commandSettingDescriptionZoomStep": {
-    "message": "The zoom step or multiple comma separated levels in percentage. If omitted, Gesturefy's default zoom levels are used.",
-    "description": "The zoom step or multiple comma separated levels in percentage. If omitted, Gesturefy's default zoom levels are used."
+    "message": "一度に拡大/縮小される倍率を % で指定するか、複数のズームレベルを , で区切って指定します。省略した場合は Cesturefy の既定のズームレベルが使用されます。",
+    "description": "The zoom step or multiple comma separated levels in percentage. If omitted, Cesturefy's default zoom levels are used."
   },
   "commandSettingDescriptionScrollDuration": {
-    "message": "The duration in milliseconds the scroll animation should take.",
+    "message": "スクロールアニメーションにかかる時間 (ミリ秒) です。",
     "description": "The duration in milliseconds the scroll animation should take."
   },
   "commandSettingDescriptionScrollProportion": {
-    "message": "The percentage of the viewport height by which the page should be scrolled.",
+    "message": "ページをスクロールする際に基準となるビューポートの高さのパーセンテージです。",
     "description": "The percentage of the viewport height by which the page should be scrolled."
   },
   "commandSettingDescriptionFocusIncludePinned": {
-    "message": "Determines if pinned tabs should be treated as the leftmost tabs.",
+    "message": "ピン留めされたタブを一番左のタブとして扱うかどうかを指定します。",
     "description": "Determines if pinned tabs should be treated as the leftmost tabs."
   },
   "commandSettingDescriptionTabCycling": {
-    "message": "Determines if the tabs should be cycled through in a loop.",
+    "message": "タブをループして循環するかどうかを指定します。",
     "description": "Determines if the tabs should be cycled through in a loop."
   },
   "commandSettingDescriptionExcludeDiscarded": {
@@ -1364,27 +1364,27 @@
     "description": "Determines whether tabs that are not loaded should be ignored."
   },
   "commandSettingDescriptionOpenEmptyTab": {
-    "message": "Determines if an empty tab should be opened if no URL or link was selected.",
+    "message": "URL またはリンクが選択されていない場合に、空のタブを開くかどうかを指定します。",
     "description": "Determines if an empty tab should be opened if no URL or link was selected."
   },
   "commandSettingDescriptionOpenEmptySearch": {
-    "message": "Determines whether a search should be performed even if no text is present",
+    "message": "テキストが空でも検索を実行するかどうかを指定します",
     "description": "Determines whether a search should be performed even if no text is present"
   },
   "commandSettingDescriptionOpenEmptyWindow": {
-    "message": "Determines if an empty window should be opened if no URL or link was selected.",
+    "message": "URL またはリンクが選択されていない場合に、空のウィンドウを開くかどうかを指定します。",
     "description": "Determines if an empty window should be opened if no URL or link was selected."
   },
   "commandSettingDescriptionSearchEngineURL": {
-    "message": "A search engine URL where the search text is either inserted for the %s placeholder or appended to the end. If omitted, the default browser search engine is used.",
+    "message": "検索エンジンの URL です。検索するテキストは %s プレースホルダー部分に挿入されるか、URL の末尾に追加されます。省略した場合はブラウザーの既定の検索エンジンが使用されます。",
     "description": "A search engine URL where the search text is either inserted for the %s placeholder or appended to the end. If omitted, the default browser search engine is used."
   },
   "commandSettingDescriptionSavePromptDialog": {
-    "message": "Determines if the \"Save As\" dialog should appear or the file should be downloaded silently to the users default download folder.",
+    "message": "On の場合は \"名前を付けて保存\" ダイアログを表示します。Off の場合は Firefox の一般設定で指定されたダウンロードフォルダーにダウンロードされます。",
     "description": "Determines if the \"Save As\" dialog should appear or the file should be downloaded silently to the users default download folder."
   },
   "commandSettingDescriptionCustomURL": {
-    "message": "The URL that should be opened.",
+    "message": "開かれる URL です。",
     "description": "The URL that should be opened."
   },
   "commandSettingDescriptionCustomText": {
@@ -1392,23 +1392,23 @@
     "description": "The text or symbols that should be inserted."
   },
   "commandSettingDescriptionAddonId": {
-    "message": "The extension ID of the add-on the message should be sent to.",
+    "message": "メッセージを送るアドオンの extension ID です。",
     "description": "The extension ID of the add-on the message should be sent to."
   },
   "commandSettingDescriptionAddonMessage": {
-    "message": "The message string that should be sent to the add-on.",
+    "message": "アドオンに送るメッセージ文字列です。",
     "description": "The message string that should be sent to the add-on."
   },
   "commandSettingDescriptionParseMessage": {
-    "message": "Determines if the message should be serialized as a JavaScript object.",
+    "message": "メッセージを JavaScript オブジェクトとしてシリアル化するかどうかを指定します。",
     "description": "Determines if the message should be serialized as a JavaScript object."
   },
   "commandSettingDescriptionTabOrder": {
-    "message": "Orders the displayed tabs by a specific characteristic.",
+    "message": "タブの表示を特定の順序で並べ替えます。",
     "description": "Orders the displayed tabs by a specific characteristic."
   },
   "commandSettingDescriptionTabIncludeCurrent": {
-    "message": "Determines if the currently active tab should be included.",
+    "message": "現在アクティブなタブを含めるかどうかを指定します。",
     "description": "Determines if the currently active tab should be included."
   },
   "commandSettingDescriptionTabShift": {
@@ -1416,31 +1416,31 @@
     "description": "Determines by how many places the tab should be moved."
   },
   "commandSettingDescriptionNewWindowFocus": {
-    "message": "Determines if the opened window should gain focus or not.",
+    "message": "開いたウィンドウがフォーカスされるかどうかを指定します。",
     "description": "Determines if the opened window should gain focus or not."
   },
   "commandSettingDescriptionUserScriptWarning": {
-    "message": "User scripts can lead to the loss of private data.",
+    "message": "ユーザースクリプトは個人データ損失の原因になる可能性があります。",
     "description": "User scripts can lead to the loss of private data."
   },
   "commandSettingDescriptionUserScriptCode": {
-    "message": "The code that should be injected into the webpage's scope.",
+    "message": "コードはウェブページのスコープ内に挿入されます。",
     "description": "The code that should be injected into the webpage's scope."
   },
   "commandSettingDescriptionTargetFrame": {
-    "message": "The frame in which the user script should be injected.",
+    "message": "ユーザースクリプトを差し込むフレームです。",
     "description": "The frame in which the user script should be injected."
   },
   "commandSettingDescriptionCustomMatchPattern": {
-    "message": "A pattern in the form of a regular expression to match a specific part of a string. If omitted an internal pattern is used.",
+    "message": "テキストの特定の部分に一致させるための正規表現のパターンです。省略した場合は内蔵されているパターンが使用されます。",
     "description": "A pattern in the form of a regular expression to match a specific part of a string. If omitted an internal pattern is used."
   },
   "commandSettingDescriptionCommandSelection": {
-    "message": "A custom selection of multiple commands.",
+    "message": "複数のコマンドを指定します。",
     "description": "A custom selection of multiple commands."
   },
   "commandErrorNotificationTitle": {
-    "message": "\"$COMMAND$\" command failed.",
+    "message": "\"$COMMAND$\" コマンドは失敗しました。",
     "description": "\"New tab\" command failed.",
     "placeholders": {
       "command": {
@@ -1450,63 +1450,63 @@
     }
   },
   "commandErrorNotificationMessageIllegalURL": {
-    "message": "The target URL cannot be opened. Click here for more information.",
+    "message": "対象の URL を開けません。詳細はここをクリックしてください。",
     "description": "The target URL cannot be opened. Click here for more information."
   },
   "commandErrorNotificationMessageNotSerializeable": {
-    "message": "The specified message string could not be parsed to a JavaScript object. Click here for more information.",
+    "message": "指定したメッセージ文字列を JavaScript オブジェクトにパースできませんでした。詳細はここをクリックしてください。",
     "description": "The specified message string could not be parsed to a JavaScript object. Click here for more information."
   },
   "commandErrorNotificationMessageMissingRecipient": {
-    "message": "The specified extension ID either does not belong to an existing add-on or the add-on does not receive messages. Click here for more information.",
+    "message": "指定した extension ID が既存のアドオンのものではない、またはアドオンがメッセージを受け取っていません。詳細はここをクリックしてください。",
     "description": "The specified extension ID either does not belong to an existing add-on or the add-on does not receive messages. Click here for more information."
   },
   "commandErrorNotificationMessageMissingIncognitoPermissions": {
-    "message": "Gesturefy does not have permission for incognito mode. Click here for more information.",
-    "description": "Gesturefy does not have permission for incognito mode. Click here for more information."
+    "message": "Cesturefy にプライベートモードの権限がありません。詳細はここをクリックしてください。",
+    "description": "Cesturefy does not have permission for incognito mode. Click here for more information."
   },
   "commandBarTitle": {
-    "message": "Command bar",
+    "message": "コマンドバー",
     "description": "Command bar"
   },
   "commandBarSearch": {
-    "message": "Search",
+    "message": "検索",
     "description": "Search"
   },
   "commandBarAdditionalPermissionsText": {
-    "message": "This command requires additional permissions: ",
+    "message": "このコマンドは追加の権限が必要です: ",
     "description": "This command requires additional permissions: "
   },
   "commandBarAdditionalSettingsText": {
-    "message": "This command has additional settings.",
+    "message": "このコマンドは追加の設定があります。",
     "description": "This command has additional settings."
   },
   "commandBarOpenSelectionText": {
-    "message": "Open command selection.",
+    "message": "コマンドの選択を開きます。",
     "description": "Open command selection."
   },
   "commandBarOpenSettingsText": {
-    "message": "Open command settings.",
+    "message": "コマンドの設定を開きます。",
     "description": "Open command settings."
   },
   "commandMultiSelectAddPlaceholder": {
-    "message": "Add",
+    "message": "追加",
     "description": "Add"
   },
   "commandMultiSelectNoResultsPlaceholder": {
-    "message": "No results",
+    "message": "結果がありません",
     "description": "No results"
   },
   "gesturePopupTitleNewGesture": {
-    "message": "New Gesture",
+    "message": "新しいジェスチャー",
     "description": "New Gesture"
   },
   "gesturePopupTitleEditGesture": {
-    "message": "Edit Gesture",
+    "message": "ジェスチャーを編集",
     "description": "Edit Gesture"
   },
   "gesturePopupRecordingAreaText": {
-    "message": "Use the $MOUSEBUTTON$ mouse button to record a new gesture.",
+    "message": "新しいジェスチャーの記録には、マウスの$MOUSEBUTTON$ボタンを使用します。",
     "description": "Use the right mouse button to record a new gesture.",
     "placeholders": {
       "mousebutton": {
@@ -1516,43 +1516,43 @@
     }
   },
   "gesturePopupMouseButtonLeft": {
-    "message": "left",
+    "message": "左",
     "description": "This will replace the placeholder in \"Use the $MOUSEBUTTON$ mouse button to record a new gesture.\""
   },
   "gesturePopupMouseButtonRight": {
-    "message": "right",
+    "message": "右",
     "description": "This will replace the placeholder in \"Use the $MOUSEBUTTON$ mouse button to record a new gesture.\""
   },
   "gesturePopupMouseButtonMiddle": {
-    "message": "middle",
+    "message": "中央",
     "description": "This will replace the placeholder in \"Use the $MOUSEBUTTON$ mouse button to record a new gesture.\""
   },
   "gesturePopupLabelCommand": {
-    "message": "Command",
+    "message": "コマンド",
     "description": "Command"
   },
   "gesturePopupLabelGestureDirections": {
-    "message": "Gesture directions",
+    "message": "ジェスチャーの方向",
     "description": "Gesture directions"
   },
   "gesturePopupLabelOptionalLabel": {
-    "message": "Label (optional)",
+    "message": "ラベル (省略可能)",
     "description": "Label (optional)"
   },
   "gesturePopupDescriptionCommand": {
-    "message": "Choose a command that should be assigned to this gesture.",
+    "message": "このジェスチャーに割り当てるコマンドを選択します。",
     "description": "Choose a command that should be assigned to this gesture."
   },
   "gesturePopupDescriptionGestureDirections": {
-    "message": "Either use the arrow keys to enter the directions, or record them in the area next to it.",
+    "message": "矢印キーを使用して方向を入力するか、横にある領域で方向を記録します。",
     "description": "Either use the arrow keys to enter the directions, or record them in the area next to it."
   },
   "gesturePopupDescriptionOptionalLabel": {
-    "message": "Assign a custom name that will be displayed instead of the command name.",
+    "message": "コマンド名の代わりに表示される任意の名前を割り当てます。",
     "description": "Assign a custom name that will be displayed instead of the command name."
   },
   "gesturePopupNotificationSimilarGesture": {
-    "message": "This gesture is similar to the \"$GESTURE_NAME$\" gesture.",
+    "message": "このジェスチャーは \"$GESTURE_NAME$\" のジェスチャーに似ています。",
     "description": "This gesture is similar to the \"$GESTURE_NAME$\" gesture.",
     "placeholders": {
       "gesture_name": {
@@ -1562,35 +1562,35 @@
     }
   },
   "permissionLabelTabs": {
-    "message": "Tabs",
+    "message": "タブ",
     "description": "Tabs"
   },
   "permissionLabelSessions": {
-    "message": "Sessions",
+    "message": "セッション",
     "description": "Sessions"
   },
   "permissionLabelBookmarks": {
-    "message": "Bookmarks",
+    "message": "ブックマーク",
     "description": "Bookmarks"
   },
   "permissionLabelClipboardWrite": {
-    "message": "Clipboard write",
+    "message": "クリップボードの書き込み",
     "description": "Clipboard write"
   },
   "permissionLabelClipboardRead": {
-    "message": "Clipboard read",
+    "message": "クリップボードの読み取り",
     "description": "Clipboard read"
   },
   "permissionLabelDownloads": {
-    "message": "Downloads",
+    "message": "ダウンロード",
     "description": "Downloads"
   },
   "permissionLabelSearch": {
-    "message": "Search",
+    "message": "検索",
     "description": "Search"
   },
   "permissionLabelBrowsingData": {
-    "message": "Browsing data",
+    "message": "ブラウジングデータ",
     "description": "Browsing data"
   },
   "toggleButtonOn": {
@@ -1602,11 +1602,11 @@
     "description": "Off - setting not checked"
   },
   "linkAdditionalInformation": {
-    "message": "Additional information",
+    "message": "その他の情報",
     "description": "Additional information"
   },
   "buttonSave": {
-    "message": "Save",
+    "message": "保存",
     "description": "Save"
   },
   "buttonConfirm": {
@@ -1614,63 +1614,63 @@
     "description": "OK"
   },
   "buttonCancel": {
-    "message": "Cancel",
+    "message": "キャンセル",
     "description": "Cancel"
   },
   "lightTheme": {
-    "message": "Light theme",
+    "message": "明るいテーマ",
     "description": "Light theme"
   },
   "darkTheme": {
-    "message": "Dark theme",
+    "message": "暗いテーマ",
     "description": "Dark theme"
   },
   "highContrastTheme": {
-    "message": "High contrast theme",
+    "message": "高コントラストテーマ",
     "description": "High contrast theme"
   },
   "welcomePageUpperSectionReference": {
-    "message": "Gesturefy has been successfully installed.",
-    "description": "Gesturefy has been successfully installed."
+    "message": "Cesturefy のインストールに成功しました。",
+    "description": "Cesturefy has been successfully installed."
   },
   "welcomePageUpperSectionHeadline": {
-    "message": "Never done a mouse gesture before?\r\n Try it out right now!",
+    "message": "過去にマウスジェスチャーを利用したことがありますか?\n 今すぐ試してみてください!",
     "description": "Never done a mouse gesture before?\r\n Try it out right now!"
   },
   "welcomePageUpperSectionTutorialStep01": {
-    "message": "Press and hold the right mouse button",
+    "message": "マウスの右ボタンを押したままにします",
     "description": "Press and hold the right mouse button"
   },
   "welcomePageUpperSectionTutorialStep02": {
-    "message": "Drag down your mouse",
+    "message": "マウス (カーソル) を下に動かします",
     "description": "Drag down your mouse"
   },
   "welcomePageUpperSectionTutorialStep03": {
-    "message": "Release the right mouse button",
+    "message": "マウスの右ボタンを放します",
     "description": "Release the right mouse button"
   },
   "welcomePageLowerSectionReference": {
-    "message": "You scrolled to the bottom of the page.",
+    "message": "ページの下までスクロールします。",
     "description": "You scrolled to the bottom of the page."
   },
   "welcomePageLowerSectionHeadline": {
-    "message": "Congratulations, you successfully accomplished your very first mouse gesture!",
+    "message": "おめでとうございます、初めてのマウスジェスチャーを無事に成し遂げました!",
     "description": "Congratulations, you successfully accomplished your very first mouse gesture!"
   },
   "welcomePageLowerSectionGetStartedText": {
-    "message": "Create as many gestures as you want to suit your individual browsing style and make your daily browsing easier, faster and a lot more fun. Get started now and personalize Gesturefy!",
-    "description": "Create as many gestures as you want to suit your individual browsing style and make your daily browsing easier, faster and a lot more fun. Get started now and personalize Gesturefy!"
+    "message": "ブラウジングスタイルに合わせて様々なジェスチャーを作成し、日々のブラウジングをより簡単に、快適に、そして楽しいものにしてください。さあ今すぐ Cesturefy を自分流にアレンジしてみましょう!",
+    "description": "Create as many gestures as you want to suit your individual browsing style and make your daily browsing easier, faster and a lot more fun. Get started now and personalize Cesturefy!"
   },
   "welcomePageLowerSectionGetStartedLink": {
-    "message": "Set Up Your Gestures",
+    "message": "ジェスチャーを設定する",
     "description": "Set Up Your Gestures"
   },
   "welcomePageLowerSectionLearnMoreText": {
-    "message": "Still confused? Click the link below for a quick break-down and if you can't get Gesturefy up and running you can also find a troubleshooting guide there.",
-    "description": "Still confused? Click the link below for a quick break-down and if you can't get Gesturefy up and running you can also find a troubleshooting guide there."
+    "message": "何か分からないことがありますか? 下記のリンク先には、Cesturefy がうまく動作しない場合のトラブルシューティングガイドも含めた、さらなる情報があります。",
+    "description": "Still confused? Click the link below for a quick break-down and if you can't get Cesturefy up and running you can also find a troubleshooting guide there."
   },
   "welcomePageLowerSectionLearnMoreLink": {
-    "message": "Learn More",
+    "message": "詳しい情報を知る",
     "description": "Learn More"
   }
 }

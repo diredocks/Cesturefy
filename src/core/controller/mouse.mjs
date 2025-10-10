@@ -1,506 +1,271 @@
-import { toSingleButton, getDistance } from "/core/utils/commons.mjs";
+import { preventDefault, getDistance, toSingleButton } from "@utils/common";
+import { DefaultConfig } from "@model/config";
+import { EventEmitter } from "@utils/emitter";
+import { SuppressionKey, MouseButton } from "@utils/types";
 
-// global static variables
+type Callback = (buffer: PointerEvent[], event: PointerEvent) => void;
+// type MouseEvents = Record<'register' | 'start' | 'update' | 'end' | 'abort', Callback>;
 
-const LEFT_MOUSE_BUTTON = 1;
-const RIGHT_MOUSE_BUTTON = 2;
-const MIDDLE_MOUSE_BUTTON = 4;
-
-const PASSIVE = 0;
-const PENDING = 1;
-const ACTIVE = 2;
-const ABORTED = 3;
-
-
-/**
- * MouseGestureController "singleton"
- * provides 4 events: on start, update, abort and end
- * events can be added via addEventListener and removed via removeEventListener
- * on default the controller is disabled and must be enabled via enable()
- * cancel() can be called to reset the controller
- **/
-
-// public methods and variables
-
-
-export default {
-  enable: enable,
-  disable: disable,
-  cancel: cancel,
-  addEventListener: addEventListener,
-  hasEventListener: hasEventListener,
-  removeEventListener: removeEventListener,
-
-  get targetElement () {
-    return targetElement;
-  },
-  set targetElement (value) {
-    targetElement = value;
-  },
-
-  get mouseButton () {
-    return mouseButton;
-  },
-  set mouseButton (value) {
-    mouseButton = Number(value);
-  },
-
-  get suppressionKey () {
-    return suppressionKey;
-  },
-  set suppressionKey (value) {
-    suppressionKey = value;
-  },
-
-  get distanceThreshold () {
-    return distanceThreshold;
-  },
-  set distanceThreshold (value) {
-    distanceThreshold = Number(value);
-  },
-
-  get timeoutActive () {
-    return timeoutActive;
-  },
-  set timeoutActive (value) {
-    timeoutActive = Boolean(value);
-  },
-
-  get timeoutDuration () {
-    // convert milliseconds back to seconds
-    return timeoutDuration / 1000;
-  },
-  set timeoutDuration (value) {
-    // convert seconds to milliseconds
-    timeoutDuration = Number(value) * 1000;
-  },
+type MouseEvents = {
+  register: Callback;
+  start: Callback;
+  update: Callback;
+  end: Callback;
+  abort: (buffer: PointerEvent[]) => void;
 };
 
-
-/**
- * Add callbacks to the given events
- **/
-function addEventListener (event, callback) {
-  // if event exists add listener (duplicates won't be added)
-  if (event in events) events[event].add(callback);
-};
-
-
-/**
- * Check if an event listener is registered
- **/
-function hasEventListener (event, callback) {
-  // if event exists check for listener
-  if (event in events) events[event].has(callback);
-};
-
-
-/**
- * Remove callbacks from the given events
- **/
-function removeEventListener (event, callback) {
-  // if event exists remove listener
-  if (event in events) events[event].delete(callback);
-};
-
-
-/**
- * Add the event listeners to detect a gesture start
- **/
-function enable () {
-  targetElement.addEventListener('pointerdown', handlePointerdown, true);
-};
-
-
-/**
- * Remove the event listeners and resets the controller
- **/
-function disable () {
-  targetElement.removeEventListener('pointerdown', handlePointerdown, true);
-
-  // reset to initial state
-  reset();
+enum MouseButtonEvents {
+  NoChanged = -1,
 }
 
-
-/**
- * Cancel the gesture controller and reset its state
- **/
-function cancel () {
-  // reset to initial state
-  reset();
-};
-
-
-// private variables and methods
-
-
-// internal states are PASSIVE, PENDING, ACTIVE, ABORTED
-let state = PASSIVE;
-
-// contains the timeout identifier
-let timeoutId = null;
-
-// holds all custom module event callbacks
-const events = {
-  'register': new Set(),
-  'start': new Set(),
-  'update': new Set(),
-  'abort': new Set(),
-  'end': new Set()
-};
-
-// temporary buffer for occurred mouse events where the latest event is always at the end of the array
-let mouseEventBuffer = [];
-
-let targetElement = window,
-    mouseButton = RIGHT_MOUSE_BUTTON,
-    suppressionKey = "",
-    distanceThreshold = 10,
-    timeoutActive = false,
-    timeoutDuration = 1000;
-
-/**
- * Initializes the gesture controller to the "pending" state, where it's unclear if the user is starting a gesture or not
- * requires a mouse/pointer event
- **/
-function initialize (event) {
-  // buffer initial mouse event
-  mouseEventBuffer.push(event);
-
-  events['register'].forEach(callback => callback(event, mouseEventBuffer));
-
-  // change internal state
-  state = PENDING;
-
-  // add gesture detection listeners
-  targetElement.addEventListener('pointermove', handlePointermove, true);
-  targetElement.addEventListener('dragstart', handleDragstart, true);
-  targetElement.addEventListener('pointerup', handlePointerup, true);
-  targetElement.addEventListener('visibilitychange', handleVisibilitychange, true);
-
-  // workaround to redirect all events to this frame/element
-  // required to track gestures starting close to frame/iframe boundary and crossing it before the distance threshold is reached
-  // exclude this for the left mouse button as it suppresses click events (see #749 and #750)
-  // surprisingly this is also not required for left mouse button to work at iframe boundaries
-  if (event.buttons !== LEFT_MOUSE_BUTTON) {
-    // use event.target because otherwise click events (e.g. middle mouse button) won't work
-    // use event.composedPath() because for shadow DOMs event.target will not be the lowest element (see #756)
-    // use event.originalTarget because for a closed shadow DOM event.composedPath() won't work (see #754)
-    const target = event.originalTarget ?? event.composedPath()[0] ?? event.target;
-    target.setPointerCapture(event.pointerId);
-    // ^ Note: If this still causes problems then finally remove this code.
-    // There are too many cases when the user actually wants to perform an action (not a gesture)
-    // where the setPointerCapture intervenes and breaks some functionality because e.g. website click listeners won't fire
-  }
+enum State {
+  PASSIVE,
+  PENDING,
+  ACTIVE,
+  ABORTED,
 }
 
+const doubleClickThreshold = 300; // ms
 
-/**
- * Indicates the gesture start and update and should be called every time the cursor position changes
- * start - will be called once after the distance threshold has been exceeded
- * update - will be called afterwards for every pointer move
- * requires a mouse/pointer event
- **/
-function update (event) {
-  // buffer mouse event
-  mouseEventBuffer.push(event);
+export class MouseController {
+  private static _instance: MouseController;
 
-  // needs to be called to prevent the values of the coalesced events from getting cleared (probably a Firefox bug)
-  event.getCoalescedEvents?.();
+  private _target: Window = window;
+  private _events = new EventEmitter<MouseEvents>();
+  private _state = State.PASSIVE;
+  private _buffer: PointerEvent[] = [];
+  private _lastClick = { time: 0, x: 0, y: 0 };
+  private _abortTimeoutId: number | null = null;
+  private _abortTimeout: number = 1000 * DefaultConfig.Settings.Gesture.Timeout.duration; // ms
+  private _contextMenuTimeoutId: number | null = null;
+  private _contextMenuTimeout: number = doubleClickThreshold; // TODO: funny uh huh
 
-  // initiate gesture
-  if (state === PENDING) {
-    // get the initial and latest event
-    const initialEvent = mouseEventBuffer[0];
-    const latestEvent = mouseEventBuffer[mouseEventBuffer.length - 1];
-    // check if the distance between the initial pointer and the latest pointer is greater than the threshold
-    if (getDistance(initialEvent.clientX, initialEvent.clientY, latestEvent.clientX, latestEvent.clientY) > distanceThreshold) {
-      // dispatch all bound functions on start and pass the initial event and an array of the buffered mouse events
-      events['start'].forEach(callback => callback(initialEvent, mouseEventBuffer));
+  public isTimeoutAbort: boolean = DefaultConfig.Settings.Gesture.Timeout.active;
+  public mouseButton: MouseButton = DefaultConfig.Settings.Gesture.mouseButton;
+  public distanceThreshold: number = DefaultConfig.Settings.Gesture.distanceThreshold; // px
+  public suppressionKey: SuppressionKey = DefaultConfig.Settings.Gesture.suppressionKey;
+  public currentOS: string = "";
 
-      // change internal state
-      state = ACTIVE;
+  private constructor() { }
 
-      preparePreventDefault();
-
-      // workaround to redirect all events to this frame/element
-      // prefer document.documentElement over event.target as the target could be removed by now
-      document.documentElement.setPointerCapture(event.pointerId);
+  public static get instance(): MouseController {
+    if (!this._instance) {
+      this._instance = new MouseController();
     }
+    return this._instance;
   }
 
-  // update gesture
-  else if (state === ACTIVE) {
-    // dispatch all bound functions on update and pass the latest event and an array of the buffered mouse events
-    events['update'].forEach(callback => callback(event, mouseEventBuffer));
+  addEventListener<K extends keyof MouseEvents>(event: K, cb: MouseEvents[K]) {
+    this._events.addEventListener(event, cb);
+  }
 
-    // handle timeout
-    if (timeoutActive) {
-      // clear previous timeout if existing
-      if (timeoutId) window.clearTimeout(timeoutId);
-      timeoutId = window.setTimeout(abort, timeoutDuration);
+  removeEventListener<K extends keyof MouseEvents>(event: K, cb: MouseEvents[K]) {
+    this._events.removeEventListener(event, cb);
+  }
+
+  enable() {
+    this._target.addEventListener("pointerdown", this._handlePointerDown);
+  }
+
+  disable() {
+    this._target.removeEventListener("pointerdown", this._handlePointerDown);
+  }
+
+  private _handlePointerDown = (e: PointerEvent) => {
+    if (this.suppressionKey !== 'none' && e[this.suppressionKey]) return; // do nothing if suppressionKey is on
+    if (e.isTrusted && e.buttons === this.mouseButton) {
+      this._initialize(e);
+    } // on mouse button
+  };
+
+  private _handleContextMenu = (e: MouseEvent) => {
+    // On Windows: prevent the default context menu only when moving 
+    // from PENDING to ACTIVE state. This ensures that if no gesture 
+    // is triggered, the context menu behaves normally.
+    //
+    // On macOS/Linux: prevent the context menu immediately on pointer 
+    // down, since it would otherwise appear right away.
+    if (this.currentOS === 'win') {
+      preventDefault(e);
+      return;
     }
-  }
-}
 
+    const now = Date.now();
+    const withinTime = now - this._lastClick.time < doubleClickThreshold;
+    const withinDist =
+      getDistance(this._lastClick.x, this._lastClick.y, e.clientX, e.clientY) < this.distanceThreshold;
 
-/**
- * Indicates the gesture abortion and sets the state to aborted
- **/
-function abort () {
-  // dispatch all bound functions on timeout and pass an array of buffered mouse events
-  events['abort'].forEach(callback => callback(mouseEventBuffer));
-  state = ABORTED;
-}
-
-
-/**
- * Indicates the gesture end and should be called to terminate the gesture
- * requires a mouse/pointer event
- **/
-function terminate (event) {
-  // buffer mouse event
-  mouseEventBuffer.push(event);
-
-  if (state === ACTIVE) {
-    // dispatch all bound functions on end and pass the latest event and an array of the buffered mouse events
-    events['end'].forEach(callback => callback(event, mouseEventBuffer));
-  }
-
-  // reset gesture controller
-  reset();
-}
-
-
-/**
- * Resets the controller to its initial state
- **/
-function reset () {
-  // remove gesture detection listeners
-  targetElement.removeEventListener('pointermove', handlePointermove, true);
-  targetElement.removeEventListener('pointerup', handlePointerup, true);
-  targetElement.removeEventListener('dragstart', handleDragstart, true);
-  targetElement.removeEventListener('visibilitychange', handleVisibilitychange, true);
-
-  neglectPreventDefault();
-
-  const firstMouseEvent = mouseEventBuffer[0];
-  // release event redirect
-  if (firstMouseEvent) {
-    firstMouseEvent.target?.releasePointerCapture(firstMouseEvent.pointerId);
-    document.documentElement.releasePointerCapture(firstMouseEvent.pointerId);
-  }
-
-  // reset mouse event buffer and internal state
-  mouseEventBuffer = [];
-  state = PASSIVE;
-
-  if (timeoutId !== null) {
-    window.clearTimeout(timeoutId);
-    timeoutId = null;
-  }
-}
-
-
-/**
- * Handles pointerdown which will initialize the gesture and switch to the pending state.
- * This will only be called for the first mouse button any subsequent mouse bu
- * This means if the user holds a non-trigger button and then presses the trigger button,
- * no pointerdown event will be dispatched and thus no gesture will be started
- **/
-function handlePointerdown (event) {
-  // on mouse button and no suppression key
-  if (event.isTrusted && event.buttons === mouseButton && (!suppressionKey || !event[suppressionKey])) {
-    initialize(event);
-
-    // prevent middle click scroll
-    if (mouseButton === MIDDLE_MOUSE_BUTTON) event.preventDefault();
-  }
-}
-
-
-/**
- * Handles pointermove which will either start the gesture or update it.
- * Pointermove event can better be understand as a pointerchange event.
- * This means it will fire even when the mouse does not move but an additional button is pressed.
- **/
-function handlePointermove (event) {
-  if (event.isTrusted) {
-    if (event.buttons === mouseButton) {
-      update(event);
-
-      // prevent text selection
-      if (mouseButton === LEFT_MOUSE_BUTTON) window.getSelection().removeAllRanges();
+    if (withinTime && withinDist) {
+      this._reset();
+      this._lastClick = { time: 0, x: 0, y: 0 };
+      return;
     }
-    // button: -1 means that no buttons changed since the last event
-    // explicity check if a button changed to prevent https://github.com/Robbendebiene/Gesturefy/issues/622
-    else if (event.button !== -1) {
-      // a pointermove event triggered by the gesture mouse button means
-      // it got released while another mouse button is still pressed.
-      // in theory this should never happen because the gesture will be canceled when another mouse button is pressed
-      if (event.button === toSingleButton(mouseButton)) {
-        terminate(event);
+
+    preventDefault(e);
+    this._lastClick = { time: now, x: e.clientX, y: e.clientY };
+  };
+
+  private _initialize(e: PointerEvent) {
+    this._buffer.push(e);
+    this._events.dispatchEvent("register", this._buffer, e);
+    this._state = State.PENDING;
+
+    if (this.currentOS !== 'win') {
+      this._target.addEventListener("contextmenu", this._handleContextMenu, true);
+    }
+    this._target.addEventListener("pointermove", this._handlePointerMove, true);
+    this._target.addEventListener("pointerup", this._handlePointerUp, true);
+    this._target.addEventListener("visibilitychange", this._handleVisibilityChange, true);
+  }
+
+  private _enablePreventDefault() {
+    this._target.addEventListener("click", preventDefault, true);
+    this._target.addEventListener("auxclick", preventDefault, true);
+    this._target.addEventListener("mouseup", preventDefault, true);
+    this._target.addEventListener("mousedown", preventDefault, true);
+  }
+
+  private _disablePreventDefault() {
+    this._target.removeEventListener("click", preventDefault, true);
+    this._target.removeEventListener("auxclick", preventDefault, true);
+    this._target.removeEventListener("mouseup", preventDefault, true);
+    this._target.removeEventListener("mousedown", preventDefault, true);
+  }
+
+  private _handlePointerMove = (e: PointerEvent) => {
+    if (!e.isTrusted) return;
+
+    if (e.buttons === this.mouseButton) {
+      this._update(e);
+      // prevent text selection when using left button
+      // idk why people use this
+      if (this.mouseButton === MouseButton.LEFT) window.getSelection()?.removeAllRanges();
+    } else if (e.button !== MouseButtonEvents.NoChanged) {
+      if (e.button === toSingleButton(this.mouseButton)) {
+        this._terminate(e);
+      } else {
+        this._abort();
       }
-      // cancel the gesture if another mouse button was pressed
-      else {
-        abort();
-      }
+    } else if (e.buttons === 0) {
+      this._terminate(e);
     }
-    // terminate in exceptional case where no buttons are pressed but pointermove is still registered
-    // depending on the state this can reset or succeed the gesture
-    // this can occur if the gesture is canceled outside the website or performed quickly (see #622)
-    else if (event.buttons === 0) {
-      terminate(event);
-    }
-  }
-}
+  };
 
+  private _update(e: PointerEvent) {
+    this._buffer.push(e);
 
-/**
- * Handles pointerup and terminates the gesture.
- * Pointerup is only fired if all pressed buttons of the mouse are released.
- **/
-function handlePointerup (event) {
-  if (event.isTrusted && event.button === toSingleButton(mouseButton)) {
-    terminate(event);
-  }
-}
+    switch (this._state) {
+      case State.PENDING: {
+        const initial = this._buffer[0];
+        const distance = getDistance(initial.clientX, initial.clientY, e.clientX, e.clientY);
 
+        if (distance > this.distanceThreshold) {
+          this._events.dispatchEvent("start", this._buffer, initial);
+          this._state = State.ACTIVE;
 
-/**
- * Handles dragstart and prevents it if needed
- **/
-function handleDragstart (event) {
-  // prevent drag if mouse button and no suppression key is pressed
-  if (event.isTrusted && event.buttons === mouseButton && (!suppressionKey || !event[suppressionKey])) {
-    event.preventDefault();
-  }
-}
-
-
-/**
- * This is only needed for tab changing actions
- **/
-function handleVisibilitychange() {
-  // call abort to trigger attached events
-  abort();
-  // reset to initial state
-  reset();
-}
-
-
-
-
-//////// WORKAROUND TO PROPERLY SUPPRESS CONTEXTMENU AND CLICK \\\\\\\\
-
-
-const TIME_TO_WAIT_FOR_PREVENTION = 200;
-
-let pendingPreventionTimeout = null;
-
-let isTargetFrame = false;
-
-browser.runtime.onMessage.addListener((message, sender) => {
-  // filter messages if the mouse gesture controller runs in the options page (which is a background page)
-  if (!sender.tab) {
-    switch (message.subject) {
-      case "mouseGestureControllerPreparePreventDefault":
-        if (!isTargetFrame) enablePreventDefault();
-      break;
-
-      case "mouseGestureControllerNeglectPreventDefault":
-        if (!isTargetFrame) {
-          const elapsedTime = Date.now() - message.data.timestamp;
-          // take elapsed time into account to ensure that the prevention is removed at the same time across frames
-          pendingPreventionTimeout = window.setTimeout(disablePreventDefault, Math.max(TIME_TO_WAIT_FOR_PREVENTION - elapsedTime, 0));
+          if (this.currentOS === 'win') {
+            this._target.addEventListener("contextmenu", this._handleContextMenu, true);
+          }
+          this._enablePreventDefault();
         }
-      break;
+        break;
+      }
+      case State.ACTIVE: {
+        this._events.dispatchEvent("update", this._buffer, e);
+        if (this.isTimeoutAbort) {
+          this._clearTimeout();
+          this._startTimeout();
+        }
+        break;
+      }
     }
   }
-});
 
+  private _handlePointerUp = (e: PointerEvent) => {
+    this._terminate(e);
+  };
 
-/**
- * Enables the prevention functions in every frame
- **/
-function preparePreventDefault () {
-  isTargetFrame = true;
+  private _terminate(e: PointerEvent) {
+    this._buffer.push(e);
 
-  browser.runtime.sendMessage({
-    subject: "mouseGestureControllerPreparePreventDefault"
-  });
-
-  enablePreventDefault();
-}
-
-
-/**
- * Disables the prevention functions in every frame after a short amount of time to give them time to prevent something if needed
- **/
-function neglectPreventDefault () {
-  isTargetFrame = true;
-
-  browser.runtime.sendMessage({
-    subject: "mouseGestureControllerNeglectPreventDefault",
-    data: {
-      timestamp: Date.now()
+    if (this._state === State.ACTIVE) {
+      this._events.dispatchEvent("end", this._buffer, e);
     }
-  });
 
-  // need to wait a specific time before we can be sure that nothing needs to be prevented
-  pendingPreventionTimeout = window.setTimeout(disablePreventDefault, TIME_TO_WAIT_FOR_PREVENTION);
-}
-
-
-/**
- * Adds all event listeners that handle the prevention
- * Clears any existing prevention timeout, in case a new gesture was started but the previous prevention timeout is still running
- **/
-function enablePreventDefault () {
-  if (pendingPreventionTimeout !== null) {
-    window.clearTimeout(pendingPreventionTimeout);
-    pendingPreventionTimeout = null;
+    this._reset();
   }
 
-  // prevent default behaviors and
-  // stop propagation because a custom context menus might trigger on the contextmenu event for example
+  private _reset() {
+    this._clearTimeout();
 
-  // prevent the context menu for right mouse button
-  targetElement.addEventListener('contextmenu', preventDefault, true);
-  // prevent the left click from opening links or pressing buttons
-  targetElement.addEventListener('click', preventDefault, true);
-  // prevent the middle click from opening links, or clipboard pasting on linux
-  targetElement.addEventListener('auxclick', preventDefault, true);
-  // prevent clicking links
-  targetElement.addEventListener('mouseup', preventDefault, true);
-  // prevent focus of e.g. input fields
-  targetElement.addEventListener('mousedown', preventDefault, true);
-}
+    if (this.currentOS === 'win') {
+      // Ensure only one timeout exists to delay removing the contextmenu prevention.
+      // This keeps the prevention active briefly after pointer-up, avoiding menu display.
+      if (this._contextMenuTimeoutId) {
+        clearTimeout(this._contextMenuTimeoutId);
+      }
+      this._contextMenuTimeoutId = setTimeout(() => {
+        this._target.removeEventListener("contextmenu", this._handleContextMenu, true);
+      }, this._contextMenuTimeout);
+    } else {
+      // Immediately remove the contextmenu prevention for non-Windows platforms
+      this._target.removeEventListener("contextmenu", this._handleContextMenu, true);
+    }
 
+    this._target.removeEventListener("pointermove", this._handlePointerMove, true);
+    this._target.removeEventListener("pointerup", this._handlePointerUp, true);
+    this._target.removeEventListener("visibilitychange", this._handleVisibilityChange, true);
 
-/**
- * Removed all event listeners that handle the prevention and resets necessary variables
- **/
-function disablePreventDefault () {
-  pendingPreventionTimeout = null;
+    this._disablePreventDefault();
 
-  isTargetFrame = false;
+    const initial = this._buffer[0];
+    if (initial) {
+      if (initial.target instanceof Element) {
+        initial.target.releasePointerCapture(initial.pointerId);
+      } else {
+        document.documentElement?.releasePointerCapture(initial.pointerId);
+      }
+    }
 
-  targetElement.removeEventListener('contextmenu', preventDefault, true);
-  targetElement.removeEventListener('click', preventDefault, true);
-  targetElement.removeEventListener('auxclick', preventDefault, true);
-  targetElement.removeEventListener('mouseup', preventDefault, true);
-  targetElement.removeEventListener('mousedown', preventDefault, true);
-}
+    this._buffer = [];
+    this._state = State.PASSIVE;
+  }
 
+  private _handleVisibilityChange = () => {
+    this._abort();
+    this._reset();
+  };
 
-/**
- * Prevent the context menu for right mouse button
- **/
-function preventDefault (event) {
-  if (event.isTrusted) {
-    event.preventDefault();
-    event.stopPropagation();
+  private _abort() {
+    this._events.dispatchEvent("abort", this._buffer);
+    this._state = State.ABORTED;
+  }
+
+  public cancel() {
+    this._reset();
+  }
+
+  get timeout() {
+    return this._abortTimeout / 1000; // ms -> s
+  }
+
+  set timeout(value: number) {
+    this._abortTimeout = value * 1000; // s -> ms
+  }
+
+  private _startTimeout() {
+    this._abortTimeoutId = window.setTimeout(() => {
+      this._abort();
+    }, this._abortTimeout);
+  }
+
+  private _clearTimeout() {
+    if (this._abortTimeoutId === null) {
+      return;
+    }
+    clearTimeout(this._abortTimeoutId);
+    this._abortTimeoutId = null;
   }
 }
+
+export const mouseController = MouseController.instance;

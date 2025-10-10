@@ -1,186 +1,138 @@
-/**
- * PopupCommandView
- * Listens for "PopupConnection" background connection and displays the message dataset
- * An iframe is used in order to protect the user data from webpages that may try to read or manipulate the contents of the popup
- **/
+// runtime.sendMessage will be route to content script
+// due to broker in background script
 
-// save a reference to the current channel
-let channel = null;
+import { PopupIframeMessages } from "@utils/message";
 
-browser.runtime.onConnect.addListener(handleConnection);
-
-// add event listeners
 window.addEventListener("contextmenu", preventContextmenu, true);
-
 window.addEventListener("pointerdown", preventAutoscroll, true);
-
 window.addEventListener("DOMContentLoaded", handleDOMContentLoaded);
 
-/**
- * Builds all popup html contents
- * Requires the background/command message containing the dataset
- **/
-function initialize (dataset) {
-  // create list and item template
+const handler = (port: chrome.runtime.Port) => {
+  if (port.name === "popupConnection") {
+    channel = port;
+    channel.onMessage.addListener(initializePopup);
+    channel.onDisconnect.addListener(terminatePopup);
+  }
+}
+
+chrome.runtime.onConnect.addListener(handler);
+
+let channel: chrome.runtime.Port | null = null;
+
+const initializePopup = async (msg: PopupIframeMessages['popupConnection']) => {
   const list = document.createElement("ul");
-        list.id = "list";
+  list.id = "list";
+
   const itemTemplate = document.createElement("li");
-        itemTemplate.classList.add("item");
+  itemTemplate.classList.add("item");
+
   const icon = document.createElement("img");
-        // use zero width space to show alt tag on missing src
-        icon.alt = "\u200B";
+  icon.alt = "\u200B";
+
   const text = document.createElement("span");
   itemTemplate.append(icon, text);
 
-  // map data to list items
-  for (let element of dataset) {
-    const item = itemTemplate.cloneNode(true);
-          item.dataset.id = element.id;
-          item.onclick = handleItemSelection;
-          item.onauxclick = handleItemSelection;
-    // add image icon if available
-    if (element.icon) {
-      item.firstElementChild.src = element.icon;
-    }
-    // add label
-    item.lastElementChild.textContent = element.label;
+  for (const element of msg) {
+    const item = itemTemplate.cloneNode(true) as HTMLLIElement;
+    item.dataset.id = element.id;
+    item.addEventListener("click", handleItemSelection);
+    item.addEventListener("auxclick", handleItemSelection);
 
+    if (element.icon) {
+      // FIXME: fallback for null, this also fixes internal pages
+      (item.firstElementChild as HTMLImageElement).src = element.icon;
+    }
+    (item.lastElementChild as HTMLSpanElement).textContent = element.label;
     list.append(item);
   }
 
-  // use resize observer to reliably get dimensions after reflow/layout
-  // otherwise if using offsetHeight or getBoundingBox even with setTimeout
-  // the dimensions of the list element sometimes equal 0
-  const resizeObserver = new ResizeObserver(async (entries) => {
-	  const lastEntry = entries.pop();
+  document.body.appendChild(list);
 
-    // the width and height the list occupies
-    const requiredDimensions = {
-      // older versions of Firefox (<= 91) provided a single size object instead of an array of sizes
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=1689645
-      width: lastEntry.borderBoxSize?.inlineSize ?? lastEntry.borderBoxSize[0].inlineSize,
-      height: lastEntry.borderBoxSize?.blockSize ?? lastEntry.borderBoxSize[0].blockSize
-    }
+  const requiredDimensions = {
+    width: list.offsetWidth,
+    height: list.scrollHeight,
+  };
 
-    resizeObserver.disconnect();
+  const availableDimensions = await chrome.runtime.sendMessage({
+    subject: "popupInitiation",
+    data: requiredDimensions,
+  });
 
-    // initiate popup display
-    // also get the available width and height
-    const availableDimensions =  await browser.runtime.sendMessage({
-      subject: "popupInitiation",
-      data: requiredDimensions
-    });
+  window.focus();
+  window.onblur = terminatePopup;
 
-    // focus popup frame
-    window.focus();
-    window.onblur = terminate;
+  if (availableDimensions.height < requiredDimensions.height) {
+    const buttonUp = document.createElement("div");
+    buttonUp.classList.add("button", "up", "hidden");
+    buttonUp.addEventListener("mouseover", handleScrollButtonMouseover);
 
-    // add scroll buttons if list is scrollable
-    if (availableDimensions.height < requiredDimensions.height) {
-      const buttonUp = document.createElement("div");
-            buttonUp.classList.add("button", "up", "hidden");
-            buttonUp.onmouseover = handleScrollButtonMouseover;
-      const buttonDown = document.createElement("div");
-            buttonDown.classList.add("button", "down");
-            buttonDown.onmouseover = handleScrollButtonMouseover;
+    const buttonDown = document.createElement("div");
+    buttonDown.classList.add("button", "down");
+    buttonDown.addEventListener("mouseover", handleScrollButtonMouseover);
 
-      window.addEventListener("scroll", () => {
-        const isOnTop = document.scrollingElement.scrollTop <= 0;
+    window.addEventListener(
+      "scroll",
+      () => {
+        const scrollTop = document.scrollingElement!.scrollTop;
+        const isOnTop = scrollTop <= 0;
         buttonUp.classList.toggle("hidden", isOnTop);
 
-        const isOnBottom = Math.round(document.scrollingElement.scrollTop) >= Math.round(requiredDimensions.height - availableDimensions.height);
+        const isOnBottom =
+          Math.round(scrollTop) >=
+          Math.round(requiredDimensions.height - availableDimensions.height);
         buttonDown.classList.toggle("hidden", isOnBottom);
-      }, { passive: true })
+      },
+      { passive: true }
+    );
 
-      document.body.append(buttonUp, buttonDown);
-    }
-  });
-
-  // start observing and append the list element
-  resizeObserver.observe(list, { box: "border-box" });
-
-  document.body.appendChild(list);
-}
-
-
-/**
- * Closes the messaging channel and sends the popup termination message to close the popup
- **/
-function terminate () {
-  // disconnect channel
-  channel.disconnect();
-  // close/remove popup
-  browser.runtime.sendMessage({
-    subject: "popupTermination"
-  });
-}
-
-
-/**
- * Handles background connection requests
- **/
-function handleConnection (port) {
-  if (port.name === "PopupConnection") {
-    // save reference to port object
-    channel = port;
-    // add listener
-    channel.onMessage.addListener(initialize);
-    channel.onDisconnect.addListener(terminate);
+    document.body.append(buttonUp, buttonDown);
   }
-}
+};
 
+const terminatePopup = () => {
+  if (channel) {
+    channel.disconnect();
+    channel = null;
+  }
 
-/**
- * Prevents the context menu because of design reason and for rocker gesture conflicts
- **/
-function preventContextmenu (event) {
-  event.preventDefault();
-}
+  chrome.runtime.sendMessage({ subject: "popupTermination" });
+};
 
-
-/**
- * Prevents the middle click scroll on windows
- **/
-function preventAutoscroll (event) {
-  if (event.button === 1) event.preventDefault();
-}
-
-
-/**
- * Retrieves the theme from the query parameter and sets it as a global class
- **/
-function handleDOMContentLoaded (event) {
-  const urlParams = new URLSearchParams(window.location.search);
-  const theme = urlParams.get('theme');
-  if (theme) document.documentElement.classList.add(`${theme}-theme`);
-}
-
-
-/**
- * Passes the id of the selected item to the corresponding command
- **/
-function handleItemSelection (event) {
+function handleItemSelection(event: MouseEvent) {
+  const el = event.currentTarget as HTMLElement | null;
+  if (!el || !channel) return;
   channel.postMessage({
     button: event.button,
-    id: this.dataset.id
+    id: el.dataset.id,
   });
   event.preventDefault();
 }
 
-
-/**
- * Handles the up and down controls
- **/
-function handleScrollButtonMouseover (event) {
-  const direction = this.classList.contains("up") ? -4 : 4;
-  const button = event.currentTarget;
+function handleScrollButtonMouseover(event: MouseEvent) {
+  const button = event.currentTarget as HTMLElement;
+  const direction = button.classList.contains("up") ? -4 : 4;
   const startTimestamp = event.timeStamp;
 
-  function step (timestamp) {
-    if (!button.matches(':hover')) return;
-    // delay scroll by 0.3 seconds
+  function step(timestamp: number) {
+    if (!button.matches(":hover")) return;
     if (timestamp - startTimestamp > 300) window.scrollBy(0, direction);
     window.requestAnimationFrame(step);
   }
   window.requestAnimationFrame(step);
+}
+
+function preventContextmenu(event: MouseEvent) {
+  event.preventDefault();
+}
+
+function preventAutoscroll(event: MouseEvent) {
+  if (event.button === 1) event.preventDefault();
+}
+
+function handleDOMContentLoaded() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const theme = urlParams.get("theme");
+  if (theme) document.documentElement.classList.add(`${theme}-theme`);
+  // once dom and script itself ready
+  chrome.runtime.sendMessage({ subject: "popupReady" });
 }

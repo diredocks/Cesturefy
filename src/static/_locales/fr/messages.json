@@ -1,15 +1,15 @@
 {
   "extensionDescription": {
-    "message": "Naviguez, surfez et agissez plus vite avec les gestes de souris ! Un module de gestes de souris personnalisable avec une variété de commandes différentes.",
-    "description": "Navigate, operate, and browse faster with mouse gestures! A customizable mouse gesture add-on with a variety of different commands."
+    "message": "Gesturefy pour les navigateurs basés sur Chromium",
+    "description": "Gesturefy for Chromium-based browsers "
   },
   "addonUpdateNotificationTitle": {
     "message": "L'extension $NAME$ a été mise à jour !",
-    "description": "Gesturefy add-on has been updated!",
+    "description": "Cesturefy add-on has been updated!",
     "placeholders": {
       "name": {
         "content": "$1",
-        "example": "Gesturefy"
+        "example": "Cesturefy"
       }
     }
   },
@@ -216,8 +216,8 @@
     "description": "Vertical screen position from 0 (top) to 100 (bottom)."
   },
   "settingDescriptionUpdateNotification": {
-    "message": "Affiche une notification quand Gesturefy est mis à jour.",
-    "description": "Shows a notification when Gesturefy is updated."
+    "message": "Affiche une notification quand Cesturefy est mis à jour.",
+    "description": "Shows a notification when Cesturefy is updated."
   },
   "gestureCreateNewButton": {
     "message": "Nouveau geste",
@@ -284,8 +284,8 @@
     "description": "Information:"
   },
   "exclusionsTextInformation": {
-    "message": "Ajoutez des modèles de correspondance d'URL pour désactiver Gesturefy pour certains sites Web. Le modèle de correspondance autorise les caractères génériques \"*\" et doit être sous la forme <scheme>://<host><path>.",
-    "description": "Add URL match patterns to disable Gesturefy for certain websites. The match pattern allows \"*\" wildcards and must be in the form of <scheme>://<host><path>."
+    "message": "Ajoutez des modèles de correspondance d'URL pour désactiver Cesturefy pour certains sites Web. Le modèle de correspondance autorise les caractères génériques \"*\" et doit être sous la forme <scheme>://<host><path>.",
+    "description": "Add URL match patterns to disable Cesturefy for certain websites. The match pattern allows \"*\" wildcards and must be in the form of <scheme>://<host><path>."
   },
   "exclusionsPlaceholderURL": {
     "message": "Entrez le modèle de correspondance de l'URL",
@@ -336,8 +336,8 @@
     "description": "Add-on page"
   },
   "aboutRestoreNotificationNoConfigFile": {
-    "message": "Le fichier sélectionné n'est pas un fichier de configuration Gesturefy valide.",
-    "description": "The selected file is not a valid Gesturefy config file."
+    "message": "Le fichier sélectionné n'est pas un fichier de configuration Cesturefy valide.",
+    "description": "The selected file is not a valid Cesturefy config file."
   },
   "aboutRestoreNotificationWrongFile": {
     "message": "Le fichier sélectionné ne correspond pas au type de fichier requis.",
@@ -644,8 +644,8 @@
     "description": "Open URL from clipboard in new private window"
   },
   "commandLabelOpenAddonSettings": {
-    "message": "Ouvrir les paramètres de Gesturefy",
-    "description": "Open Gesturefy settings"
+    "message": "Ouvrir les paramètres de Cesturefy",
+    "description": "Open Cesturefy settings"
   },
   "commandLabelOpenLink": {
     "message": "Ouvrir le lien",
@@ -1008,8 +1008,8 @@
     "description": "If the clipboard contains a URL, it will be opened in a new private window."
   },
   "commandDescriptionOpenAddonSettings": {
-    "message": "Ouvre la page de paramètres de Gesturefy.",
-    "description": "Opens the Gesturefy settings page."
+    "message": "Ouvre la page de paramètres de Cesturefy.",
+    "description": "Opens the Cesturefy settings page."
   },
   "commandDescriptionOpenLink": {
     "message": "Ouvre soit une URL sélectionnée, soit le lien sur lequel le geste a commencé.",
@@ -1340,8 +1340,8 @@
     "description": "Determines if the cache should be reloaded or not."
   },
   "commandSettingDescriptionZoomStep": {
-    "message": "L'étape de zoom ou plusieurs niveaux séparés par des virgules en pourcentage. Si omis, les niveaux de zoom par défaut de Gesturefy sont utilisés.",
-    "description": "The zoom step or multiple comma separated levels in percentage. If omitted, Gesturefy's default zoom levels are used."
+    "message": "L'étape de zoom ou plusieurs niveaux séparés par des virgules en pourcentage. Si omis, les niveaux de zoom par défaut de Cesturefy sont utilisés.",
+    "description": "The zoom step or multiple comma separated levels in percentage. If omitted, Cesturefy's default zoom levels are used."
   },
   "commandSettingDescriptionScrollDuration": {
     "message": "La durée en millisecondes que l'animation de défilement devra prendre.",
@@ -1462,8 +1462,8 @@
     "description": "The specified extension ID either does not belong to an existing add-on or the add-on does not receive messages. Click here for more information."
   },
   "commandErrorNotificationMessageMissingIncognitoPermissions": {
-    "message": "Gesturefy n'a pas la permission pour le mode incognito. Cliquez ici pour plus d'informations.",
-    "description": "Gesturefy does not have permission for incognito mode. Click here for more information."
+    "message": "Cesturefy n'a pas la permission pour le mode incognito. Cliquez ici pour plus d'informations.",
+    "description": "Cesturefy does not have permission for incognito mode. Click here for more information."
   },
   "commandBarTitle": {
     "message": "Barre de commandes",
@@ -1630,8 +1630,8 @@
     "description": "High contrast theme"
   },
   "welcomePageUpperSectionReference": {
-    "message": "Gesturefy a été installé avec succès.",
-    "description": "Gesturefy has been successfully installed."
+    "message": "Cesturefy a été installé avec succès.",
+    "description": "Cesturefy has been successfully installed."
   },
   "welcomePageUpperSectionHeadline": {
     "message": "Jamais fait un geste de souris avant ?\n Essayez-le dès maintenant !",
@@ -1658,16 +1658,16 @@
     "description": "Congratulations, you successfully accomplished your very first mouse gesture!"
   },
   "welcomePageLowerSectionGetStartedText": {
-    "message": "Créez autant de gestes que vous le souhaitez pour s'adapter à votre style de navigation individuel et rendre votre navigation quotidienne plus facile, plus rapide et beaucoup plus amusante. Commencez dès maintenant et personnalisez Gesturefy!",
-    "description": "Create as many gestures as you want to suit your individual browsing style and make your daily browsing easier, faster and a lot more fun. Get started now and personalize Gesturefy!"
+    "message": "Créez autant de gestes que vous le souhaitez pour s'adapter à votre style de navigation individuel et rendre votre navigation quotidienne plus facile, plus rapide et beaucoup plus amusante. Commencez dès maintenant et personnalisez Cesturefy!",
+    "description": "Create as many gestures as you want to suit your individual browsing style and make your daily browsing easier, faster and a lot more fun. Get started now and personalize Cesturefy!"
   },
   "welcomePageLowerSectionGetStartedLink": {
     "message": "Configurez vos gestes",
     "description": "Set Up Your Gestures"
   },
   "welcomePageLowerSectionLearnMoreText": {
-    "message": "Toujours confus ? Cliquez sur le lien ci-dessous pour un rapide aperçu et si vous ne pouvez pas faire fonctionner Gesturefy, vous pouvez également y trouver un guide de dépannage.",
-    "description": "Still confused? Click the link below for a quick break-down and if you can't get Gesturefy up and running you can also find a troubleshooting guide there."
+    "message": "Toujours confus ? Cliquez sur le lien ci-dessous pour un rapide aperçu et si vous ne pouvez pas faire fonctionner Cesturefy, vous pouvez également y trouver un guide de dépannage.",
+    "description": "Still confused? Click the link below for a quick break-down and if you can't get Cesturefy up and running you can also find a troubleshooting guide there."
   },
   "welcomePageLowerSectionLearnMoreLink": {
     "message": "En savoir plus",

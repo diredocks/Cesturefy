@@ -1,0 +1,60 @@
+{
+  "manifest_version": 3,
+  "name": "Cesturefy",
+  "version": "0.0.3",
+  "description": "__MSG_extensionDescription__",
+  "author": "diredocks",
+  "homepage_url": "https://github.com/diredocks/Cesturefy",
+  "permissions": [
+    "storage",
+    "notifications"
+  ],
+  "optional_permissions": [
+    "tabs",
+    "search",
+    "sessions",
+    "bookmarks",
+    "downloads",
+    "scripting",
+    "activeTab",
+    "clipboardRead",
+    "clipboardWrite"
+  ],
+  "optional_host_permissions": [
+    "<all_urls>"
+  ],
+  "icons": {
+    "16": "images/iconx16.png",
+    "32": "images/iconx32.png",
+    "48": "images/iconx48.png",
+    "96": "images/iconx96.png",
+    "128": "images/iconx128.png",
+    "300": "images/iconx300.png"
+  },
+  "background": {
+    "service_worker": "background.bundle.js"
+  },
+  "content_scripts": [
+    {
+      "js": ["content.bundle.js"],
+      "css": [
+        "core/view/trace-command.css"
+      ],
+      "all_frames": true,
+      "match_about_blank": true,
+      "run_at": "document_start",
+      "matches": ["<all_urls>"]
+    }
+  ],
+ "web_accessible_resources": [
+   {
+     "resources": [
+       "fonts/*.woff",
+       "core/view/iframe-popup-command.html"
+     ],
+     "matches": ["<all_urls>"]
+   }
+ ],
+  "options_page": "options/index.html",
+  "default_locale": "en"
+}
