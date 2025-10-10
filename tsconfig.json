@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": "src",
+    "paths": {
+      "@utils/*": ["core/utils/*"],
+      "@controller/*": ["core/controller/*"],
+      "@view/*": ["core/view/*"],
+      "@model/*": ["core/model/*"],
+      "@commands/*": ["core/commands/*"],
+      "@options/*": ["options/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}
