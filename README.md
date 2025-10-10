@@ -1,60 +1,41 @@
-[<img align="right" src="https://img.shields.io/amo/stars/gesturefy.svg">](https://addons.mozilla.org/firefox/addon/gesturefy/reviews/)
-[<img align="right" src="https://img.shields.io/amo/users/gesturefy.svg">](https://addons.mozilla.org/firefox/addon/gesturefy/statistics)
-[<img align="right" src="https://img.shields.io/github/release/robbendebiene/gesturefy.svg">](https://github.com/Robbendebiene/Gesturefy/releases)
-[<img align="right" src="https://img.shields.io/github/license/robbendebiene/gesturefy.svg">](https://github.com/Robbendebiene/Gesturefy/blob/master/LICENSE)
+# <sub><img src="https://github.com/diredocks/Cesturefy/blob/main/src/static/images/iconx48.png" height="38" width="38"></sub>esturefy
 
+#### Still your favorite gesture extension, now on Chromium-based browsers
 
-# <sub><img src="https://github.com/Robbendebiene/Gesturefy/blob/master/src/resources/img/iconx48.png" height="38" width="38"></sub>esturefy
+Cesturefy is a Chromium adaptation of the popular [Robbendebiene/Gesturefy](https://github.com/Robbendebiene/Gesturefy) mouse gesture extension originally for Firefox, bringing the same smooth gesture control to Chrome, Edge, and other Chromium-based browsers.
 
-#### [<img height="60" align="right" src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg">](https://addons.mozilla.org/firefox/addon/gesturefy/) Navigate, operate, and browse faster with mouse gestures! A customizable Firefox mouse gesture add-on with a variety of different commands.
+#### [<img height="62" src="https://learn.microsoft.com/en-us/microsoft-edge/extensions/publish/add-ons-badge-images/microsoft-edge-add-ons-badge.png">](https://microsoftedge.microsoft.com/addons/detail/cesturefy/jefejapoeaijdkiilodmeagdmddhfign) [<img height="62" src="https://developer.chrome.com/static/docs/webstore/branding/image/HRs9MPufa1J1h5glNhut.png">](https://chromewebstore.google.com/detail/cesturefy/bifgfhokfobhebifcogneljkpaaloonp)
 
-
-***
-
-Gesturefy is a pure mouse gesture extension, which means it's only suited for mice and not touchpads. "What's a mouse gesture?" you might ask yourself. Well, mouse gestures are like keyboard shortcuts, only for your mouse. Instead of pressing a bunch of keys, you simply move your mouse in a certain manner to execute commands and actions. Mouse gestures can be more natural and convenient than keyboard shortcuts and thus are also suitable for casual users. Wait, is that a mouse in your hand? Come and try it out :)
-
-**Features:**
+## Features
 
  - Mouse gestures (moving the mouse while holding the left, middle, or right button)
- - More than 80 different predefined commands
- - Provides special commands like popup, user script, multi purpose and cross add-on command
- - Customizable gesture trace and status information style
  - Rocker gestures (left-click while holding the right mouse button and vice versa)
  - Wheel gestures (scroll wheel while holding the left, middle, or right button)
- - Multilingual, thanks to volunteers on [Crowdin](https://crowdin.com/project/gesturefy)
+ - (79/91) different [predefined commands](docs/commands-todo.md)
+ - Provides special commands like popup, multi purpose and cross add-on command
+ - Customizable gesture trace and status information style
  - Light, dark and highcontrast theme
 
-**Limitations:**
+## Todo
 
- - Gesturefy does not work on Mozilla related pages like [addons.mozilla.org](https://addons.mozilla.org), internal pages like about:addons or other add-on option pages (e.g. moz-extension://*). This is because Firefox restricts add-ons from accessing these pages for security reasons.
- - The page must be partially loaded to perform gestures.
- - **MacOS Sierra:** Wheel gestures currently doesn't work (see this [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1424893))
+- [ ] Provides special commands like user script
 
+## Limitations
 
-**If you want to support Gesturefy, please [visit this page](https://github.com/Robbendebiene/Gesturefy/wiki/FAQ#where-and-how-can-i-support-gesturefy)!**
+- Cesturefy does not work on Chrome internal pages like `chrome://extensions` or other restricted pages. This is due to browser security restrictions.
+- The page must be partially loaded to perform gestures.
+- Gestures cannot be properly performed inside iframe pages, because Chrome does not provide the [mozInnerScreenX/Y](https://developer.mozilla.org/en-US/docs/Web/API/Window/mozInnerScreenX) API.
+- On Linux and macOS, right-click menu gestures require a double click to trigger. Chrome does not support the [browserSettings.contextMenuShowEvent](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/browserSettings/contextMenuShowEvent) API.
 
-**Permissions explained:**
+## License
 
- - Access your data for all websites: *This is a key permission, because the complete gesture functionality is injected in every webpage you visit (which means a part of the code is running in each tab). This is necessary, because with the new API there is no other way to track your mouse movement or draw anything on the screen. It's also needed to perform page specific commands like scroll down or up.*
- - Read and modify browser settings: *This is required to change the context menu behaviour for MacOS and Linux users to support the usage of the right mouse button.*
- - Display notifications: *This is used to show a notification on Gesturefy updates or to display certain error messages.*
+This project is licensed under the terms of the [GNU General Public License v3.0](https://github.com/diredocks/Cesturefy/blob/main/LICENSE).
 
+## Privacy
 
-***
+Cesturefy does not collect any data of any kind.
 
-**Release History:**
+* Cesturefy has no home server.
+* Cesturefy doesn't embed any analytic or telemetry hooks in its code.
 
-See the [releases page](https://github.com/Robbendebiene/Gesturefy/releases) for a history of releases and highlights for each release.
-
-**License:**
-
-This project is licensed under the terms of the [GNU General Public License v3.0](https://github.com/Robbendebiene/Gesturefy/blob/master/LICENSE).
-
-**Privacy:**
-
-Gesturefy does not collect any data of any kind.
-
-* Gesturefy has no home server.
-* Gesturefy doesn't embed any analytic or telemetry hooks in its code.
-
-**GitHub** is used to host the Gesturefy project. **GitHub, Inc.** (a subsidiary of **Microsoft Corporation**) owns **GitHub** and is unrelated to Gesturefy.
+**GitHub** is used to host the Cesturefy project. **GitHub, Inc.** (a subsidiary of **Microsoft Corporation**) owns **GitHub** and is unrelated to Cesturefy.
