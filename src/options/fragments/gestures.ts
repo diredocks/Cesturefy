@@ -516,7 +516,7 @@ function mouseGestureControllerSetup() {
 
   mouseController.addEventListener("update", (_b, e) => {
     // include fallback if getCoalescedEvents is not defined
-    const events = e.getCoalescedEvents();
+    const events = e.getCoalescedEvents?.() ?? [e];
 
     const lastEvent = events[events.length - 1];
     for (let event of events) canvasContext.lineTo(

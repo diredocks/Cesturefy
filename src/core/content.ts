@@ -70,7 +70,7 @@ mouseController.addEventListener('start', (es, e) => {
   }
 
   const coalescedEvents = es.flatMap(e => {
-    const es = e.getCoalescedEvents();
+    const es = e.getCoalescedEvents?.();
     // if events is null/undefined or empty (length == 0) return plain event
     return (es?.length > 0) ? es : [e];
   });
@@ -79,7 +79,7 @@ mouseController.addEventListener('start', (es, e) => {
 });
 
 mouseController.addEventListener('update', (_es, e) => {
-  const coalescedEvents = e.getCoalescedEvents();
+  const coalescedEvents = e.getCoalescedEvents?.() ?? [e];
   mouseGestureUpdate(coalescedEvents);
 });
 
