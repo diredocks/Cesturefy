@@ -11,10 +11,16 @@ const injectedCode = (
   scrollRatio: number,
   duration: number
 ) => {
-  const isScrollableY = (el: Element | null) =>
-    !!el && (el.scrollHeight ?? 0) > (el.clientHeight ?? 0);
+  const isScrollableY = (el: Element) =>
+    (el.scrollHeight > el.clientHeight);
 
-  const scrollToY = (y: number, duration: number, el: Element | null) => {
+  const isDivScrollableY = (el: Element) => {
+    const style = getComputedStyle(el);
+    const overflowY = style.overflowY;
+    return isScrollableY(el) && (overflowY === 'auto' || overflowY === 'scroll');
+  }
+
+  const scrollToY = (y: number, duration: number, el: Element) => {
     if (!el) return;
     const start = (el as any).scrollTop ?? 0;
     const change = y - start;
@@ -30,12 +36,27 @@ const injectedCode = (
     requestAnimationFrame(step);
   };
 
-  const getScrollableElement = () => {
+  const getAllScrollableElements = (root = document.body): Element[] => {
+    const scrollables: Element[] = [];
+
+    const traverse = (node: Element) => {
+      if (isDivScrollableY(node)) scrollables.push(node);
+      Array.from(node.children).forEach((child) => traverse(child as Element));
+    };
+
+    traverse(root);
+    return scrollables;
+  };
+
+  const getScrollableElement = (): Element | null => {
     const target = (window as any).TARGET as Element | null | undefined;
     if (target && isScrollableY(target)) return target;
+
     const docEl = document.scrollingElement as Element | null;
-    if (isScrollableY(docEl)) return docEl;
-    return null;
+    if (docEl && isScrollableY(docEl)) return docEl;
+
+    const scrollables = getAllScrollableElements();
+    return scrollables.length > 0 ? scrollables[0] : null;
   };
 
   const el = getScrollableElement();
