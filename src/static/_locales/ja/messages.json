@@ -135,6 +135,10 @@
     "message": "コマンドを表示する",
     "description": "Display command"
   },
+  "settingLabelCommandFollowCursor": {
+    "message": "カーソルを追従",
+    "description": "Follow Cursor"
+  },
   "settingLabelCommandFontColor": {
     "message": "フォントの色",
     "description": "Font color"
@@ -202,6 +206,10 @@
   "settingDescriptionDisplayCommand": {
     "message": "現在のジェスチャーに一致するコマンドを表示します。",
     "description": "Displays the command of the currently matching gesture if available."
+  },
+  "settingDescriptionCommandFollowCursor": {
+    "message": "コマンドがカーソルに追従するかどうかを決定します。",
+    "description": "Determines if the command should follow cursor."
   },
   "settingDescriptionCommandFontSize": {
     "message": "em、px、pt、%、vh などの CSS の単位が有効です。",

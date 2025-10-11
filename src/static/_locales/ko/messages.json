@@ -135,6 +135,10 @@
     "message": "명령 표시",
     "description": "Display command"
   },
+  "settingLabelCommandFollowCursor": {
+    "message": "커서 따라가기",
+    "description": "Follow Cursor"
+  },
   "settingLabelCommandFontColor": {
     "message": "글꼴 색",
     "description": "Font color"
@@ -202,6 +206,10 @@
   "settingDescriptionDisplayCommand": {
     "message": "가능한 경우, 현재 일치하는 제스처의 명령을 표시합니다.",
     "description": "Displays the command of the currently matching gesture if available."
+  },
+  "settingDescriptionCommandFollowCursor": {
+    "message": "명령이 커서를 따라가야 하는지 결정합니다.",
+    "description": "Determines if the command should follow cursor."
   },
   "settingDescriptionCommandFontSize": {
     "message": "다음과 같은 모든 CSS 단위를 허용합니다: em, px, pt, %, vh 등.",

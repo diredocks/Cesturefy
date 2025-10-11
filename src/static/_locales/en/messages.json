@@ -139,6 +139,10 @@
     "message": "Display command",
     "description": "Display command"
   },
+  "settingLabelCommandFollowCursor": {
+    "message": "Follow Cursor",
+    "description": "Follow Cursor"
+  },
   "settingLabelCommandFontColor": {
     "message": "Font color",
     "description": "Font color"
@@ -208,6 +212,10 @@
   "settingDescriptionDisplayCommand": {
     "message": "Displays the command of the currently matching gesture if available.",
     "description": "Displays the command of the currently matching gesture if available."
+  },
+  "settingDescriptionCommandFollowCursor": {
+    "message": "Determines if the command should follow cursor.",
+    "description": "Determines if the command should follow cursor."
   },
   "settingDescriptionCommandFontSize": {
     "message": "Accepts every CSS Unit like: em, px, pt, %, vh etc.",

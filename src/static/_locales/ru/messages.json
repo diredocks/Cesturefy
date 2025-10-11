@@ -135,6 +135,10 @@
     "message": "Отображать выполняемое действие",
     "description": "Display command"
   },
+  "settingLabelCommandFollowCursor": {
+    "message": "Следовать за курсором",
+    "description": "Follow Cursor"
+  },
   "settingLabelCommandFontColor": {
     "message": "Цвет шрифта",
     "description": "Font color"
@@ -202,6 +206,10 @@
   "settingDescriptionDisplayCommand": {
     "message": "Отображает команду с одинаковыми жестами, если таковые имеются.",
     "description": "Displays the command of the currently matching gesture if available."
+  },
+  "settingDescriptionCommandFollowCursor": {
+    "message": "Определяет, должен ли командный указатель следовать за курсором.",
+    "description": "Determines if the command should follow cursor."
   },
   "settingDescriptionCommandFontSize": {
     "message": "Допустимы любые единицы измерения CSS: em, px, pt, %, vh и т.п.",

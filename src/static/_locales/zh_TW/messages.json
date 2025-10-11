@@ -135,6 +135,10 @@
     "message": "顯示指令",
     "description": "Display command"
   },
+  "settingLabelCommandFollowCursor": {
+    "message": "跟隨游標",
+    "description": "Follow Cursor"
+  },
   "settingLabelCommandFontColor": {
     "message": "文字顏色",
     "description": "Font color"
@@ -202,6 +206,10 @@
   "settingDescriptionDisplayCommand": {
     "message": "顯示與目前手勢所對應的指令 (如果有)",
     "description": "Displays the command of the currently matching gesture if available."
+  },
+  "settingDescriptionCommandFollowCursor": {
+    "message": "決定指令是否應跟隨游標。",
+    "description": "Determines if the command should follow cursor."
   },
   "settingDescriptionCommandFontSize": {
     "message": "可以是任何的CSS可使用的單位 如: em, px, pt, %, vh 等",

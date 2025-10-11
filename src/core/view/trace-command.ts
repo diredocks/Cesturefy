@@ -13,6 +13,7 @@ export class TraceCommand {
 
   private traceLineWidth = DefaultConfig.Settings.Gesture.Trace.Style.lineWidth;
   private traceLineGrowth = DefaultConfig.Settings.Gesture.Trace.Style.lineGrowth;
+  private commandFollowCursor = DefaultConfig.Settings.Gesture.Command.followCursor;
   private lastTraceWidth = 0;
   private lastPoint: Point = { x: 0, y: 0 };
 
@@ -107,9 +108,16 @@ export class TraceCommand {
   }
 
   updateCommand(text: string | null) {
+    // FIXME: when trace disabled lastPoint won't update
     if (text !== null && this.overlay.isConnected) {
       this.command.textContent = text;
       if (!this.overlay.contains(this.command)) this.overlay.appendChild(this.command);
+      if (this.commandFollowCursor) {
+        const horizontalPercent = (this.lastPoint.x / window.innerWidth) * 100;
+        const verticalPercent = (this.lastPoint.y / window.innerHeight) * 100;
+        this.command.style.setProperty("--horizontalPosition", String(horizontalPercent));
+        this.command.style.setProperty("--verticalPosition", String(verticalPercent));
+      }
     } else {
       this.command.remove();
     }
@@ -217,6 +225,13 @@ export class TraceCommand {
     this.command.style.setProperty("--verticalPosition", String(value));
   }
 
+  get gestureCommandFollowCursor(): boolean {
+    return this.commandFollowCursor;
+  }
+  set gestureCommandFollowCursor(value: boolean) {
+    this.commandFollowCursor = Boolean(value);
+  }
+
   applyConfig() {
     this.gestureTraceLineColor = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "strokeStyle"]);
     this.gestureTraceLineWidth = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "lineWidth"]);
@@ -227,6 +242,7 @@ export class TraceCommand {
     this.gestureCommandBackgroundColor = configManager.getPath(["Settings", "Gesture", "Command", "Style", "backgroundColor"]);
     this.gestureCommandHorizontalPosition = configManager.getPath(["Settings", "Gesture", "Command", "Style", "horizontalPosition"]);
     this.gestureCommandVerticalPosition = configManager.getPath(["Settings", "Gesture", "Command", "Style", "verticalPosition"]);
+    this.commandFollowCursor = configManager.getPath(["Settings", "Gesture", "Command", "followCursor"]);
   }
 }
 

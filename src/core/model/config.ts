@@ -29,6 +29,7 @@ export interface CommandStyleSettings {
 
 export interface CommandDisplaySettings {
   display: boolean;
+  followCursor: boolean;
   Style: CommandStyleSettings;
 }
 
@@ -97,6 +98,7 @@ export const DefaultConfig: ConfigSchema = {
       },
       Command: {
         display: true,
+        followCursor: false,
         Style: {
           fontColor: "#ffffffff",
           backgroundColor: "#00000080",
