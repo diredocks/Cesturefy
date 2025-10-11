@@ -36,5 +36,6 @@ export const RestoreTab = defineCommand(
   {
     currentWindowOnly: false,
   },
-  "tabs"
+  "tabs",
+  ["sessions"]
 );
