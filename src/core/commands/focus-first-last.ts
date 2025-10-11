@@ -5,7 +5,7 @@ interface FocusFSettings {
   includePinned?: boolean;
 }
 
-interface FocusLSettings {}
+type FocusLSettings = Record<string, never>;
 
 const FocusFirstTabFn: CommandFn<FocusFSettings> = async function (sender) {
   if (!sender.tab?.id) return true;

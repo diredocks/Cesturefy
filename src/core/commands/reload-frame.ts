@@ -6,8 +6,10 @@ const injectedCode = () => {
 };
 
 const ReloadFrameFn: CommandFn = async function (sender) {
+  if (!sender.tab?.id) return true;
+
   await chrome.scripting.executeScript({
-    target: { tabId: sender.tab?.id!, frameIds: [sender.frameId ?? 0] },
+    target: { tabId: sender.tab.id, frameIds: [sender.frameId ?? 0] },
     func: injectedCode,
     world: "MAIN",
   });

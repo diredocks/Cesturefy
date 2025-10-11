@@ -11,7 +11,7 @@ function buildNumberMatcher(customRegex?: string): RegExp {
     return new RegExp(customRegex);
   }
 
-  const matchBetweenSlashes = /(?<=\/)(\d+)(?=[\/?#]|$)/;
+  const matchBetweenSlashes = /(?<=\/)(\d+)(?=[/?#]|$)/;
   const matchQueryParameterValue = /(?<=[?&]\w+=)(\d+)(?=[?&#]|$)/;
 
   return new RegExp(

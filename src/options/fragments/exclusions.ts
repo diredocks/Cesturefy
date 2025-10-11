@@ -96,7 +96,7 @@ function addExclusionsEntry(exclusionsEntry: HTMLLIElement) {
   exclusionsEntry.style.removeProperty("position");
 
   // trigger reflow
-  exclusionsContainer.offsetHeight;
+  void exclusionsContainer.offsetHeight;
 
   exclusionsEntry.addEventListener(
     "animationend",

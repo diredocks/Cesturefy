@@ -38,13 +38,14 @@ const fn: CommandFn<CloseTabSettings> = async function (sender) {
             : acc,
         );
         break;
-      case "recent":
+      case "recent": {
         // get the previous tab
         const withAccessed = tabs.filter((t) => t.lastAccessed !== undefined);
         nextTab = withAccessed.reduce((acc, cur) =>
           acc.lastAccessed! > cur.lastAccessed! ? acc : cur,
         );
         break;
+      }
       case "default":
       default:
         nextTab = null;

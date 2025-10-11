@@ -61,7 +61,7 @@ export function sendTabMessage<K extends keyof M, M extends ContentMessages>(
 export type BackgroundMessages = {
   gestureChange: { vectors: Vectors; context: Context };
   gestureEnd: { vectors: Vectors; context: Context };
-  OSRequest: {};
+  OSRequest: Record<string, never>;
   rockerLeft: { context: Context };
   rockerRight: { context: Context };
   wheelUp: { context: Context };
@@ -71,7 +71,7 @@ export type BackgroundMessages = {
 export type ContentMessages = {
   matchingGesture: string | null; // null possible due to not matched any gesture
   clipboardWriteText: string;
-  clipboardReadText: {};
+  clipboardReadText: Record<string, never>;
   clipboardWriteImage: string; // url to image
 };
 
@@ -94,7 +94,7 @@ export function waitForVoidMessage(subject: string): Promise<any> {
 export type PopupMessages = {
   popupRequest: { mousePositionX: number; mousePositionY: number };
   popupInitiation: { width: number; height: number };
-  popupTermination: {};
+  popupTermination: Record<string, never>;
 };
 
 export type PopupIframeMessages = {

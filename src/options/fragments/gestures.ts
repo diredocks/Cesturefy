@@ -269,8 +269,9 @@ function onItemPointerleave(this: HTMLElement, _e: Event) {
       this.querySelector(".gl-thumbnail-trail")!.addEventListener(
         "animationend",
         () => {
-          (this.classList.remove("demo"), { once: true });
+          this.classList.remove("demo");
         },
+        { once: true },
       );
     }
   }

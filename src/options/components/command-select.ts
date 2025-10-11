@@ -307,7 +307,7 @@ export class CommandSelect extends HTMLElement {
 
     this.shadow.appendChild(frag);
 
-    bar.offsetHeight; // trigger reflow
+    void bar.offsetHeight; // trigger reflow
 
     overlay.classList.replace("o-hide", "o-show");
     bar.classList.replace("cb-hide", "cb-show");
@@ -359,7 +359,7 @@ export class CommandSelect extends HTMLElement {
     });
 
     wrapper.appendChild(newPanel);
-    wrapper.offsetHeight;
+    void wrapper.offsetHeight; // trigger reflow
     current.classList.add(slideOut);
     newPanel.classList.remove(slideIn);
   }
