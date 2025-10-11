@@ -1,5 +1,5 @@
 // NOTE: Extras will reuse things we implement here
-import { ContentLoaded } from "@options/index"
+import { ContentLoaded } from "@options/index";
 import { configManager } from "@model/config-manager";
 
 const res: Promise<unknown>[] = [configManager.loaded, ContentLoaded];
@@ -9,19 +9,21 @@ loaded.then(main);
 
 async function main() {
   // apply values to input fields and add their event function
-  for (const input of document.querySelectorAll<HTMLInputElement>("[data-config]")) {
+  for (const input of document.querySelectorAll<HTMLInputElement>(
+    "[data-config]",
+  )) {
     const value = configManager.get(input.dataset.config!);
     if (input.type === "checkbox") {
       input.checked = value;
-    }
-    else if (input.type === "radio") {
+    } else if (input.type === "radio") {
       input.checked = input.value === value;
-    }
-    else input.value = value;
-    input.addEventListener('change', onChange);
+    } else input.value = value;
+    input.addEventListener("change", onChange);
   }
   // toggle collapsables and add their event function
-  for (const collapse of document.querySelectorAll<HTMLInputElement>("[data-collapse]")) {
+  for (const collapse of document.querySelectorAll<HTMLInputElement>(
+    "[data-collapse]",
+  )) {
     // if user dispatched the function, then hide with animation
     collapse.addEventListener("change", onCollapse);
     // else hide without animation
@@ -57,15 +59,17 @@ function onChange(this: HTMLElement) {
 }
 
 function onCollapse(this: HTMLInputElement) {
-  const targetElements = document.querySelectorAll<HTMLElement>(this.dataset["collapse"]!);
+  const targetElements = document.querySelectorAll<HTMLElement>(
+    this.dataset["collapse"]!,
+  );
 
   for (const element of targetElements) {
     element.addEventListener(
       "transitionend",
-      e => {
+      (e) => {
         (e.currentTarget as HTMLElement).classList.remove("animate");
       },
-      { once: true }
+      { once: true },
     );
     element.classList.add("animate");
 
@@ -80,7 +84,9 @@ function onCollapse(this: HTMLInputElement) {
 }
 
 function applyCollapseState(collapse: HTMLInputElement) {
-  const targetElements = document.querySelectorAll<HTMLElement>(collapse.dataset["collapse"]!);
+  const targetElements = document.querySelectorAll<HTMLElement>(
+    collapse.dataset["collapse"]!,
+  );
 
   for (const element of targetElements) {
     if (element.style.height === "0px" && collapse.checked) {

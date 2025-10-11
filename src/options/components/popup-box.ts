@@ -21,7 +21,7 @@ export class PopupBox extends HTMLElement {
     `;
 
     // Wait for stylesheets
-    this._loaded = new Promise(resolve => {
+    this._loaded = new Promise((resolve) => {
       const sheet = this.shadowRoot!.querySelector<HTMLLinkElement>("link");
       if (!sheet) {
         resolve();
@@ -46,7 +46,11 @@ export class PopupBox extends HTMLElement {
     this.shadowRoot?.getElementById("popupWrapper")?.remove();
   }
 
-  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+  attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
     if (!this.isConnected) return;
 
     switch (name) {
@@ -58,12 +62,14 @@ export class PopupBox extends HTMLElement {
         }
         break;
 
-      case "type": {
-        this.shadowRoot?.getElementById("popupOverlay")?.remove();
-        this.shadowRoot?.getElementById("popupWrapper")?.remove();
-        const frag = this._buildPopupBox();
-        this.shadowRoot?.append(frag);
-      } break;
+      case "type":
+        {
+          this.shadowRoot?.getElementById("popupOverlay")?.remove();
+          this.shadowRoot?.getElementById("popupWrapper")?.remove();
+          const frag = this._buildPopupBox();
+          this.shadowRoot?.append(frag);
+        }
+        break;
     }
   }
 
@@ -107,44 +113,58 @@ export class PopupBox extends HTMLElement {
     const closeBtn = template.content.getElementById("popupBoxCloseButton")!;
     const footer = template.content.getElementById("popupBoxFooter")!;
 
-    popupOverlay.addEventListener("click", () => this._handleCloseButtonClick());
+    popupOverlay.addEventListener("click", () =>
+      this._handleCloseButtonClick(),
+    );
     closeBtn.addEventListener("click", () => this._handleCloseButtonClick());
 
     switch (this.type) {
-      case "alert": {
-        const btn = document.createElement("button");
-        btn.id = "popupBoxConfirmButton";
-        btn.textContent = chrome.i18n.getMessage("buttonConfirm");
-        btn.addEventListener("click", () => this._handleCloseButtonClick());
-        footer.append(btn);
-      } break;
+      case "alert":
+        {
+          const btn = document.createElement("button");
+          btn.id = "popupBoxConfirmButton";
+          btn.textContent = chrome.i18n.getMessage("buttonConfirm");
+          btn.addEventListener("click", () => this._handleCloseButtonClick());
+          footer.append(btn);
+        }
+        break;
 
-      case "confirm": {
-        const confirmBtn = document.createElement("button");
-        confirmBtn.id = "popupBoxConfirmButton";
-        confirmBtn.textContent = chrome.i18n.getMessage("buttonConfirm");
-        confirmBtn.addEventListener("click", () => this._handleConfirmButtonClick());
+      case "confirm":
+        {
+          const confirmBtn = document.createElement("button");
+          confirmBtn.id = "popupBoxConfirmButton";
+          confirmBtn.textContent = chrome.i18n.getMessage("buttonConfirm");
+          confirmBtn.addEventListener("click", () =>
+            this._handleConfirmButtonClick(),
+          );
 
-        const cancelBtn = document.createElement("button");
-        cancelBtn.id = "popupBoxCancelButton";
-        cancelBtn.textContent = chrome.i18n.getMessage("buttonCancel");
-        cancelBtn.addEventListener("click", () => this._handleCancelButtonClick());
+          const cancelBtn = document.createElement("button");
+          cancelBtn.id = "popupBoxCancelButton";
+          cancelBtn.textContent = chrome.i18n.getMessage("buttonCancel");
+          cancelBtn.addEventListener("click", () =>
+            this._handleCancelButtonClick(),
+          );
 
-        footer.append(cancelBtn, confirmBtn);
-      } break;
+          footer.append(cancelBtn, confirmBtn);
+        }
+        break;
 
-      case "prompt": {
-        const input = document.createElement("input");
-        input.id = "popupBoxInput";
-        input.addEventListener("keypress", e => this._handleInputKeypress(e));
+      case "prompt":
+        {
+          const input = document.createElement("input");
+          input.id = "popupBoxInput";
+          input.addEventListener("keypress", (e) =>
+            this._handleInputKeypress(e),
+          );
 
-        const btn = document.createElement("button");
-        btn.id = "popupBoxConfirmButton";
-        btn.textContent = chrome.i18n.getMessage("buttonConfirm");
-        btn.addEventListener("click", () => this._handleConfirmButtonClick());
+          const btn = document.createElement("button");
+          btn.id = "popupBoxConfirmButton";
+          btn.textContent = chrome.i18n.getMessage("buttonConfirm");
+          btn.addEventListener("click", () => this._handleConfirmButtonClick());
 
-        footer.append(input, btn);
-      } break;
+          footer.append(input, btn);
+        }
+        break;
     }
 
     return template.content;
@@ -166,12 +186,12 @@ export class PopupBox extends HTMLElement {
     // Force reflow
     void box.offsetHeight;
 
-    overlay.addEventListener("transitionend", e => {
+    overlay.addEventListener("transitionend", (e) => {
       if (e.currentTarget === e.target) {
         overlay.classList.remove("po-show");
       }
     });
-    box.addEventListener("animationend", e => {
+    box.addEventListener("animationend", (e) => {
       if (e.currentTarget === e.target) {
         box.classList.remove("pb-show");
       }
@@ -188,10 +208,10 @@ export class PopupBox extends HTMLElement {
     const wrapper = this.shadowRoot!.getElementById("popupWrapper")!;
     const box = this.shadowRoot!.getElementById("popupBox")!;
 
-    overlay.addEventListener("transitionend", e => {
+    overlay.addEventListener("transitionend", (e) => {
       if (e.currentTarget === e.target) overlay.remove();
     });
-    box.addEventListener("transitionend", e => {
+    box.addEventListener("transitionend", (e) => {
       if (e.currentTarget === e.target) wrapper.remove();
     });
 
@@ -206,7 +226,9 @@ export class PopupBox extends HTMLElement {
   }
 
   private _handleConfirmButtonClick(): void {
-    const input = this.shadowRoot?.getElementById("popupBoxInput") as HTMLInputElement | null;
+    const input = this.shadowRoot?.getElementById(
+      "popupBoxInput",
+    ) as HTMLInputElement | null;
     this.value = input ? input.value : true;
     this.open = false;
   }
@@ -223,7 +245,7 @@ export class PopupBox extends HTMLElement {
   addEventListener<K extends keyof PopupBoxEventMap>(
     type: K,
     listener: (this: PopupBox, ev: PopupBoxEventMap[K]) => any,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void {
     super.addEventListener(type, listener as EventListener, options);
   }
@@ -231,7 +253,7 @@ export class PopupBox extends HTMLElement {
   removeEventListener<K extends keyof PopupBoxEventMap>(
     type: K,
     listener: (this: PopupBox, ev: PopupBoxEventMap[K]) => any,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void {
     super.removeEventListener(type, listener as EventListener, options);
   }

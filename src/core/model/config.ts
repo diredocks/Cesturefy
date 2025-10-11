@@ -48,7 +48,7 @@ export interface RockerSettings {
   active: boolean;
   leftMouseClick: CommandJSON;
   rightMouseClick: CommandJSON;
-};
+}
 
 export interface WheelSettings {
   active: boolean;
@@ -56,7 +56,7 @@ export interface WheelSettings {
   wheelSensitivity: number;
   wheelUp: CommandJSON;
   wheelDown: CommandJSON;
-};
+}
 
 export interface GeneralSettings {
   updateNotification: boolean;
@@ -80,13 +80,13 @@ export const DefaultConfig: ConfigSchema = {
   Settings: {
     Gesture: {
       mouseButton: 2,
-      suppressionKey: 'none',
+      suppressionKey: "none",
       distanceThreshold: 10, // px
       deviationTolerance: 0.15,
       matchingAlgorithm: "Combined",
       Timeout: {
         active: false,
-        duration: 1 // s
+        duration: 1, // s
       },
       Trace: {
         display: true,
@@ -144,8 +144,8 @@ export const DefaultConfig: ConfigSchema = {
     {
       pattern: [[1, 0]],
       command: {
-        name: 'CloseTab',
-        settings: { nextFocus: 'next' }
+        name: "CloseTab",
+        settings: { nextFocus: "next" },
       },
     },
   ],

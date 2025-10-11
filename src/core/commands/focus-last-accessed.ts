@@ -10,11 +10,17 @@ const FocusPreviousSelectedTabFn: CommandFn = async function (sender) {
   });
 
   if (tabs.length > 0) {
-    const lastAccessedTab = tabs.reduce((acc, cur) => (acc.lastAccessed! > cur.lastAccessed! ? acc! : cur!));
+    const lastAccessedTab = tabs.reduce((acc, cur) =>
+      acc.lastAccessed! > cur.lastAccessed! ? acc! : cur!,
+    );
     await chrome.tabs.update(lastAccessedTab.id!, { active: true });
   }
 
   return true;
 };
 
-export const FocusPreviousSelectedTab = defineCommand(FocusPreviousSelectedTabFn, {}, 'focus');
+export const FocusPreviousSelectedTab = defineCommand(
+  FocusPreviousSelectedTabFn,
+  {},
+  "focus",
+);

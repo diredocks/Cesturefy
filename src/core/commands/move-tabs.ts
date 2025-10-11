@@ -9,7 +9,9 @@ const moveTabToStart: CommandFn = async function (sender) {
     pinned: sender.tab.pinned,
   });
 
-  const mostLeftTab = tabs.reduce((acc, cur) => (cur.index < acc.index ? cur : acc));
+  const mostLeftTab = tabs.reduce((acc, cur) =>
+    cur.index < acc.index ? cur : acc,
+  );
 
   if (mostLeftTab.index !== sender.tab.index) {
     await chrome.tabs.move(sender.tab.id, { index: mostLeftTab.index });
@@ -26,7 +28,9 @@ const moveTabToEnd: CommandFn = async function (sender) {
     pinned: sender.tab.pinned,
   });
 
-  const mostRightTab = tabs.reduce((acc, cur) => (cur.index > acc.index ? cur : acc));
+  const mostRightTab = tabs.reduce((acc, cur) =>
+    cur.index > acc.index ? cur : acc,
+  );
 
   if (mostRightTab.index !== sender.tab.index) {
     await chrome.tabs.move(sender.tab.id, { index: mostRightTab.index + 1 });
@@ -52,7 +56,7 @@ const moveTabRight: CommandFn<MoveTabRLSettings> = async function (sender) {
   });
   tabs.sort((a, b) => a.index - b.index);
 
-  const currentIndex = tabs.findIndex(tab => tab.index === sender.tab!.index);
+  const currentIndex = tabs.findIndex((tab) => tab.index === sender.tab!.index);
   let nextIndex = currentIndex + shift;
 
   if (cycling) {
@@ -80,7 +84,7 @@ const moveTabLeft: CommandFn<MoveTabRLSettings> = async function (sender) {
   });
   tabs.sort((a, b) => a.index - b.index);
 
-  const currentIndex = tabs.findIndex(tab => tab.index === sender.tab!.index);
+  const currentIndex = tabs.findIndex((tab) => tab.index === sender.tab!.index);
   let nextIndex = currentIndex - shift;
 
   if (cycling) {
@@ -107,70 +111,88 @@ interface MoveTabsToNewWindowSettings {
   focus: boolean;
 }
 
-const moveRightTabsToNewWindow: CommandFn<MoveTabsToNewWindowSettings> = async function (sender) {
-  if (!sender.tab?.id) return true;
+const moveRightTabsToNewWindow: CommandFn<MoveTabsToNewWindowSettings> =
+  async function (sender) {
+    if (!sender.tab?.id) return true;
 
-  const includeCurrent = this.getSetting("includeCurrent");
-  const focus = this.getSetting("focus");
+    const includeCurrent = this.getSetting("includeCurrent");
+    const focus = this.getSetting("focus");
 
-  const query: chrome.tabs.QueryInfo = {
-    windowId: sender.tab.windowId,
-    pinned: false,
-    active: includeCurrent ? undefined : false,
-  };
+    const query: chrome.tabs.QueryInfo = {
+      windowId: sender.tab.windowId,
+      pinned: false,
+      active: includeCurrent ? undefined : false,
+    };
 
-  const tabs = await chrome.tabs.query(query);
-  const rightTabs = tabs.filter(tab => tab.index >= sender.tab!.index);
-  const rightIds = rightTabs.map(tab => tab.id).filter(Boolean) as number[];
+    const tabs = await chrome.tabs.query(query);
+    const rightTabs = tabs.filter((tab) => tab.index >= sender.tab!.index);
+    const rightIds = rightTabs.map((tab) => tab.id).filter(Boolean) as number[];
 
-  if (rightIds.length > 0) {
-    const firstTabId = rightIds.shift()!;
-    const window = await chrome.windows.create({
-      tabId: firstTabId,
-      state: focus ? undefined : "minimized",
-    });
     if (rightIds.length > 0) {
-      await chrome.tabs.move(rightIds, { windowId: window!.id, index: 1 });
+      const firstTabId = rightIds.shift()!;
+      const window = await chrome.windows.create({
+        tabId: firstTabId,
+        state: focus ? undefined : "minimized",
+      });
+      if (rightIds.length > 0) {
+        await chrome.tabs.move(rightIds, { windowId: window!.id, index: 1 });
+      }
+      return true;
     }
-    return true;
-  }
-  return false;
-};
-
-const moveLeftTabsToNewWindow: CommandFn<MoveTabsToNewWindowSettings> = async function (sender) {
-  if (!sender.tab?.id) return true;
-
-  const includeCurrent = this.getSetting("includeCurrent");
-  const focus = this.getSetting("focus");
-
-  const query: chrome.tabs.QueryInfo = {
-    windowId: sender.tab.windowId,
-    pinned: false,
-    active: includeCurrent ? undefined : false,
+    return false;
   };
 
-  const tabs = await chrome.tabs.query(query);
-  const leftTabs = tabs.filter(tab => tab.index <= sender.tab!.index);
-  const leftIds = leftTabs.map(tab => tab.id).filter(Boolean) as number[];
+const moveLeftTabsToNewWindow: CommandFn<MoveTabsToNewWindowSettings> =
+  async function (sender) {
+    if (!sender.tab?.id) return true;
 
-  if (leftIds.length > 0) {
-    const lastTabId = leftIds.pop()!;
-    const window = await chrome.windows.create({
-      tabId: lastTabId,
-      state: focus ? undefined : "minimized",
-    });
+    const includeCurrent = this.getSetting("includeCurrent");
+    const focus = this.getSetting("focus");
+
+    const query: chrome.tabs.QueryInfo = {
+      windowId: sender.tab.windowId,
+      pinned: false,
+      active: includeCurrent ? undefined : false,
+    };
+
+    const tabs = await chrome.tabs.query(query);
+    const leftTabs = tabs.filter((tab) => tab.index <= sender.tab!.index);
+    const leftIds = leftTabs.map((tab) => tab.id).filter(Boolean) as number[];
+
     if (leftIds.length > 0) {
-      await chrome.tabs.move(leftIds, { windowId: window!.id, index: 0 });
+      const lastTabId = leftIds.pop()!;
+      const window = await chrome.windows.create({
+        tabId: lastTabId,
+        state: focus ? undefined : "minimized",
+      });
+      if (leftIds.length > 0) {
+        await chrome.tabs.move(leftIds, { windowId: window!.id, index: 0 });
+      }
+      return true;
     }
-    return true;
-  }
-  return false;
-};
+    return false;
+  };
 
-export const MoveTabToStart = defineCommand(moveTabToStart, {}, 'move');
-export const MoveTabToEnd = defineCommand(moveTabToEnd, {}, 'move');
-export const MoveTabRight = defineCommand(moveTabRight, { shift: 1, cycling: false }, 'move');
-export const MoveTabLeft = defineCommand(moveTabLeft, { shift: 1, cycling: false }, 'move');
-export const MoveTabToNewWindow = defineCommand(moveTabToNewWindow, {}, 'move');
-export const MoveRightTabsToNewWindow = defineCommand(moveRightTabsToNewWindow, { includeCurrent: true, focus: true }, 'move');
-export const MoveLeftTabsToNewWindow = defineCommand(moveLeftTabsToNewWindow, { includeCurrent: true, focus: true }, 'move');
+export const MoveTabToStart = defineCommand(moveTabToStart, {}, "move");
+export const MoveTabToEnd = defineCommand(moveTabToEnd, {}, "move");
+export const MoveTabRight = defineCommand(
+  moveTabRight,
+  { shift: 1, cycling: false },
+  "move",
+);
+export const MoveTabLeft = defineCommand(
+  moveTabLeft,
+  { shift: 1, cycling: false },
+  "move",
+);
+export const MoveTabToNewWindow = defineCommand(moveTabToNewWindow, {}, "move");
+export const MoveRightTabsToNewWindow = defineCommand(
+  moveRightTabsToNewWindow,
+  { includeCurrent: true, focus: true },
+  "move",
+);
+export const MoveLeftTabsToNewWindow = defineCommand(
+  moveLeftTabsToNewWindow,
+  { includeCurrent: true, focus: true },
+  "move",
+);

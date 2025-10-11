@@ -2,7 +2,7 @@ import { CommandFn } from "@utils/types";
 import { defineCommand } from "@commands/commands";
 
 const OpenLinkFn: CommandFn = async function (sender, data) {
-  if (!(data?.link?.href)) return false;
+  if (!data?.link?.href) return false;
 
   let url = data.link.href;
   await chrome.tabs.update(sender.tab!.id, { url });
@@ -15,8 +15,11 @@ interface OpenLinkNewTabSettings {
   focus?: boolean;
 }
 
-const OpenLinkNewTabFn: CommandFn<OpenLinkNewTabSettings> = async function (sender, data) {
-  if (!(data?.link?.href)) return false;
+const OpenLinkNewTabFn: CommandFn<OpenLinkNewTabSettings> = async function (
+  sender,
+  data,
+) {
+  if (!data?.link?.href) return false;
 
   let url = data.link.href;
   let index: number | undefined;
@@ -48,7 +51,7 @@ const OpenLinkNewTabFn: CommandFn<OpenLinkNewTabSettings> = async function (send
 };
 
 const OpenLinkInNewWindowFn: CommandFn = async function (_sender, data) {
-  if (!(data?.link?.href)) return false;
+  if (!data?.link?.href) return false;
 
   let url = data.link.href;
   await chrome.windows.create({ url });
@@ -57,7 +60,7 @@ const OpenLinkInNewWindowFn: CommandFn = async function (_sender, data) {
 };
 
 const OpenLinkInNewPrivateWindowFn: CommandFn = async function (_sender, data) {
-  if (!(data?.link?.href)) return false;
+  if (!data?.link?.href) return false;
 
   let url = data.link.href;
   await chrome.windows.create({ url, incognito: true });
@@ -65,12 +68,22 @@ const OpenLinkInNewPrivateWindowFn: CommandFn = async function (_sender, data) {
   return true;
 };
 
-export const OpenLink = defineCommand(OpenLinkFn, {}, 'link');
-export const OpenLinkInNewTab = defineCommand(OpenLinkNewTabFn,
+export const OpenLink = defineCommand(OpenLinkFn, {}, "link");
+export const OpenLinkInNewTab = defineCommand(
+  OpenLinkNewTabFn,
   {
-    position: 'after',
-    focus: true
-  }, 'link');
-export const OpenLinkInNewWindow = defineCommand(OpenLinkInNewWindowFn, {}, 'link');
-export const OpenLinkInNewPrivateWindow = defineCommand(OpenLinkInNewPrivateWindowFn, {}, 'link');
-
+    position: "after",
+    focus: true,
+  },
+  "link",
+);
+export const OpenLinkInNewWindow = defineCommand(
+  OpenLinkInNewWindowFn,
+  {},
+  "link",
+);
+export const OpenLinkInNewPrivateWindow = defineCommand(
+  OpenLinkInNewPrivateWindowFn,
+  {},
+  "link",
+);

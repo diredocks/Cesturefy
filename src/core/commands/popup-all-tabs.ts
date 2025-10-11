@@ -4,7 +4,12 @@ import { defineCommand } from "@commands/commands";
 
 interface PopupAllTabsSettings {
   excludeDiscarded?: boolean;
-  order?: 'lastAccessedAsc' | 'lastAccessedDesc' | 'alphabeticalAsc' | 'alphabeticalDesc' | 'none';
+  order?:
+    | "lastAccessedAsc"
+    | "lastAccessedDesc"
+    | "alphabeticalAsc"
+    | "alphabeticalDesc"
+    | "none";
 }
 
 const fn: CommandFn<PopupAllTabsSettings> = async function (sender, data) {
@@ -33,26 +38,30 @@ const fn: CommandFn<PopupAllTabsSettings> = async function (sender, data) {
   }
 
   const dataset = tabs
-    .filter(tab => tab.title != undefined) // filter out internal pages
-    .map(tab => ({
+    .filter((tab) => tab.title != undefined) // filter out internal pages
+    .map((tab) => ({
       id: tab.id,
       label: tab.title,
       icon: tab.favIconUrl || null,
     }));
 
-  const popupCreatedSuccessfully = await chrome.tabs.sendMessage(sender.tab.id, {
-    subject: "popupRequest",
-    data: {
-      mousePositionX: data.mouse.endpoint.x,
-      mousePositionY: data.mouse.endpoint.y
+  const popupCreatedSuccessfully = await chrome.tabs.sendMessage(
+    sender.tab.id,
+    {
+      subject: "popupRequest",
+      data: {
+        mousePositionX: data.mouse.endpoint.x,
+        mousePositionY: data.mouse.endpoint.y,
+      },
     },
-  }, { frameId: 0 });
+    { frameId: 0 },
+  );
 
   // if popup creation failed exit this command function
   if (!popupCreatedSuccessfully) return false;
 
   const channel = chrome.tabs.connect(sender.tab.id, {
-    name: "popupConnection"
+    name: "popupConnection",
   });
 
   channel.postMessage(dataset);
@@ -64,9 +73,14 @@ const fn: CommandFn<PopupAllTabsSettings> = async function (sender, data) {
   });
 
   return true;
-}
+};
 
-export const PopupAllTabs = defineCommand(fn, {
-  excludeDiscarded: false,
-  order: "none",
-}, 'popup', ['tabs']);
+export const PopupAllTabs = defineCommand(
+  fn,
+  {
+    excludeDiscarded: false,
+    order: "none",
+  },
+  "popup",
+  ["tabs"],
+);

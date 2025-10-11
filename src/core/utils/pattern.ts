@@ -10,8 +10,10 @@ export enum PatternStatus {
 }
 
 export default class Pattern {
-  private differenceThreshold: number = DefaultConfig.Settings.Gesture.deviationTolerance;
-  private distanceThreshold: number = DefaultConfig.Settings.Gesture.distanceThreshold;
+  private differenceThreshold: number =
+    DefaultConfig.Settings.Gesture.deviationTolerance;
+  private distanceThreshold: number =
+    DefaultConfig.Settings.Gesture.distanceThreshold;
 
   private lastExtractedPoint: Vector | null = null;
   private previousPoint: Vector | null = null;
@@ -61,10 +63,13 @@ export default class Pattern {
         this.previousVector[0],
         this.previousVector[1],
         newVector[0],
-        newVector[1]
+        newVector[1],
       );
 
-      if (Math.abs(diff) > this.differenceThreshold && this.lastExtractedPoint) {
+      if (
+        Math.abs(diff) > this.differenceThreshold &&
+        this.lastExtractedPoint
+      ) {
         this.extractedVectors.push([
           prevX - this.lastExtractedPoint[0],
           prevY - this.lastExtractedPoint[1],
@@ -94,7 +99,15 @@ export default class Pattern {
   }
 
   applyConfig() {
-    this.distanceThreshold = configManager.getPath(['Settings', 'Gesture', 'distanceThreshold']);
-    this.differenceThreshold = configManager.getPath(['Settings', 'Gesture', 'deviationTolerance']);
+    this.distanceThreshold = configManager.getPath([
+      "Settings",
+      "Gesture",
+      "distanceThreshold",
+    ]);
+    this.differenceThreshold = configManager.getPath([
+      "Settings",
+      "Gesture",
+      "deviationTolerance",
+    ]);
   }
 }

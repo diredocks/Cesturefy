@@ -15,22 +15,38 @@ function buildNumberMatcher(customRegex?: string): RegExp {
   const matchQueryParameterValue = /(?<=[?&]\w+=)(\d+)(?=[?&#]|$)/;
 
   return new RegExp(
-    "((" + matchBetweenSlashes.source + ")|(" + matchQueryParameterValue.source + "))" +
-    "(?!.*((" + matchBetweenSlashes.source + ")|(" + matchQueryParameterValue.source + ")))"
+    "((" +
+      matchBetweenSlashes.source +
+      ")|(" +
+      matchQueryParameterValue.source +
+      "))" +
+      "(?!.*((" +
+      matchBetweenSlashes.source +
+      ")|(" +
+      matchQueryParameterValue.source +
+      ")))",
   );
 }
 
-function updateURLNumber(url: string, regex: RegExp, delta: number): string | null {
+function updateURLNumber(
+  url: string,
+  regex: RegExp,
+  delta: number,
+): string | null {
   const matched = url.match(regex)?.[0];
   if (!matched) return null;
 
   const newNumber = Number(matched) + delta;
   if (newNumber < 0 || Number.isNaN(newNumber)) return null;
 
-  return url.replace(regex, () => newNumber.toString().padStart(matched.length, "0"));
+  return url.replace(regex, () =>
+    newNumber.toString().padStart(matched.length, "0"),
+  );
 }
 
-const IncreaseURLNumberFn: CommandFn<URLNumberSettings> = async function (sender) {
+const IncreaseURLNumberFn: CommandFn<URLNumberSettings> = async function (
+  sender,
+) {
   if (!sender.tab?.id) return false;
 
   const tabUrl = sender.tab?.url;
@@ -46,7 +62,9 @@ const IncreaseURLNumberFn: CommandFn<URLNumberSettings> = async function (sender
   return true;
 };
 
-const DecreaseURLNumberFn: CommandFn<URLNumberSettings> = async function (sender) {
+const DecreaseURLNumberFn: CommandFn<URLNumberSettings> = async function (
+  sender,
+) {
   if (!sender.tab?.id) return false;
 
   const tabUrl = sender.tab?.url;
@@ -62,5 +80,13 @@ const DecreaseURLNumberFn: CommandFn<URLNumberSettings> = async function (sender
   return true;
 };
 
-export const IncreaseURLNumber = defineCommand(IncreaseURLNumberFn, { regex: "" }, "url");
-export const DecreaseURLNumber = defineCommand(DecreaseURLNumberFn, { regex: "" }, "url");
+export const IncreaseURLNumber = defineCommand(
+  IncreaseURLNumberFn,
+  { regex: "" },
+  "url",
+);
+export const DecreaseURLNumber = defineCommand(
+  DecreaseURLNumberFn,
+  { regex: "" },
+  "url",
+);

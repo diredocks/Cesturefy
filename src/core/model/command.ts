@@ -32,7 +32,7 @@ export default class Command<TSettings = Record<string, unknown>> {
   }
 
   toString() {
-    return chrome.i18n.getMessage(`commandLabel${this.getName()}`)
+    return chrome.i18n.getMessage(`commandLabel${this.getName()}`);
   }
 
   getGroup() {
@@ -40,7 +40,7 @@ export default class Command<TSettings = Record<string, unknown>> {
   }
 
   getPermissions() {
-    return this._permissions
+    return this._permissions;
   }
 
   getName() {
@@ -52,7 +52,7 @@ export default class Command<TSettings = Record<string, unknown>> {
   }
 
   getSetting<K extends keyof TSettings>(key: K): TSettings[K] {
-    return this._settings[key] ?? this._defaults[key] // default must exists
+    return this._settings[key] ?? this._defaults[key]; // default must exists
   }
 
   setSetting<K extends keyof TSettings>(key: K, value: TSettings[K]): void {
@@ -94,7 +94,7 @@ export default class Command<TSettings = Record<string, unknown>> {
       def.fn,
       def.defaults,
       json.settings,
-      def.permissions
+      def.permissions,
     );
   }
 }

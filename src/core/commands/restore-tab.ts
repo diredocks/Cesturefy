@@ -10,19 +10,20 @@ const fn: CommandFn<RestoreTabSettings> = async function (sender) {
 
   if (this.getSetting("currentWindowOnly") && sender.tab?.windowId) {
     sessions = sessions.filter(
-      (s) => s.tab && s.tab.windowId === sender.tab!.windowId
+      (s) => s.tab && s.tab.windowId === sender.tab!.windowId,
     );
   }
 
   if (sessions.length > 0) {
     const mostRecent = sessions.reduce((prev, cur) =>
-      prev.lastModified && cur.lastModified && prev.lastModified > cur.lastModified
+      prev.lastModified &&
+      cur.lastModified &&
+      prev.lastModified > cur.lastModified
         ? prev
-        : cur
+        : cur,
     );
 
-    const sessionId =
-      mostRecent.tab?.sessionId ?? mostRecent.window?.sessionId;
+    const sessionId = mostRecent.tab?.sessionId ?? mostRecent.window?.sessionId;
     if (sessionId) {
       await chrome.sessions.restore(sessionId);
     }
@@ -37,5 +38,5 @@ export const RestoreTab = defineCommand(
     currentWindowOnly: false,
   },
   "tabs",
-  ["sessions"]
+  ["sessions"],
 );

@@ -62,10 +62,20 @@ const closeWindowFn: CommandFn = async function (sender) {
 export const NewWindow = defineCommand(newWindowFn, {}, "window");
 export const NewPrivateWindow = defineCommand(newPrivateWindowFn, {}, "window");
 export const CloseWindow = defineCommand(closeWindowFn, {}, "window.controls");
-export const EnterFullscreen = defineCommand(enterFullscreenFn, {}, "window.controls");
+export const EnterFullscreen = defineCommand(
+  enterFullscreenFn,
+  {},
+  "window.controls",
+);
 export const ToggleFullscreen = defineCommand(toggleFullscreenFn, {}, "toggle");
 export const ToggleWindowSize = defineCommand(toggleWindowSizeFn, {}, "toggle");
-export const MaximizeWindow = defineCommand(maximizeWindowFn, {}, "window.controls");
-export const MinimizeWindow = defineCommand(minimizeWindowFn, {}, "window.controls");
-
-
+export const MaximizeWindow = defineCommand(
+  maximizeWindowFn,
+  {},
+  "window.controls",
+);
+export const MinimizeWindow = defineCommand(
+  minimizeWindowFn,
+  {},
+  "window.controls",
+);

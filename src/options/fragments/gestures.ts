@@ -22,25 +22,39 @@ function main() {
   const gesturePopup = document.getElementById("gesturePopup") as PopupBox;
   gesturePopup.addEventListener("close", onGesturePopupClose);
 
-  const gesturePopupForm = document.getElementById("gesturePopupForm") as HTMLFormElement;
+  const gesturePopupForm = document.getElementById(
+    "gesturePopupForm",
+  ) as HTMLFormElement;
   gesturePopupForm.addEventListener("submit", onGesturePopupFormSubmit);
 
-  const gesturePopupCommandSelect = document.getElementById("gesturePopupCommandSelect") as CommandSelect;
+  const gesturePopupCommandSelect = document.getElementById(
+    "gesturePopupCommandSelect",
+  ) as CommandSelect;
   gesturePopupCommandSelect.addEventListener("change", onCommandSelectChange);
 
-  const newGestureButton = document.getElementById("gestureAddButton") as HTMLButtonElement;
+  const newGestureButton = document.getElementById(
+    "gestureAddButton",
+  ) as HTMLButtonElement;
   newGestureButton.addEventListener("click", onAddButtonClick);
 
-  const gestureSearchToggleButton = document.getElementById("gestureSearchToggleButton") as HTMLButtonElement;
+  const gestureSearchToggleButton = document.getElementById(
+    "gestureSearchToggleButton",
+  ) as HTMLButtonElement;
   gestureSearchToggleButton.addEventListener("click", onSearchToggle);
 
-  const gestureSearchInput = document.getElementById("gestureSearchInput") as HTMLInputElement;
+  const gestureSearchInput = document.getElementById(
+    "gestureSearchInput",
+  ) as HTMLInputElement;
   gestureSearchInput.addEventListener("input", onSearchInput);
-  gestureSearchInput.placeholder = chrome.i18n.getMessage("gestureSearchPlaceholder");
+  gestureSearchInput.placeholder = chrome.i18n.getMessage(
+    "gestureSearchPlaceholder",
+  );
 
   // create and add all existing gesture items
   const fragment = document.createDocumentFragment();
-  for (let gestureJSON of (configManager.getPath(['Gestures']) as GestureJSON[])) {
+  for (let gestureJSON of configManager.getPath([
+    "Gestures",
+  ]) as GestureJSON[]) {
     const gesture = new Gesture(gestureJSON);
     const gestureListItem = createGestureListItem(gesture);
     // use the reference to the gestureItem as the Map key to the gesture object
@@ -49,20 +63,23 @@ function main() {
   }
   const gestureList = document.getElementById("gestureContainer")!;
   gestureList.appendChild(fragment);
-  gestureList.dataset.noResultsHint = chrome.i18n.getMessage('gestureHintNoSearchResults');
+  gestureList.dataset.noResultsHint = chrome.i18n.getMessage(
+    "gestureHintNoSearchResults",
+  );
 
   // add mouse gesture controller event listeners
   mouseGestureControllerSetup();
 }
 
 function onSearchToggle() {
-  const gestureSearchForm = document.getElementById("gestureSearchForm")! as HTMLFormElement;
+  const gestureSearchForm = document.getElementById(
+    "gestureSearchForm",
+  )! as HTMLFormElement;
   const gestureSearchInput = document.getElementById("gestureSearchInput")!;
 
   if (gestureSearchForm.classList.toggle("show")) {
     gestureSearchInput.focus();
-  }
-  else {
+  } else {
     gestureSearchForm.reset();
     onSearchInput();
   }
@@ -70,15 +87,22 @@ function onSearchToggle() {
 
 function onSearchInput() {
   const gestureList = document.getElementById("gestureContainer")!;
-  const gestureAddButtonItem = gestureList.firstElementChild as HTMLButtonElement;
-  const searchQuery = (document.getElementById("gestureSearchInput")! as HTMLInputElement).value.toLowerCase().trim();
+  const gestureAddButtonItem =
+    gestureList.firstElementChild as HTMLButtonElement;
+  const searchQuery = (
+    document.getElementById("gestureSearchInput")! as HTMLInputElement
+  ).value
+    .toLowerCase()
+    .trim();
   const searchQueryKeywords = searchQuery.split(" ");
 
   for (const [gestureListItem, gesture] of GestureMap) {
     // get the gesture string and transform all letters to lower case
     const gestureString = gesture.toString().toLowerCase();
     // check if all keywords are matching the command name
-    const isMatching = searchQueryKeywords.every(keyword => gestureString.includes(keyword));
+    const isMatching = searchQueryKeywords.every((keyword) =>
+      gestureString.includes(keyword),
+    );
     // hide all unmatching commands and show all matching commands
     gestureListItem.hidden = !isMatching;
   }
@@ -87,7 +111,10 @@ function onSearchInput() {
   gestureAddButtonItem.hidden = !!searchQuery;
 
   // toggle "no search results" hint if all items are hidden
-  gestureList.classList.toggle("empty", !gestureList.querySelectorAll(".gl-item:not([hidden])").length);
+  gestureList.classList.toggle(
+    "empty",
+    !gestureList.querySelectorAll(".gl-item:not([hidden])").length,
+  );
 }
 
 function onAddButtonClick() {
@@ -97,12 +124,24 @@ function onAddButtonClick() {
 
 async function openGesturePopup(gesture?: Gesture) {
   const gesturePopup = document.getElementById("gesturePopup") as PopupBox;
-  const heading = gesturePopup.querySelector<HTMLElement>("#gesturePopupHeading")!;
-  const commandSelect = gesturePopup.querySelector<HTMLSelectElement & { command?: unknown }>("#gesturePopupCommandSelect")!;
-  const labelInput = gesturePopup.querySelector<HTMLInputElement>("#gesturePopupLabelInput")!;
-  const patternContainer = gesturePopup.querySelector<HTMLElement>("#gesturePopupPatternContainer")!;
+  const heading = gesturePopup.querySelector<HTMLElement>(
+    "#gesturePopupHeading",
+  )!;
+  const commandSelect = gesturePopup.querySelector<
+    HTMLSelectElement & { command?: unknown }
+  >("#gesturePopupCommandSelect")!;
+  const labelInput = gesturePopup.querySelector<HTMLInputElement>(
+    "#gesturePopupLabelInput",
+  )!;
+  const patternContainer = gesturePopup.querySelector<HTMLElement>(
+    "#gesturePopupPatternContainer",
+  )!;
 
-  const currentUserMouseButton = configManager.getPath(["Settings", "Gesture", "mouseButton"]) as number;
+  const currentUserMouseButton = configManager.getPath([
+    "Settings",
+    "Gesture",
+    "mouseButton",
+  ]) as number;
   const mouseButtonLabelMap: Record<number, string> = {
     1: "gesturePopupMouseButtonLeft",
     2: "gesturePopupMouseButtonRight",
@@ -112,16 +151,22 @@ async function openGesturePopup(gesture?: Gesture) {
   patternContainer.classList.remove("alert");
   patternContainer.dataset.gestureRecordingHint = chrome.i18n.getMessage(
     "gesturePopupRecordingAreaText",
-    chrome.i18n.getMessage(mouseButtonLabelMap[currentUserMouseButton])
+    chrome.i18n.getMessage(mouseButtonLabelMap[currentUserMouseButton]),
   );
   patternContainer.title = "";
 
-  mouseController.mouseButton = configManager.getPath(['Settings', 'Gesture', 'mouseButton']);
-  mouseController.currentOS = await sendBackgroundMessage('OSRequest', {});
+  mouseController.mouseButton = configManager.getPath([
+    "Settings",
+    "Gesture",
+    "mouseButton",
+  ]);
+  mouseController.currentOS = await sendBackgroundMessage("OSRequest", {});
   mouseController.enable();
 
   if (gesture) {
-    heading.textContent = chrome.i18n.getMessage("gesturePopupTitleEditGesture");
+    heading.textContent = chrome.i18n.getMessage(
+      "gesturePopupTitleEditGesture",
+    );
     commandSelect.command = gesture.getCommand();
     labelInput.placeholder = gesture.getCommand().toString();
     labelInput.value = gesture.getLabel() ?? "";
@@ -131,17 +176,20 @@ async function openGesturePopup(gesture?: Gesture) {
     patternContainer.append(thumbnail);
 
     // exclude current gesture pattern
-    const mostSimilarGesture = matcher.getGestureByPattern(currentPopupPattern,
-      Array.from(GestureMap.values()).filter(g => g !== gesture));
+    const mostSimilarGesture = matcher.getGestureByPattern(
+      currentPopupPattern,
+      Array.from(GestureMap.values()).filter((g) => g !== gesture),
+    );
     if (mostSimilarGesture) {
       patternContainer.classList.add("alert");
       patternContainer.title = chrome.i18n.getMessage(
         "gesturePopupNotificationSimilarGesture",
-        mostSimilarGesture.toString()
+        mostSimilarGesture.toString(),
       );
     } else {
       patternContainer.classList.remove("alert");
-      patternContainer.title = patternContainer.dataset.gestureRecordingHint ?? "";
+      patternContainer.title =
+        patternContainer.dataset.gestureRecordingHint ?? "";
     }
   } else {
     heading.textContent = chrome.i18n.getMessage("gesturePopupTitleNewGesture");
@@ -159,10 +207,18 @@ function onGesturePopupClose(): void {
   currentPopupPattern = null;
 
   const gesturePopup = document.getElementById("gesturePopup") as PopupBox;
-  const heading = gesturePopup.querySelector<HTMLElement>("#gesturePopupHeading")!;
-  const commandSelect = gesturePopup.querySelector<HTMLSelectElement & { command?: unknown }>("#gesturePopupCommandSelect")!;
-  const labelInput = gesturePopup.querySelector<HTMLInputElement>("#gesturePopupLabelInput")!;
-  const patternContainer = gesturePopup.querySelector<HTMLElement>("#gesturePopupPatternContainer")!;
+  const heading = gesturePopup.querySelector<HTMLElement>(
+    "#gesturePopupHeading",
+  )!;
+  const commandSelect = gesturePopup.querySelector<
+    HTMLSelectElement & { command?: unknown }
+  >("#gesturePopupCommandSelect")!;
+  const labelInput = gesturePopup.querySelector<HTMLInputElement>(
+    "#gesturePopupLabelInput",
+  )!;
+  const patternContainer = gesturePopup.querySelector<HTMLElement>(
+    "#gesturePopupPatternContainer",
+  )!;
 
   heading.textContent = chrome.i18n.getMessage("gesturePopupTitleNewGesture");
   commandSelect.command = null;
@@ -173,9 +229,9 @@ function onGesturePopupClose(): void {
 
 function createGestureListItem(gesture: Gesture): HTMLLIElement {
   const li = document.createElement("li");
-  li.addEventListener('pointerover', onItemPointerenter);
-  li.addEventListener('pointerleave', onItemPointerleave);
-  li.addEventListener('click', onItemClick);
+  li.addEventListener("pointerover", onItemPointerenter);
+  li.addEventListener("pointerleave", onItemPointerleave);
+  li.addEventListener("click", onItemClick);
   li.classList.add("gl-item");
 
   const thumbnail = createGestureThumbnail(gesture.getPattern());
@@ -203,16 +259,19 @@ function onItemPointerenter(this: HTMLElement, _e: Event) {
 
 function onItemPointerleave(this: HTMLElement, _e: Event) {
   const animations = this.querySelector(".gl-thumbnail-trail")!.getAnimations();
-  const animationsAreRunning = animations.some(animation => animation.playState === "running");
+  const animationsAreRunning = animations.some(
+    (animation) => animation.playState === "running",
+  );
   if (this.classList.contains("demo")) {
     if (!animationsAreRunning) {
       this.classList.remove("demo");
-    }
-    else {
-      this.querySelector(".gl-thumbnail-trail")!
-        .addEventListener("animationend", () => {
-          this.classList.remove("demo"), { once: true }
-        });
+    } else {
+      this.querySelector(".gl-thumbnail-trail")!.addEventListener(
+        "animationend",
+        () => {
+          (this.classList.remove("demo"), { once: true });
+        },
+      );
     }
   }
 }
@@ -236,7 +295,7 @@ function handleDeleteItem(item: HTMLElement) {
 
   configManager.setPath(
     ["Gestures"],
-    Array.from(GestureMap.values()).map(g => g.toJSON())
+    Array.from(GestureMap.values()).map((g) => g.toJSON()),
   );
 }
 
@@ -246,20 +305,25 @@ function handleEditItem(item: HTMLElement) {
 }
 
 function removeGestureListItem(gestureListItem: HTMLElement): void {
-  const gestureList = document.getElementById("gestureContainer") as HTMLElement | null;
+  const gestureList = document.getElementById(
+    "gestureContainer",
+  ) as HTMLElement | null;
   if (!gestureList) return;
 
   // get child index for current gesture item
-  const gestureItemIndex = Array.prototype.indexOf.call(gestureList.children, gestureListItem);
+  const gestureItemIndex = Array.prototype.indexOf.call(
+    gestureList.children,
+    gestureListItem,
+  );
 
   // select all visible gesture items starting from given gesture item index
   const gestureItems = gestureList.querySelectorAll<HTMLElement>(
-    `.gl-item:not([hidden]):nth-child(n + ${gestureItemIndex + 1})`
+    `.gl-item:not([hidden]):nth-child(n + ${gestureItemIndex + 1})`,
   );
 
   // cache all grid item positions
   const itemPositionCache = new Map<HTMLElement, { x: number; y: number }>();
-  gestureItems.forEach(gestureItem => {
+  gestureItems.forEach((gestureItem) => {
     itemPositionCache.set(gestureItem, {
       x: gestureItem.offsetLeft,
       y: gestureItem.offsetTop,
@@ -293,7 +357,7 @@ function removeGestureListItem(gestureListItem: HTMLElement): void {
     currentGestureItem.addEventListener("transitionend", handleTransitionEnd);
     currentGestureItem.style.setProperty(
       "transform",
-      `translate(${previousItemPosition.x - currentItemPosition.x}px, ${previousItemPosition.y - currentItemPosition.y}px)`
+      `translate(${previousItemPosition.x - currentItemPosition.x}px, ${previousItemPosition.y - currentItemPosition.y}px)`,
     );
     currentGestureItem.style.setProperty("transition", "transform 0.3s");
   }
@@ -305,23 +369,28 @@ function removeGestureListItem(gestureListItem: HTMLElement): void {
 function onGesturePopupFormSubmit(event: Event) {
   event.preventDefault();
 
-  const gesturePopupCommandSelect = document.getElementById("gesturePopupCommandSelect")! as CommandSelect;
-  const gesturePopupLabelInput = document.getElementById("gesturePopupLabelInput")! as HTMLInputElement;
+  const gesturePopupCommandSelect = document.getElementById(
+    "gesturePopupCommandSelect",
+  )! as CommandSelect;
+  const gesturePopupLabelInput = document.getElementById(
+    "gesturePopupLabelInput",
+  )! as HTMLInputElement;
 
   if (!gesturePopupCommandSelect || !gesturePopupLabelInput) return;
   if (!gesturePopupCommandSelect.value || !currentPopupPattern) return;
 
   if (!currentItem) {
-    const newGesture = Gesture.fromJSON(
-      {
-        pattern: currentPopupPattern,
-        label: gesturePopupLabelInput.value === "" ? undefined : gesturePopupLabelInput.value,
-        command: {
-          name: gesturePopupCommandSelect.value.name,
-          settings: gesturePopupCommandSelect.value.settings
-        }
-      }
-    );
+    const newGesture = Gesture.fromJSON({
+      pattern: currentPopupPattern,
+      label:
+        gesturePopupLabelInput.value === ""
+          ? undefined
+          : gesturePopupLabelInput.value,
+      command: {
+        name: gesturePopupCommandSelect.value.name,
+        settings: gesturePopupCommandSelect.value.settings,
+      },
+    });
 
     const gestureListItem = createGestureListItem(newGesture);
     GestureMap.set(gestureListItem, newGesture);
@@ -329,7 +398,7 @@ function onGesturePopupFormSubmit(event: Event) {
     // update config using configManager and toJSON
     configManager.setPath(
       ["Gestures"],
-      Array.from(GestureMap.values()).map(g => g.toJSON())
+      Array.from(GestureMap.values()).map((g) => g.toJSON()),
     );
 
     addGestureListItem(gestureListItem);
@@ -337,39 +406,39 @@ function onGesturePopupFormSubmit(event: Event) {
     const currentGesture = GestureMap.get(currentItem)!;
     currentGesture.setPattern(currentPopupPattern);
     currentGesture.setLabel(
-      gesturePopupLabelInput.value === "" ? undefined : gesturePopupLabelInput.value
+      gesturePopupLabelInput.value === ""
+        ? undefined
+        : gesturePopupLabelInput.value,
     );
     currentGesture.setCommand(gesturePopupCommandSelect.command!);
 
     // update config using configManager and toJSON
     configManager.setPath(
       ["Gestures"],
-      Array.from(GestureMap.values()).map(g => g.toJSON())
+      Array.from(GestureMap.values()).map((g) => g.toJSON()),
     );
 
     updateGestureListItem(currentItem, currentGesture);
   }
 
-  const gesturePopup = document.getElementById("gesturePopup")! as HTMLDialogElement;
+  const gesturePopup = document.getElementById(
+    "gesturePopup",
+  )! as HTMLDialogElement;
   gesturePopup.open = false;
 }
 
-function updateGestureListItem(
-  gestureListItem: HTMLElement,
-  gesture: Gesture
-) {
+function updateGestureListItem(gestureListItem: HTMLElement, gesture: Gesture) {
   gestureListItem.addEventListener(
     "animationend",
     () => {
       gestureListItem.classList.remove("gl-item-animate-update");
     },
-    { once: true }
+    { once: true },
   );
   gestureListItem.classList.add("gl-item-animate-update");
 
-  const currentGestureThumbnail = gestureListItem.querySelector(
-    ".gl-thumbnail"
-  );
+  const currentGestureThumbnail =
+    gestureListItem.querySelector(".gl-thumbnail");
   if (!currentGestureThumbnail) return;
 
   const newGestureThumbnail = createGestureThumbnail(gesture.getPattern());
@@ -382,37 +451,49 @@ function updateGestureListItem(
 }
 
 function onCommandSelectChange(this: CommandSelect, _e: Event) {
-  const gesturePopupLabelInput = document.getElementById("gesturePopupLabelInput")! as HTMLInputElement;
-  gesturePopupLabelInput.placeholder = chrome.i18n.getMessage(`commandLabel${this.value.name}`);
+  const gesturePopupLabelInput = document.getElementById(
+    "gesturePopupLabelInput",
+  )! as HTMLInputElement;
+  gesturePopupLabelInput.placeholder = chrome.i18n.getMessage(
+    `commandLabel${this.value.name}`,
+  );
 }
 
 export function addGestureListItem(gestureListItem: HTMLElement): void {
-  const gestureList = document.getElementById("gestureContainer")! as HTMLElement;
+  const gestureList = document.getElementById(
+    "gestureContainer",
+  )! as HTMLElement;
   const gestureAddButtonItem = gestureList.firstElementChild! as HTMLElement;
 
   // prepend new entry, this pushes all elements by the height / width of one entry
   gestureAddButtonItem.after(gestureListItem);
 
   // select all visible gesture items
-  const gestureItems = gestureList.querySelectorAll<HTMLElement>(".gl-item:not([hidden])");
+  const gestureItems = gestureList.querySelectorAll<HTMLElement>(
+    ".gl-item:not([hidden])",
+  );
 
   if (gestureItems.length > 0) {
     const gridComputedStyle = window.getComputedStyle(gestureList);
 
-    const gridRowGap = parseFloat(gridComputedStyle.getPropertyValue("grid-row-gap"));
-    const gridColumnGap = parseFloat(gridComputedStyle.getPropertyValue("grid-column-gap"));
+    const gridRowGap = parseFloat(
+      gridComputedStyle.getPropertyValue("grid-row-gap"),
+    );
+    const gridColumnGap = parseFloat(
+      gridComputedStyle.getPropertyValue("grid-column-gap"),
+    );
 
     const gridRowSizes = gridComputedStyle
       .getPropertyValue("grid-template-rows")
       .split(" ")
       .map(parseFloat)
-      .filter(n => !Number.isNaN(n));
+      .filter((n) => !Number.isNaN(n));
 
     const gridColumnSizes = gridComputedStyle
       .getPropertyValue("grid-template-columns")
       .split(" ")
       .map(parseFloat)
-      .filter(n => !Number.isNaN(n));
+      .filter((n) => !Number.isNaN(n));
 
     for (let i = 0; i < gestureItems.length; i++) {
       const gestureItem = gestureItems[i];
@@ -424,10 +505,13 @@ export function addGestureListItem(gestureListItem: HTMLElement): void {
         // translate last element of row one row up and to the right end
         gestureItem.style.setProperty(
           "transform",
-          `translate(${(gridColumnSize + gridColumnGap) * (gridColumnSizes.length - 1)}px, ${-gridRowSize - gridRowGap}px)`
+          `translate(${(gridColumnSize + gridColumnGap) * (gridColumnSizes.length - 1)}px, ${-gridRowSize - gridRowGap}px)`,
         );
       } else {
-        gestureItem.style.setProperty("transform", `translateX(${-gridColumnSize - gridColumnGap}px)`);
+        gestureItem.style.setProperty(
+          "transform",
+          `translateX(${-gridColumnSize - gridColumnGap}px)`,
+        );
       }
     }
   }
@@ -435,7 +519,7 @@ export function addGestureListItem(gestureListItem: HTMLElement): void {
   // remove animation class on animation end
   gestureListItem.addEventListener(
     "animationend",
-    event => {
+    (event) => {
       const target = event.currentTarget as HTMLElement;
       target.classList.remove("gl-item-animate-add");
 
@@ -443,17 +527,17 @@ export function addGestureListItem(gestureListItem: HTMLElement): void {
       for (const gestureItem of gestureItems) {
         gestureItem.addEventListener(
           "transitionend",
-          e => {
+          (e) => {
             const t = e.currentTarget as HTMLElement;
             t.style.removeProperty("transition");
           },
-          { once: true }
+          { once: true },
         );
         gestureItem.style.setProperty("transition", "transform .3s");
         gestureItem.style.removeProperty("transform");
       }
     },
-    { once: true }
+    { once: true },
   );
 
   // setup gesture item add animation
@@ -464,16 +548,21 @@ export function addGestureListItem(gestureListItem: HTMLElement): void {
   void gestureListItem.offsetHeight;
 
   gestureListItem.style.setProperty("transition", "transform .3s");
-  gestureListItem.style.transform = gestureListItem.style.transform.replace("scale(1.6)", "");
+  gestureListItem.style.transform = gestureListItem.style.transform.replace(
+    "scale(1.6)",
+    "",
+  );
 }
 
 function mouseGestureControllerSetup() {
-  const gesturePopupCanvas = document.getElementById("gesturePopupCanvas")! as HTMLCanvasElement;
+  const gesturePopupCanvas = document.getElementById(
+    "gesturePopupCanvas",
+  )! as HTMLCanvasElement;
   const canvasContext = gesturePopupCanvas.getContext("2d")!;
 
   mouseController.addEventListener("start", (b) => {
     // TODO: detect if the gesture started on the recording area
-    // 
+    //
     // if (!e.target!.closest("#gesturePopupRecordingArea")) {
     //   // cancel gesture and event handler if the first click was not within the recording area
     //   mouseController.cancel();
@@ -497,21 +586,12 @@ function mouseGestureControllerSetup() {
     canvasContext.setTransform(1, 0, 0, 1, -clientRect.x, -clientRect.y);
     // dradditionalArrowWidth all occurred events
     canvasContext.beginPath();
-    canvasContext.moveTo(
-      firstEvent.clientX,
-      firstEvent.clientY
-    );
-    for (let event of b) canvasContext.lineTo(
-      event.clientX,
-      event.clientY
-    );
+    canvasContext.moveTo(firstEvent.clientX, firstEvent.clientY);
+    for (let event of b) canvasContext.lineTo(event.clientX, event.clientY);
     canvasContext.stroke();
 
     canvasContext.beginPath();
-    canvasContext.moveTo(
-      lastEvent.clientX,
-      lastEvent.clientY
-    );
+    canvasContext.moveTo(lastEvent.clientX, lastEvent.clientY);
   });
 
   mouseController.addEventListener("update", (_b, e) => {
@@ -519,39 +599,44 @@ function mouseGestureControllerSetup() {
     const events = e.getCoalescedEvents?.() ?? [e];
 
     const lastEvent = events[events.length - 1];
-    for (let event of events) canvasContext.lineTo(
-      event.clientX,
-      event.clientY
-    );
+    for (let event of events)
+      canvasContext.lineTo(event.clientX, event.clientY);
     canvasContext.stroke();
 
     canvasContext.beginPath();
-    canvasContext.moveTo(
-      lastEvent.clientX,
-      lastEvent.clientY
-    );
+    canvasContext.moveTo(lastEvent.clientX, lastEvent.clientY);
   });
 
   mouseController.addEventListener("abort", () => {
     // clear canvas
     canvasContext.setTransform(1, 0, 0, 1, 0, 0);
-    canvasContext.clearRect(0, 0, gesturePopupCanvas.width, gesturePopupCanvas.height);
+    canvasContext.clearRect(
+      0,
+      0,
+      gesturePopupCanvas.width,
+      gesturePopupCanvas.height,
+    );
   });
 
   mouseController.addEventListener("end", (b) => {
     // clear canvas
     canvasContext.setTransform(1, 0, 0, 1, 0, 0);
-    canvasContext.clearRect(0, 0, gesturePopupCanvas.width, gesturePopupCanvas.height);
+    canvasContext.clearRect(
+      0,
+      0,
+      gesturePopupCanvas.width,
+      gesturePopupCanvas.height,
+    );
 
     // setup pattern extractor
     const patternConstructor = new Pattern();
 
     // gather all events in one array
     // calling getCoalescedEvents for an event other then pointermove will return an empty array
-    const coalescedEvents = b.flatMap(event => {
+    const coalescedEvents = b.flatMap((event) => {
       const events = event.getCoalescedEvents?.();
       // if events is null/undefined or empty (length == 0) return plain event
-      return (events?.length > 0) ? events : [event];
+      return events?.length > 0 ? events : [event];
     });
 
     // build gesture pattern
@@ -563,25 +648,30 @@ function mouseGestureControllerSetup() {
 
     // update popup gesture pattern
     const gestureThumbnail = createGestureThumbnail(currentPopupPattern);
-    const gesturePopupPatternContainer = document.getElementById("gesturePopupPatternContainer")!;
+    const gesturePopupPatternContainer = document.getElementById(
+      "gesturePopupPatternContainer",
+    )!;
     // remove previous pattern if any
-    if (gesturePopupPatternContainer.firstChild) gesturePopupPatternContainer.firstChild.remove();
+    if (gesturePopupPatternContainer.firstChild)
+      gesturePopupPatternContainer.firstChild.remove();
     gesturePopupPatternContainer.append(gestureThumbnail);
 
-    const mostSimilarGesture = matcher.getGestureByPattern(currentPopupPattern,
-      Array.from(GestureMap.values()));
+    const mostSimilarGesture = matcher.getGestureByPattern(
+      currentPopupPattern,
+      Array.from(GestureMap.values()),
+    );
     // if there is a similar gesture report it to the user
     if (mostSimilarGesture) {
       // activate alert symbol and change title
       gesturePopupPatternContainer.classList.add("alert");
       gesturePopupPatternContainer.title = chrome.i18n.getMessage(
-        'gesturePopupNotificationSimilarGesture',
-        mostSimilarGesture.toString()
+        "gesturePopupNotificationSimilarGesture",
+        mostSimilarGesture.toString(),
       );
-    }
-    else {
+    } else {
       gesturePopupPatternContainer.classList.remove("alert");
-      gesturePopupPatternContainer.title = gesturePopupPatternContainer.dataset.gestureRecordingHint ?? "";
+      gesturePopupPatternContainer.title =
+        gesturePopupPatternContainer.dataset.gestureRecordingHint ?? "";
     }
   });
 }

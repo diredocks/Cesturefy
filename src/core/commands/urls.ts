@@ -12,21 +12,20 @@ const toRootURLFn: CommandFn = async function (sender) {
     return true;
   }
   return true;
-}
-
+};
 
 const urlLevelUpFn: CommandFn = async function (sender) {
   if (!sender.tab || !sender.tab.id) return true;
 
   const url = new URL(sender.tab.url!);
-  const newPath = url.pathname.replace(/\/([^/]+)\/?$/, '');
+  const newPath = url.pathname.replace(/\/([^/]+)\/?$/, "");
 
   if (newPath !== url.pathname) {
     await chrome.tabs.update(sender.tab.id, { url: url.origin + newPath });
     return true;
   }
   return true;
-}
+};
 
-export const ToRootURL = defineCommand(toRootURLFn, {}, 'url');
-export const URLLevelUp = defineCommand(urlLevelUpFn, {}, 'url');
+export const ToRootURL = defineCommand(toRootURLFn, {}, "url");
+export const URLLevelUp = defineCommand(urlLevelUpFn, {}, "url");

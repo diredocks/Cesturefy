@@ -17,7 +17,9 @@ const fn: CommandFn = async function (sender) {
   });
 
   // If at least one frame was not finished loading
-  const hasIncomplete = stopLoadingResults.some(result => result.result !== "complete");
+  const hasIncomplete = stopLoadingResults.some(
+    (result) => result.result !== "complete",
+  );
   if (hasIncomplete) {
     return true;
   }
@@ -25,4 +27,4 @@ const fn: CommandFn = async function (sender) {
   return false;
 };
 
-export const StopLoading = defineCommand(fn, {}, 'load', ['scripting']);
+export const StopLoading = defineCommand(fn, {}, "load", ["scripting"]);

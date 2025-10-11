@@ -36,17 +36,21 @@ export class MouseController {
   private _buffer: PointerEvent[] = [];
   private _lastClick = { time: 0, x: 0, y: 0 };
   private _abortTimeoutId: number | null = null;
-  private _abortTimeout: number = 1000 * DefaultConfig.Settings.Gesture.Timeout.duration; // ms
+  private _abortTimeout: number =
+    1000 * DefaultConfig.Settings.Gesture.Timeout.duration; // ms
   private _contextMenuTimeoutId: number | null = null;
   private _contextMenuTimeout: number = doubleClickThreshold; // TODO: funny uh huh
 
-  public isTimeoutAbort: boolean = DefaultConfig.Settings.Gesture.Timeout.active;
+  public isTimeoutAbort: boolean =
+    DefaultConfig.Settings.Gesture.Timeout.active;
   public mouseButton: MouseButton = DefaultConfig.Settings.Gesture.mouseButton;
-  public distanceThreshold: number = DefaultConfig.Settings.Gesture.distanceThreshold; // px
-  public suppressionKey: SuppressionKey = DefaultConfig.Settings.Gesture.suppressionKey;
+  public distanceThreshold: number =
+    DefaultConfig.Settings.Gesture.distanceThreshold; // px
+  public suppressionKey: SuppressionKey =
+    DefaultConfig.Settings.Gesture.suppressionKey;
   public currentOS: string = "";
 
-  private constructor() { }
+  private constructor() {}
 
   public static get instance(): MouseController {
     if (!this._instance) {
@@ -59,7 +63,10 @@ export class MouseController {
     this._events.addEventListener(event, cb);
   }
 
-  removeEventListener<K extends keyof MouseEvents>(event: K, cb: MouseEvents[K]) {
+  removeEventListener<K extends keyof MouseEvents>(
+    event: K,
+    cb: MouseEvents[K],
+  ) {
     this._events.removeEventListener(event, cb);
   }
 
@@ -72,20 +79,20 @@ export class MouseController {
   }
 
   private _handlePointerDown = (e: PointerEvent) => {
-    if (this.suppressionKey !== 'none' && e[this.suppressionKey]) return; // do nothing if suppressionKey is on
+    if (this.suppressionKey !== "none" && e[this.suppressionKey]) return; // do nothing if suppressionKey is on
     if (e.isTrusted && e.buttons === this.mouseButton) {
       this._initialize(e);
     } // on mouse button
   };
 
   private _handleContextMenu = (e: MouseEvent) => {
-    // On Windows: prevent the default context menu only when moving 
-    // from PENDING to ACTIVE state. This ensures that if no gesture 
+    // On Windows: prevent the default context menu only when moving
+    // from PENDING to ACTIVE state. This ensures that if no gesture
     // is triggered, the context menu behaves normally.
     //
-    // On macOS/Linux: prevent the context menu immediately on pointer 
+    // On macOS/Linux: prevent the context menu immediately on pointer
     // down, since it would otherwise appear right away.
-    if (this.currentOS === 'win') {
+    if (this.currentOS === "win") {
       preventDefault(e);
       return;
     }
@@ -93,7 +100,8 @@ export class MouseController {
     const now = Date.now();
     const withinTime = now - this._lastClick.time < doubleClickThreshold;
     const withinDist =
-      getDistance(this._lastClick.x, this._lastClick.y, e.clientX, e.clientY) < this.distanceThreshold;
+      getDistance(this._lastClick.x, this._lastClick.y, e.clientX, e.clientY) <
+      this.distanceThreshold;
 
     if (withinTime && withinDist) {
       this._reset();
@@ -110,12 +118,20 @@ export class MouseController {
     this._events.dispatchEvent("register", this._buffer, e);
     this._state = State.PENDING;
 
-    if (this.currentOS !== 'win') {
-      this._target.addEventListener("contextmenu", this._handleContextMenu, true);
+    if (this.currentOS !== "win") {
+      this._target.addEventListener(
+        "contextmenu",
+        this._handleContextMenu,
+        true,
+      );
     }
     this._target.addEventListener("pointermove", this._handlePointerMove, true);
     this._target.addEventListener("pointerup", this._handlePointerUp, true);
-    this._target.addEventListener("visibilitychange", this._handleVisibilityChange, true);
+    this._target.addEventListener(
+      "visibilitychange",
+      this._handleVisibilityChange,
+      true,
+    );
   }
 
   private _enablePreventDefault() {
@@ -139,7 +155,8 @@ export class MouseController {
       this._update(e);
       // prevent text selection when using left button
       // idk why people use this
-      if (this.mouseButton === MouseButton.LEFT) window.getSelection()?.removeAllRanges();
+      if (this.mouseButton === MouseButton.LEFT)
+        window.getSelection()?.removeAllRanges();
     } else if (e.button !== MouseButtonEvents.NoChanged) {
       if (e.button === toSingleButton(this.mouseButton)) {
         this._terminate(e);
@@ -157,14 +174,23 @@ export class MouseController {
     switch (this._state) {
       case State.PENDING: {
         const initial = this._buffer[0];
-        const distance = getDistance(initial.clientX, initial.clientY, e.clientX, e.clientY);
+        const distance = getDistance(
+          initial.clientX,
+          initial.clientY,
+          e.clientX,
+          e.clientY,
+        );
 
         if (distance > this.distanceThreshold) {
           this._events.dispatchEvent("start", this._buffer, initial);
           this._state = State.ACTIVE;
 
-          if (this.currentOS === 'win') {
-            this._target.addEventListener("contextmenu", this._handleContextMenu, true);
+          if (this.currentOS === "win") {
+            this._target.addEventListener(
+              "contextmenu",
+              this._handleContextMenu,
+              true,
+            );
           }
           this._enablePreventDefault();
         }
@@ -198,23 +224,39 @@ export class MouseController {
   private _reset() {
     this._clearTimeout();
 
-    if (this.currentOS === 'win') {
+    if (this.currentOS === "win") {
       // Ensure only one timeout exists to delay removing the contextmenu prevention.
       // This keeps the prevention active briefly after pointer-up, avoiding menu display.
       if (this._contextMenuTimeoutId) {
         clearTimeout(this._contextMenuTimeoutId);
       }
       this._contextMenuTimeoutId = setTimeout(() => {
-        this._target.removeEventListener("contextmenu", this._handleContextMenu, true);
+        this._target.removeEventListener(
+          "contextmenu",
+          this._handleContextMenu,
+          true,
+        );
       }, this._contextMenuTimeout);
     } else {
       // Immediately remove the contextmenu prevention for non-Windows platforms
-      this._target.removeEventListener("contextmenu", this._handleContextMenu, true);
+      this._target.removeEventListener(
+        "contextmenu",
+        this._handleContextMenu,
+        true,
+      );
     }
 
-    this._target.removeEventListener("pointermove", this._handlePointerMove, true);
+    this._target.removeEventListener(
+      "pointermove",
+      this._handlePointerMove,
+      true,
+    );
     this._target.removeEventListener("pointerup", this._handlePointerUp, true);
-    this._target.removeEventListener("visibilitychange", this._handleVisibilityChange, true);
+    this._target.removeEventListener(
+      "visibilitychange",
+      this._handleVisibilityChange,
+      true,
+    );
 
     this._disablePreventDefault();
 

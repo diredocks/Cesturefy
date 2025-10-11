@@ -5,18 +5,24 @@ export async function fetchJSONAsObject<T = unknown>(url: string): Promise<T> {
   const response = await fetch(url, { method: "GET" });
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+    );
   }
 
   const json: T = await response.json();
   return json;
 }
 
-export async function fetchHTMLAsFragment(url: string): Promise<DocumentFragment> {
+export async function fetchHTMLAsFragment(
+  url: string,
+): Promise<DocumentFragment> {
   const response = await fetch(url, { method: "GET" });
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+    );
   }
 
   const htmlText = await response.text();
@@ -26,7 +32,7 @@ export async function fetchHTMLAsFragment(url: string): Promise<DocumentFragment
 
 export function createSvgElement<K extends keyof SVGElementTagNameMap>(
   tag: K,
-  attrs: Record<string, string> = {}
+  attrs: Record<string, string> = {},
 ): SVGElementTagNameMap[K] {
   const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
   for (const [k, v] of Object.entries(attrs)) {
@@ -45,7 +51,7 @@ export function createGestureThumbnail(pattern: Vectors): SVGSVGElement {
       acc.push({ x: last.x + dx, y: last.y + dy });
       return acc;
     },
-    [{ x: 0, y: 0 }]
+    [{ x: 0, y: 0 }],
   );
 
   const svg = createSvgElement("svg", {
@@ -61,7 +67,10 @@ export function createGestureThumbnail(pattern: Vectors): SVGSVGElement {
 
   const arrow = createSvgElement("path", { d: "M0,-7 L14,0 L0,7 z" });
   arrow.classList.add("gl-thumbnail-arrow");
-  arrow.style.setProperty("offset-path", `path('${gesturePath.getAttribute("d") ?? ""}')`);
+  arrow.style.setProperty(
+    "offset-path",
+    `path('${gesturePath.getAttribute("d") ?? ""}')`,
+  );
 
   group.append(gesturePath, arrow);
 
@@ -71,11 +80,17 @@ export function createGestureThumbnail(pattern: Vectors): SVGSVGElement {
   document.body.removeChild(svg);
   svg.style.cssText = "";
 
-  const scale = Math.min(viewBoxWidth / bbox.width, viewBoxHeight / bbox.height) * 0.75;
-  let translateX = -bbox.x * scale + viewBoxWidth / 2 - (bbox.width * scale) / 2;
-  let translateY = -bbox.y * scale + viewBoxHeight / 2 - (bbox.height * scale) / 2;
+  const scale =
+    Math.min(viewBoxWidth / bbox.width, viewBoxHeight / bbox.height) * 0.75;
+  let translateX =
+    -bbox.x * scale + viewBoxWidth / 2 - (bbox.width * scale) / 2;
+  let translateY =
+    -bbox.y * scale + viewBoxHeight / 2 - (bbox.height * scale) / 2;
 
-  group.setAttribute("transform", `translate(${translateX},${translateY}) scale(${scale})`);
+  group.setAttribute(
+    "transform",
+    `translate(${translateX},${translateY}) scale(${scale})`,
+  );
 
   const pathLength = gesturePath.getTotalLength();
   svg.style.setProperty("--pathLength", pathLength.toString());
@@ -84,8 +99,12 @@ export function createGestureThumbnail(pattern: Vectors): SVGSVGElement {
   return svg;
 }
 
-export function createCatmullRomSVGPath(points: Points, alpha = 0.5): SVGPathElement {
-  if (points.length < 2) throw new Error("Need at least two points to create a path");
+export function createCatmullRomSVGPath(
+  points: Points,
+  alpha = 0.5,
+): SVGPathElement {
+  if (points.length < 2)
+    throw new Error("Need at least two points to create a path");
 
   let d = `M${points[0].x},${points[0].y} C`;
   const n = points.length - 1;
@@ -100,9 +119,12 @@ export function createCatmullRomSVGPath(points: Points, alpha = 0.5): SVGPathEle
     const d2 = Math.hypot(p1.x - p2.x, p1.y - p2.y);
     const d3 = Math.hypot(p2.x - p3.x, p2.y - p3.y);
 
-    const d1a = d1 ** alpha, d1a2 = d1a ** 2;
-    const d2a = d2 ** alpha, d2a2 = d2a ** 2;
-    const d3a = d3 ** alpha, d3a2 = d3a ** 2;
+    const d1a = d1 ** alpha,
+      d1a2 = d1a ** 2;
+    const d2a = d2 ** alpha,
+      d2a2 = d2a ** 2;
+    const d3a = d3 ** alpha,
+      d3a2 = d3a ** 2;
 
     const A = 2 * d1a2 + 3 * d1a * d2a + d2a2;
     const B = 2 * d3a2 + 3 * d3a * d2a + d2a2;
@@ -139,9 +161,15 @@ export function rgbToHSV(r: number, g: number, b: number): RGB {
   let h = 0;
   if (max !== min) {
     switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
     }
     h /= 6;
   }
@@ -151,7 +179,7 @@ export function rgbToHSV(r: number, g: number, b: number): RGB {
 
 export function RGBAToHexA(r: number, g: number, b: number, a: number): string {
   const arr = [r, g, b, Math.round(a * 255)].map((v) =>
-    v.toString(16).padStart(2, "0")
+    v.toString(16).padStart(2, "0"),
   );
   return `#${arr.join("")}`;
 }
@@ -171,7 +199,9 @@ export const COMMAND_ITEMS = Object.entries(commands).map(([name, def]) => ({
   command: name,
   settings: def.defaults,
   group: def.group,
-  permissions: def.permissions
+  permissions: def.permissions,
 }));
 
-export const COMMAND_SETTING_TEMPLATES = fetchHTMLAsFragment('/options/components/command-setting-templates.html');
+export const COMMAND_SETTING_TEMPLATES = fetchHTMLAsFragment(
+  "/options/components/command-setting-templates.html",
+);

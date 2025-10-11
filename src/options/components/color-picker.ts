@@ -84,51 +84,54 @@ export class ColorPicker extends HTMLElement {
   private bindEvents() {
     this.$<HTMLCanvasElement>("colorField").addEventListener(
       "pointerdown",
-      this._handleColorFieldPointerdown.bind(this)
+      this._handleColorFieldPointerdown.bind(this),
     );
     this.$("colorFieldCursor").addEventListener(
       "pointerdown",
-      this._handleColorFieldPointerdown.bind(this)
+      this._handleColorFieldPointerdown.bind(this),
     );
 
     this.$<HTMLCanvasElement>("colorScale").addEventListener(
       "pointerdown",
-      this._handleColorScalePointerdown.bind(this)
+      this._handleColorScalePointerdown.bind(this),
     );
     this.$("colorScaleCursor").addEventListener(
       "pointerdown",
-      this._handleColorScalePointerdown.bind(this)
+      this._handleColorScalePointerdown.bind(this),
     );
 
     this.$("alphaScale").addEventListener(
       "pointerdown",
-      this._handleAlphaScalePointerdown.bind(this)
+      this._handleAlphaScalePointerdown.bind(this),
     );
     this.$("alphaScaleCursor").addEventListener(
       "pointerdown",
-      this._handleAlphaScalePointerdown.bind(this)
+      this._handleAlphaScalePointerdown.bind(this),
     );
 
     this.$("rgbaValueForm").addEventListener(
       "input",
-      this._handleRGBAInput.bind(this)
+      this._handleRGBAInput.bind(this),
     );
     this.$("hexValueForm").addEventListener(
       "input",
-      this._handleHexInput.bind(this)
+      this._handleHexInput.bind(this),
     );
     this.$("hexValueForm").addEventListener(
       "submit",
-      this._handleHexSubmit.bind(this)
+      this._handleHexSubmit.bind(this),
     );
 
-    this.$("saveButton").textContent =
-      chrome.i18n.getMessage("buttonSave");
+    this.$("saveButton").textContent = chrome.i18n.getMessage("buttonSave");
 
     this.addEventListener("click", this._handleHostElementClick.bind(this));
   }
 
-  attributeChangedCallback(name: string, _old: string | null, value: string | null) {
+  attributeChangedCallback(
+    name: string,
+    _old: string | null,
+    value: string | null,
+  ) {
     if (name === "value") {
       this._rgba = value ? HexAToRGBA(value) : [0, 0, 0, 0];
       this._updateRGBAInputs(...this._rgba);
@@ -151,7 +154,9 @@ export class ColorPicker extends HTMLElement {
    * Opens the color picker popup
    **/
   _openColorPicker() {
-    const colorPickerPopup = this.shadow.getElementById("colorPickerPopup") as PopupBox;
+    const colorPickerPopup = this.shadow.getElementById(
+      "colorPickerPopup",
+    ) as PopupBox;
     colorPickerPopup.open = true;
   }
 
@@ -159,7 +164,9 @@ export class ColorPicker extends HTMLElement {
    * Opens the color picker popup
    **/
   _closeColorPicker() {
-    const colorPickerPopup = this.shadow.getElementById("colorPickerPopup") as PopupBox;
+    const colorPickerPopup = this.shadow.getElementById(
+      "colorPickerPopup",
+    ) as PopupBox;
     colorPickerPopup.open = false;
   }
 
@@ -167,26 +174,30 @@ export class ColorPicker extends HTMLElement {
    * Get the color data of the color field (saturation & value field) at the given x and y position
    **/
   _getColorFieldData(x: number, y: number) {
-    const colorField = this.shadow.getElementById("colorField") as HTMLCanvasElement;
+    const colorField = this.shadow.getElementById(
+      "colorField",
+    ) as HTMLCanvasElement;
 
     x = clamp(x, 0, colorField.width - 1);
     y = clamp(y, 0, colorField.height - 1);
 
     // TODO: Maybe we need to cache canvas context
     // See also: https://stackoverflow.com/questions/74101155/chrome-warning-willreadfrequently-attribute-set-to-true
-    return colorField.getContext('2d')!.getImageData(x, y, 1, 1).data;
+    return colorField.getContext("2d")!.getImageData(x, y, 1, 1).data;
   }
 
   /**
    * Get the color data of the color scale (hue field) at the given y position
    **/
   _getColorScaleData(y: number) {
-    const colorScale = this.shadow.getElementById("colorScale") as HTMLCanvasElement;
+    const colorScale = this.shadow.getElementById(
+      "colorScale",
+    ) as HTMLCanvasElement;
 
     y = clamp(y, 0, colorScale.height - 1);
 
     // See also: https://stackoverflow.com/questions/74101155/chrome-warning-willreadfrequently-attribute-set-to-true
-    return colorScale.getContext('2d')!.getImageData(0, y, 1, 1).data;
+    return colorScale.getContext("2d")!.getImageData(0, y, 1, 1).data;
   }
 
   /**
@@ -199,7 +210,7 @@ export class ColorPicker extends HTMLElement {
     y = clamp(y, 0, alphaHeight - 1);
 
     // calculate alpha value
-    const alpha = 1 - (1 / alphaHeight * y);
+    const alpha = 1 - (1 / alphaHeight) * y;
     // round alpha value by 2 decimal places
     return Math.round(alpha * 100) / 100;
   }
@@ -209,7 +220,9 @@ export class ColorPicker extends HTMLElement {
    * By the given x and y coordinates
    **/
   _updateColorFieldCursor(x: number, y: number) {
-    const colorField = this.shadow.getElementById("colorField") as HTMLCanvasElement;
+    const colorField = this.shadow.getElementById(
+      "colorField",
+    ) as HTMLCanvasElement;
     const colorPicker = this.shadow.getElementById("colorPicker")!;
 
     x = clamp(x, 0, colorField.width - 1);
@@ -224,7 +237,9 @@ export class ColorPicker extends HTMLElement {
    * By the given y coordinates
    **/
   _updateColorScaleCursor(y: number) {
-    const colorScale = this.shadow.getElementById("colorScale") as HTMLCanvasElement;
+    const colorScale = this.shadow.getElementById(
+      "colorScale",
+    ) as HTMLCanvasElement;
     const colorPicker = this.shadow.getElementById("colorPicker")!;
 
     y = clamp(y, 0, colorScale.height - 1);
@@ -237,7 +252,9 @@ export class ColorPicker extends HTMLElement {
    * By the given y coordinates
    **/
   _updateAlphaScaleCursor(y: number) {
-    const alphaScale = this.shadow.getElementById("alphaScale") as HTMLCanvasElement;
+    const alphaScale = this.shadow.getElementById(
+      "alphaScale",
+    ) as HTMLCanvasElement;
     const colorPicker = this.shadow.getElementById("colorPicker")!;
 
     y = clamp(y, 0, (alphaScale.offsetHeight || 256) - 1);
@@ -250,21 +267,23 @@ export class ColorPicker extends HTMLElement {
    * By the given rgb value (hue)
    **/
   _updateColorField(...rgb: RGB) {
-    const colorField = this.shadow.getElementById("colorField") as HTMLCanvasElement;
+    const colorField = this.shadow.getElementById(
+      "colorField",
+    ) as HTMLCanvasElement;
 
     let gradient;
 
-    const ctx = colorField.getContext('2d')!;
-    ctx.fillStyle = `rgb(${rgb.join(',')})`;
+    const ctx = colorField.getContext("2d")!;
+    ctx.fillStyle = `rgb(${rgb.join(",")})`;
     ctx.fillRect(0, 0, colorField.width, colorField.height);
     gradient = ctx.createLinearGradient(0, 0, colorField.width, 0);
-    gradient.addColorStop(0, 'rgba(255,255,255,1)');
-    gradient.addColorStop(1, 'rgba(255,255,255,0)');
+    gradient.addColorStop(0, "rgba(255,255,255,1)");
+    gradient.addColorStop(1, "rgba(255,255,255,0)");
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, colorField.width, colorField.height);
     gradient = ctx.createLinearGradient(0, 0, 0, 255);
-    gradient.addColorStop(0, 'rgba(0,0,0,0)');
-    gradient.addColorStop(1, 'rgba(0,0,0,1)');
+    gradient.addColorStop(0, "rgba(0,0,0,0)");
+    gradient.addColorStop(1, "rgba(0,0,0,1)");
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, colorField.width, colorField.height);
   }
@@ -274,7 +293,10 @@ export class ColorPicker extends HTMLElement {
    **/
   _updateColor(...rgba: RGBA) {
     const colorPicker = this.shadow.getElementById("colorPicker")!;
-    colorPicker.style.setProperty("--color", `${rgba[0]}, ${rgba[1]}, ${rgba[2]}`);
+    colorPicker.style.setProperty(
+      "--color",
+      `${rgba[0]}, ${rgba[1]}, ${rgba[2]}`,
+    );
     colorPicker.style.setProperty("--alpha", `${rgba[3]}`);
     // update internal variable
     this._rgba = rgba;
@@ -284,7 +306,9 @@ export class ColorPicker extends HTMLElement {
    * Update the color picker rgba inputs by the given rgba value
    **/
   _updateRGBAInputs(...rgba: RGBA) {
-    const rgbaValueForm = this.shadow.getElementById("rgbaValueForm") as HTMLFormElement;
+    const rgbaValueForm = this.shadow.getElementById(
+      "rgbaValueForm",
+    ) as HTMLFormElement;
     rgbaValueForm.R.value = rgba[0];
     rgbaValueForm.G.value = rgba[1];
     rgbaValueForm.B.value = rgba[2];
@@ -295,7 +319,9 @@ export class ColorPicker extends HTMLElement {
    * Update the color picker hex input by the given rgba value
    **/
   _updateHexInput(...rgba: RGBA) {
-    const hexValueForm = this.shadow.getElementById("hexValueForm") as HTMLFormElement;
+    const hexValueForm = this.shadow.getElementById(
+      "hexValueForm",
+    ) as HTMLFormElement;
     hexValueForm.Hex.value = RGBAToHexA(...rgba);
   }
 
@@ -304,7 +330,9 @@ export class ColorPicker extends HTMLElement {
    * Updates all other color picker elements to match the new value
    **/
   _handleRGBAInput() {
-    const rgbaValueForm = this.shadow.getElementById("rgbaValueForm") as HTMLFormElement;
+    const rgbaValueForm = this.shadow.getElementById(
+      "rgbaValueForm",
+    ) as HTMLFormElement;
     if (!rgbaValueForm.reportValidity()) {
       return;
     }
@@ -312,20 +340,28 @@ export class ColorPicker extends HTMLElement {
       rgbaValueForm.R.valueAsNumber,
       rgbaValueForm.G.valueAsNumber,
       rgbaValueForm.B.valueAsNumber,
-      rgbaValueForm.A.valueAsNumber
+      rgbaValueForm.A.valueAsNumber,
     ] as RGBA;
     const hsv = rgbToHSV(rgba[0], rgba[1], rgba[2]);
 
-    const colorField = this.shadow.getElementById("colorField") as HTMLCanvasElement;
-    const colorFieldX = Math.round((hsv[1]) * (colorField.width - 1));
+    const colorField = this.shadow.getElementById(
+      "colorField",
+    ) as HTMLCanvasElement;
+    const colorFieldX = Math.round(hsv[1] * (colorField.width - 1));
     const colorFieldY = Math.round((1 - hsv[2]) * (colorField.height - 1));
 
-    const colorScale = this.shadow.getElementById("colorScale") as HTMLCanvasElement;
+    const colorScale = this.shadow.getElementById(
+      "colorScale",
+    ) as HTMLCanvasElement;
     const colorScaleY = Math.round((1 - hsv[0]) * (colorScale.height - 1));
 
-    const alphaScale = this.shadow.getElementById("alphaScale") as HTMLCanvasElement;
+    const alphaScale = this.shadow.getElementById(
+      "alphaScale",
+    ) as HTMLCanvasElement;
     // offsetHeight can be undefined / 0 when the element is hidden
-    const alphaScaleY = Math.round((1 - rgba[3]) * ((alphaScale.offsetHeight || 256) - 1));
+    const alphaScaleY = Math.round(
+      (1 - rgba[3]) * ((alphaScale.offsetHeight || 256) - 1),
+    );
 
     this._updateColorFieldCursor(colorFieldX, colorFieldY);
     this._updateColorScaleCursor(colorScaleY);
@@ -333,7 +369,11 @@ export class ColorPicker extends HTMLElement {
 
     const colorScaleData = this._getColorScaleData(colorScaleY);
 
-    this._updateColorField(colorScaleData[0], colorScaleData[1], colorScaleData[2]);
+    this._updateColorField(
+      colorScaleData[0],
+      colorScaleData[1],
+      colorScaleData[2],
+    );
     this._updateHexInput(...rgba);
     this._updateColor(...rgba);
   }
@@ -343,7 +383,9 @@ export class ColorPicker extends HTMLElement {
    * Updates all other color picker elements to match the new value
    **/
   _handleHexInput() {
-    const hexValueForm = this.shadow.getElementById("hexValueForm") as HTMLFormElement;
+    const hexValueForm = this.shadow.getElementById(
+      "hexValueForm",
+    ) as HTMLFormElement;
     if (!hexValueForm.reportValidity()) {
       return;
     }
@@ -351,16 +393,24 @@ export class ColorPicker extends HTMLElement {
     const rgba = HexAToRGBA(hex);
     const hsv = rgbToHSV(rgba[0], rgba[1], rgba[2]);
 
-    const colorField = this.shadow.getElementById("colorField") as HTMLCanvasElement;
-    const colorFieldX = Math.round((hsv[1]) * (colorField.width - 1));
+    const colorField = this.shadow.getElementById(
+      "colorField",
+    ) as HTMLCanvasElement;
+    const colorFieldX = Math.round(hsv[1] * (colorField.width - 1));
     const colorFieldY = Math.round((1 - hsv[2]) * (colorField.height - 1));
 
-    const colorScale = this.shadow.getElementById("colorScale") as HTMLCanvasElement;
+    const colorScale = this.shadow.getElementById(
+      "colorScale",
+    ) as HTMLCanvasElement;
     const colorScaleY = Math.round((1 - hsv[0]) * (colorScale.height - 1));
 
-    const alphaScale = this.shadow.getElementById("alphaScale") as HTMLCanvasElement;
+    const alphaScale = this.shadow.getElementById(
+      "alphaScale",
+    ) as HTMLCanvasElement;
     // offsetHeight can be undefined / 0 when the element is hidden
-    const alphaScaleY = Math.round((1 - rgba[3]) * ((alphaScale.offsetHeight || 256) - 1));
+    const alphaScaleY = Math.round(
+      (1 - rgba[3]) * ((alphaScale.offsetHeight || 256) - 1),
+    );
 
     this._updateColorFieldCursor(colorFieldX, colorFieldY);
     this._updateColorScaleCursor(colorScaleY);
@@ -368,7 +418,11 @@ export class ColorPicker extends HTMLElement {
 
     const colorScaleData = this._getColorScaleData(colorScaleY);
 
-    this._updateColorField(colorScaleData[0], colorScaleData[1], colorScaleData[2]);
+    this._updateColorField(
+      colorScaleData[0],
+      colorScaleData[1],
+      colorScaleData[2],
+    );
     this._updateRGBAInputs(...rgba);
     this._updateColor(...rgba);
   }
@@ -381,17 +435,23 @@ export class ColorPicker extends HTMLElement {
     if (event.buttons != MouseButton.LEFT) {
       return;
     }
-    const callbackReference = this._handleColorFieldPointerMove.bind(this) as EventListener;
+    const callbackReference = this._handleColorFieldPointerMove.bind(
+      this,
+    ) as EventListener;
     // call pointer move listener once with the current event
     // in order to update the cursor position
     callbackReference(event);
 
     this.shadow.addEventListener("pointermove", callbackReference);
 
-    this.shadow.addEventListener("pointerup", (_event) => {
-      // remove the pointer move listener
-      this.shadow.removeEventListener("pointermove", callbackReference);
-    }, { once: true });
+    this.shadow.addEventListener(
+      "pointerup",
+      (_event) => {
+        // remove the pointer move listener
+        this.shadow.removeEventListener("pointermove", callbackReference);
+      },
+      { once: true },
+    );
   }
 
   /**
@@ -402,17 +462,23 @@ export class ColorPicker extends HTMLElement {
     if (event.buttons != MouseButton.LEFT) {
       return;
     }
-    const callbackReference = this._handleColorScalePointerMove.bind(this) as EventListener;
+    const callbackReference = this._handleColorScalePointerMove.bind(
+      this,
+    ) as EventListener;
     // call pointer move listener once with the current event
     // in order to update the cursor position
     callbackReference(event);
 
     this.shadow.addEventListener("pointermove", callbackReference);
 
-    this.shadow.addEventListener("pointerup", (_event) => {
-      // remove the pointer move listener
-      this.shadow.removeEventListener("pointermove", callbackReference);
-    }, { once: true });
+    this.shadow.addEventListener(
+      "pointerup",
+      (_event) => {
+        // remove the pointer move listener
+        this.shadow.removeEventListener("pointermove", callbackReference);
+      },
+      { once: true },
+    );
   }
 
   /**
@@ -423,17 +489,23 @@ export class ColorPicker extends HTMLElement {
     if (event.buttons != MouseButton.LEFT) {
       return;
     }
-    const callbackReference = this._handleAlphaScalePointerMove.bind(this) as EventListener;
+    const callbackReference = this._handleAlphaScalePointerMove.bind(
+      this,
+    ) as EventListener;
     // call pointer move listener once with the current event
     // in order to update the cursor position
     callbackReference(event);
 
     this.shadow.addEventListener("pointermove", callbackReference);
 
-    this.shadow.addEventListener("pointerup", (_event) => {
-      // remove the pointer move listener
-      this.shadow.removeEventListener("pointermove", callbackReference);
-    }, { once: true });
+    this.shadow.addEventListener(
+      "pointerup",
+      (_event) => {
+        // remove the pointer move listener
+        this.shadow.removeEventListener("pointermove", callbackReference);
+      },
+      { once: true },
+    );
   }
 
   /**
@@ -445,7 +517,9 @@ export class ColorPicker extends HTMLElement {
     if (event.buttons != MouseButton.LEFT) {
       return;
     }
-    const colorField = this.shadow.getElementById("colorField") as HTMLCanvasElement;
+    const colorField = this.shadow.getElementById(
+      "colorField",
+    ) as HTMLCanvasElement;
     const clientRect = colorField.getBoundingClientRect();
 
     const x = Math.round(event.clientX - clientRect.left),
@@ -455,10 +529,25 @@ export class ColorPicker extends HTMLElement {
 
     this._updateColorFieldCursor(x, y);
 
-    this._updateColor(colorFieldData[0], colorFieldData[1], colorFieldData[2], this._rgba[3]);
+    this._updateColor(
+      colorFieldData[0],
+      colorFieldData[1],
+      colorFieldData[2],
+      this._rgba[3],
+    );
 
-    this._updateRGBAInputs(colorFieldData[0], colorFieldData[1], colorFieldData[2], this._rgba[3]);
-    this._updateHexInput(colorFieldData[0], colorFieldData[1], colorFieldData[2], this._rgba[3]);
+    this._updateRGBAInputs(
+      colorFieldData[0],
+      colorFieldData[1],
+      colorFieldData[2],
+      this._rgba[3],
+    );
+    this._updateHexInput(
+      colorFieldData[0],
+      colorFieldData[1],
+      colorFieldData[2],
+      this._rgba[3],
+    );
 
     event.preventDefault();
   }
@@ -484,17 +573,36 @@ export class ColorPicker extends HTMLElement {
 
     this._updateColorScaleCursor(y);
 
-    this._updateColorField(colorScaleData[0], colorScaleData[1], colorScaleData[2]);
+    this._updateColorField(
+      colorScaleData[0],
+      colorScaleData[1],
+      colorScaleData[2],
+    );
 
     const colorPicker = this.shadow.getElementById("colorPicker")!;
-    const colorFieldCursorX = colorPicker.style.getPropertyValue("--colorFieldX");
-    const colorFieldCursorY = colorPicker.style.getPropertyValue("--colorFieldY");
-    const colorData = this._getColorFieldData(+colorFieldCursorX, +colorFieldCursorY);
+    const colorFieldCursorX =
+      colorPicker.style.getPropertyValue("--colorFieldX");
+    const colorFieldCursorY =
+      colorPicker.style.getPropertyValue("--colorFieldY");
+    const colorData = this._getColorFieldData(
+      +colorFieldCursorX,
+      +colorFieldCursorY,
+    );
 
     this._updateColor(colorData[0], colorData[1], colorData[2], this._rgba[3]);
 
-    this._updateRGBAInputs(colorData[0], colorData[1], colorData[2], this._rgba[3]);
-    this._updateHexInput(colorData[0], colorData[1], colorData[2], this._rgba[3]);
+    this._updateRGBAInputs(
+      colorData[0],
+      colorData[1],
+      colorData[2],
+      this._rgba[3],
+    );
+    this._updateHexInput(
+      colorData[0],
+      colorData[1],
+      colorData[2],
+      this._rgba[3],
+    );
 
     event.preventDefault();
   }
@@ -517,10 +625,25 @@ export class ColorPicker extends HTMLElement {
 
     this._updateAlphaScaleCursor(y);
 
-    this._updateColor(this._rgba[0], this._rgba[1], this._rgba[2], alphaScaleData);
+    this._updateColor(
+      this._rgba[0],
+      this._rgba[1],
+      this._rgba[2],
+      alphaScaleData,
+    );
 
-    this._updateRGBAInputs(this._rgba[0], this._rgba[1], this._rgba[2], alphaScaleData);
-    this._updateHexInput(this._rgba[0], this._rgba[1], this._rgba[2], alphaScaleData);
+    this._updateRGBAInputs(
+      this._rgba[0],
+      this._rgba[1],
+      this._rgba[2],
+      alphaScaleData,
+    );
+    this._updateHexInput(
+      this._rgba[0],
+      this._rgba[1],
+      this._rgba[2],
+      alphaScaleData,
+    );
 
     event.preventDefault();
   }
@@ -532,7 +655,7 @@ export class ColorPicker extends HTMLElement {
    **/
   _handleHexSubmit(event: Event) {
     this.value = RGBAToHexA(...this._rgba);
-    this.dispatchEvent(new InputEvent('change'));
+    this.dispatchEvent(new InputEvent("change"));
 
     this._closeColorPicker();
     event.preventDefault();
@@ -545,7 +668,6 @@ export class ColorPicker extends HTMLElement {
   _handleHostElementClick(event: Event) {
     // ignore click events triggered by popup/color picker
     if (event.composedPath()[0] === this) {
-
       // reset color picker to current value
       this._rgba = this.value ? HexAToRGBA(this.value) : [0, 0, 0, 0];
       this._updateRGBAInputs(...this._rgba);

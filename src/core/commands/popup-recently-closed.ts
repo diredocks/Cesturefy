@@ -5,9 +5,9 @@ const fn: CommandFn = async function (sender, data) {
   if (!sender.tab || !data) return false;
   if (!sender.tab.id) return false;
 
-  const recentlyClosed =
-    (await chrome.sessions.getRecentlyClosed())
-      .filter((s) => 'tab' in s);
+  const recentlyClosed = (await chrome.sessions.getRecentlyClosed()).filter(
+    (s) => "tab" in s,
+  );
   if (recentlyClosed.length === 0) return false;
 
   const dataset = recentlyClosed
@@ -15,21 +15,25 @@ const fn: CommandFn = async function (sender, data) {
     .map((s) => ({
       id: s.tab!.sessionId,
       label: s.tab!.title,
-      icon: s.tab!.favIconUrl || null
+      icon: s.tab!.favIconUrl || null,
     }));
 
-  const popupCreatedSuccessfully = await chrome.tabs.sendMessage(sender.tab.id, {
-    subject: "popupRequest",
-    data: {
-      mousePositionX: data.mouse.endpoint.x,
-      mousePositionY: data.mouse.endpoint.y
+  const popupCreatedSuccessfully = await chrome.tabs.sendMessage(
+    sender.tab.id,
+    {
+      subject: "popupRequest",
+      data: {
+        mousePositionX: data.mouse.endpoint.x,
+        mousePositionY: data.mouse.endpoint.y,
+      },
     },
-  }, { frameId: 0 });
+    { frameId: 0 },
+  );
 
   if (!popupCreatedSuccessfully) return false;
 
   const channel = chrome.tabs.connect(sender.tab.id, {
-    name: "popupConnection"
+    name: "popupConnection",
   });
 
   channel.postMessage(dataset);
@@ -42,4 +46,7 @@ const fn: CommandFn = async function (sender, data) {
   return true;
 };
 
-export const PopupRecentlyClosedTabs = defineCommand(fn, {}, 'popup', ["tabs", "sessions"]);
+export const PopupRecentlyClosedTabs = defineCommand(fn, {}, "popup", [
+  "tabs",
+  "sessions",
+]);

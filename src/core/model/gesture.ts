@@ -14,7 +14,11 @@ export default class Gesture {
 
   constructor(pattern: Vectors, command: Command, label?: string);
   constructor(json: GestureJSON);
-  constructor(patternOrJson: Vectors | GestureJSON, command?: Command, label?: string) {
+  constructor(
+    patternOrJson: Vectors | GestureJSON,
+    command?: Command,
+    label?: string,
+  ) {
     if (Array.isArray(patternOrJson)) {
       this._pattern = patternOrJson;
       if (!command) throw new Error("Command must be provided.");

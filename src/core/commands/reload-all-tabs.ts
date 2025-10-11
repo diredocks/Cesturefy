@@ -13,14 +13,13 @@ const fn: CommandFn<ReloadAllTabsSettings> = async function (sender) {
   });
 
   await Promise.all(
-    tabs
-      .map((tab) =>
-        tab.id
-          ? chrome.tabs.reload(tab.id, {
+    tabs.map((tab) =>
+      tab.id
+        ? chrome.tabs.reload(tab.id, {
             bypassCache: this.getSetting("cache"),
           })
-          : Promise.resolve()
-      )
+        : Promise.resolve(),
+    ),
   );
 
   return true;

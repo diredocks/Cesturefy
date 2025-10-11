@@ -6,14 +6,15 @@ interface ScrollSettings {
 }
 
 const injectedCode = (direction: "top" | "bottom", duration: number) => {
-  const isScrollableY = (el: Element) =>
-    (el.scrollHeight > el.clientHeight);
+  const isScrollableY = (el: Element) => el.scrollHeight > el.clientHeight;
 
   const isDivScrollableY = (el: Element) => {
     const style = getComputedStyle(el);
     const overflowY = style.overflowY;
-    return isScrollableY(el) && (overflowY === 'auto' || overflowY === 'scroll');
-  }
+    return (
+      isScrollableY(el) && (overflowY === "auto" || overflowY === "scroll")
+    );
+  };
 
   const scrollToY = (y: number, duration: number, el: Element) => {
     if (!el) return;
@@ -57,8 +58,7 @@ const injectedCode = (direction: "top" | "bottom", duration: number) => {
 
   const top = (el as any).scrollTop ?? 0;
   const max = (el.scrollHeight ?? 0) - (el.clientHeight ?? 0);
-  const canScroll =
-    direction === "top" ? top > 0 : top < max;
+  const canScroll = direction === "top" ? top > 0 : top < max;
 
   if (canScroll) {
     const targetY = direction === "top" ? 0 : el.scrollHeight;
@@ -67,7 +67,9 @@ const injectedCode = (direction: "top" | "bottom", duration: number) => {
   return canScroll;
 };
 
-const createScrollFn = (direction: "top" | "bottom"): CommandFn<ScrollSettings> =>
+const createScrollFn = (
+  direction: "top" | "bottom",
+): CommandFn<ScrollSettings> =>
   async function (sender) {
     if (!sender.tab?.id) return false;
 
@@ -87,12 +89,12 @@ export const ScrollTop = defineCommand(
   createScrollFn("top"),
   { duration: 300 },
   "scroll",
-  ["scripting"]
+  ["scripting"],
 );
 
 export const ScrollBottom = defineCommand(
   createScrollFn("bottom"),
   { duration: 300 },
   "scroll",
-  ["scripting"]
+  ["scripting"],
 );

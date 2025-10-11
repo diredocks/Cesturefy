@@ -14,4 +14,6 @@ const ReloadFrameFn: CommandFn = async function (sender) {
   return true;
 };
 
-export const ReloadFrame = defineCommand(ReloadFrameFn, {}, 'load', ['scripting']);
+export const ReloadFrame = defineCommand(ReloadFrameFn, {}, "load", [
+  "scripting",
+]);

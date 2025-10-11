@@ -1,7 +1,11 @@
 import { NewTab } from "@commands/new-tab";
 import { DuplicateTab } from "@commands/duplicate-tab";
 import { CloseTab } from "@commands/close-tab";
-import { CloseLeftTabs, CloseRightTabs, CloseOtherTabs } from "@commands/close-tabs";
+import {
+  CloseLeftTabs,
+  CloseRightTabs,
+  CloseOtherTabs,
+} from "@commands/close-tabs";
 import { RestoreTab } from "@commands/restore-tab";
 import { ReloadTab } from "@commands/reload-tab";
 import { ReloadAllTabs } from "@commands/reload-all-tabs";
@@ -17,34 +21,67 @@ import { StopLoading } from "@commands/stop-loading";
 import {
   MoveLeftTabsToNewWindow,
   MoveRightTabsToNewWindow,
-  MoveTabLeft, MoveTabRight,
-  MoveTabToEnd, MoveTabToStart,
-  MoveTabToNewWindow
+  MoveTabLeft,
+  MoveTabRight,
+  MoveTabToEnd,
+  MoveTabToStart,
+  MoveTabToNewWindow,
 } from "@commands/move-tabs";
 import {
-  CloseWindow, EnterFullscreen,
-  MaximizeWindow, MinimizeWindow,
+  CloseWindow,
+  EnterFullscreen,
+  MaximizeWindow,
+  MinimizeWindow,
   NewPrivateWindow,
-  NewWindow, ToggleFullscreen, ToggleWindowSize
+  NewWindow,
+  ToggleFullscreen,
+  ToggleWindowSize,
 } from "@commands/window";
 import { ToRootURL, URLLevelUp } from "@commands/urls";
-import { OpenAddonSettings, OpenPrintPreview, ViewPageSourceCode } from "@commands/open";
+import {
+  OpenAddonSettings,
+  OpenPrintPreview,
+  ViewPageSourceCode,
+} from "@commands/open";
 import { CopyImageURL, CopyLinkURL, CopyTabURL } from "@commands/copy-url";
-import { OpenURLFromClipboard, OpenURLFromClipboardInNewPrivateWindow, OpenURLFromClipboardInNewTab, OpenURLFromClipboardInNewWindow } from "@commands/open-clipboard";
+import {
+  OpenURLFromClipboard,
+  OpenURLFromClipboardInNewPrivateWindow,
+  OpenURLFromClipboardInNewTab,
+  OpenURLFromClipboardInNewWindow,
+} from "@commands/open-clipboard";
 import { CopyTextSelection } from "@commands/copy-selection";
-import { OpenLink, OpenLinkInNewWindow, OpenLinkInNewTab, OpenLinkInNewPrivateWindow } from "@commands/open-link";
+import {
+  OpenLink,
+  OpenLinkInNewWindow,
+  OpenLinkInNewTab,
+  OpenLinkInNewPrivateWindow,
+} from "@commands/open-link";
 import { PopupAllTabs } from "@commands/popup-all-tabs";
 import { RunMultiPurposeCommand } from "@commands/multi-purpose";
 import { SendMessageToOtherAddon } from "@commands/send-msg-addon";
 import { CopyImage } from "@commands/copy-image";
 import { PopupRecentlyClosedTabs } from "@commands/popup-recently-closed";
 import { PopupCustomCommandList } from "@commands/popup-commands";
-import { SearchClipboard, SearchTextSelection, SearchClipboardInNewTab, SearchTextSelectionInNewTab } from "@commands/search";
+import {
+  SearchClipboard,
+  SearchTextSelection,
+  SearchClipboardInNewTab,
+  SearchTextSelectionInNewTab,
+} from "@commands/search";
 import { SaveLink, SaveScreenshot } from "@commands/save";
 import { ReloadFrame } from "@commands/reload-frame";
 import { LinkToNewBookmark } from "@commands/link-bookmark";
-import { OpenCustomURL, OpenCustomURLInNewPrivateWindow, OpenCustomURLInNewTab, OpenCustomURLInNewWindow } from "@commands/open-custom";
-import { DecreaseURLNumber, IncreaseURLNumber } from "@commands/crease-url-number";
+import {
+  OpenCustomURL,
+  OpenCustomURLInNewPrivateWindow,
+  OpenCustomURLInNewTab,
+  OpenCustomURLInNewWindow,
+} from "@commands/open-custom";
+import {
+  DecreaseURLNumber,
+  IncreaseURLNumber,
+} from "@commands/crease-url-number";
 
 export const commands = {
   NewTab,

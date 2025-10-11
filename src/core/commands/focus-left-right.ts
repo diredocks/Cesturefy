@@ -24,7 +24,11 @@ const FocusRightTabFn: CommandFn<FocusLRSettings> = async function (sender) {
     return acc;
   }, tabs[0]);
 
-  if (!tabs.some(t => t.index > sender.tab!.index) && this.getSetting("cycling") && tabs.length > 0) {
+  if (
+    !tabs.some((t) => t.index > sender.tab!.index) &&
+    this.getSetting("cycling") &&
+    tabs.length > 0
+  ) {
     nextTab = tabs.reduce((acc, cur) => (acc.index < cur.index ? acc : cur));
   }
 
@@ -50,7 +54,11 @@ const FocusLeftTabFn: CommandFn<FocusLRSettings> = async function (sender) {
     return acc;
   }, tabs[0]);
 
-  if (!tabs.some(t => t.index < sender.tab!.index) && this.getSetting("cycling") && tabs.length > 0) {
+  if (
+    !tabs.some((t) => t.index < sender.tab!.index) &&
+    this.getSetting("cycling") &&
+    tabs.length > 0
+  ) {
     nextTab = tabs.reduce((acc, cur) => (acc.index > cur.index ? acc : cur));
   }
 
@@ -58,12 +66,20 @@ const FocusLeftTabFn: CommandFn<FocusLRSettings> = async function (sender) {
   return true;
 };
 
-export const FocusRightTab = defineCommand(FocusRightTabFn, {
-  excludeDiscarded: false,
-  cycling: false
-}, 'focus');
+export const FocusRightTab = defineCommand(
+  FocusRightTabFn,
+  {
+    excludeDiscarded: false,
+    cycling: false,
+  },
+  "focus",
+);
 
-export const FocusLeftTab = defineCommand(FocusLeftTabFn, {
-  excludeDiscarded: false,
-  cycling: false
-}, 'focus');
+export const FocusLeftTab = defineCommand(
+  FocusLeftTabFn,
+  {
+    excludeDiscarded: false,
+    cycling: false,
+  },
+  "focus",
+);

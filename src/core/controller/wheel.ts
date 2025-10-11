@@ -22,7 +22,7 @@ export class WheelController {
   public mouseButton: MouseButton = DefaultConfig.Settings.Wheel.mouseButton;
   public wheelSensitivity = DefaultConfig.Settings.Wheel.wheelSensitivity;
 
-  private constructor() { }
+  private constructor() {}
 
   public static get instance(): WheelController {
     if (!this._instance) {
@@ -35,27 +35,41 @@ export class WheelController {
     this._events.addEventListener(event, cb);
   }
 
-  removeEventListener<K extends keyof WheelEvents>(event: K, cb: WheelEvents[K]) {
+  removeEventListener<K extends keyof WheelEvents>(
+    event: K,
+    cb: WheelEvents[K],
+  ) {
     this._events.removeEventListener(event, cb);
   }
 
   enable() {
-    this._target.addEventListener("wheel", this._handleWheel, { capture: true, passive: false });
+    this._target.addEventListener("wheel", this._handleWheel, {
+      capture: true,
+      passive: false,
+    });
     this._target.addEventListener("mousedown", this._handleMousedown);
     this._target.addEventListener("mouseup", this._handleMouseup);
     this._target.addEventListener("click", this._handleClick);
     this._target.addEventListener("contextmenu", this._handleContextmenu);
-    this._target.addEventListener("visibilitychange", this._handleVisibilitychange);
+    this._target.addEventListener(
+      "visibilitychange",
+      this._handleVisibilitychange,
+    );
   }
 
   disable() {
     this._preventDefault = true;
-    this._target.removeEventListener("wheel", this._handleWheel, { capture: true });
+    this._target.removeEventListener("wheel", this._handleWheel, {
+      capture: true,
+    });
     this._target.removeEventListener("mousedown", this._handleMousedown);
     this._target.removeEventListener("mouseup", this._handleMouseup);
     this._target.removeEventListener("click", this._handleClick);
     this._target.removeEventListener("contextmenu", this._handleContextmenu);
-    this._target.removeEventListener("visibilitychange", this._handleVisibilitychange);
+    this._target.removeEventListener(
+      "visibilitychange",
+      this._handleVisibilitychange,
+    );
   }
 
   private _handleMousedown = (e: MouseEvent) => {
@@ -64,7 +78,10 @@ export class WheelController {
     this._accumulatedDeltaY = 0;
 
     // prevent middle click scroll
-    if (this.mouseButton === MouseButton.MIDDLE && e.buttons === MouseButton.MIDDLE) {
+    if (
+      this.mouseButton === MouseButton.MIDDLE &&
+      e.buttons === MouseButton.MIDDLE
+    ) {
       e.preventDefault();
     }
   };
@@ -74,7 +91,7 @@ export class WheelController {
     if (e.buttons !== this.mouseButton || e.deltaY === 0) return;
 
     // reset if direction changed
-    if ((this._accumulatedDeltaY < 0) !== (e.deltaY < 0)) {
+    if (this._accumulatedDeltaY < 0 !== e.deltaY < 0) {
       this._accumulatedDeltaY = 0;
     }
 
@@ -121,8 +138,12 @@ export class WheelController {
       !e.isTrusted ||
       !this._preventDefault ||
       e.button !== toSingleButton(this.mouseButton) ||
-      !(this.mouseButton === MouseButton.LEFT || this.mouseButton === MouseButton.MIDDLE)
-    ) return;
+      !(
+        this.mouseButton === MouseButton.LEFT ||
+        this.mouseButton === MouseButton.MIDDLE
+      )
+    )
+      return;
 
     // only prevent real click (not enter/label trigger)
     if (e.detail && e.timeStamp === this._lastMouseup) {

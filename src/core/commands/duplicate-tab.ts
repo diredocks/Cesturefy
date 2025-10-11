@@ -3,7 +3,7 @@ import { defineCommand } from "@commands/commands";
 
 interface DuplicateTabSettings {
   focus?: boolean;
-  position?: 'before' | 'after' | 'start' | 'end' | 'default';
+  position?: "before" | "after" | "start" | "end" | "default";
 }
 
 const fn: CommandFn<DuplicateTabSettings> = async function (sender) {
@@ -17,22 +17,22 @@ const fn: CommandFn<DuplicateTabSettings> = async function (sender) {
   }
 
   // if focus new tab, then don't focus prev tab
-  if (!this.getSetting('focus'))
+  if (!this.getSetting("focus"))
     chrome.tabs.update(sender.tab.id, { active: true });
 
   let index;
-  switch (this.getSetting('position')) {
-    case 'before':
+  switch (this.getSetting("position")) {
+    case "before":
       index = sender.tab.id;
       break;
-    case 'after':
+    case "after":
       index = sender.tab.index + 1;
       break;
-    case 'start':
+    case "start":
       index = 0;
       break;
-    case 'end':
-    case 'default':
+    case "end":
+    case "default":
     default:
       index = -1;
       break;
@@ -42,7 +42,11 @@ const fn: CommandFn<DuplicateTabSettings> = async function (sender) {
   return true;
 };
 
-export const DuplicateTab = defineCommand(fn, {
-  focus: true,
-  position: 'default'
-}, 'tabs');
+export const DuplicateTab = defineCommand(
+  fn,
+  {
+    focus: true,
+    position: "default",
+  },
+  "tabs",
+);

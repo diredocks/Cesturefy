@@ -9,17 +9,16 @@ export type ConfigEvents = Record<string, (...args: any[]) => void> & {
 
 type Path<T> = T extends object
   ? {
-    [K in keyof T]: [K] | [K, ...Path<T[K]>];
-  }[keyof T]
+      [K in keyof T]: [K] | [K, ...Path<T[K]>];
+    }[keyof T]
   : [];
 
-type PathValue<T, P extends any[]> =
-  P extends [infer K, ...infer Rest]
+type PathValue<T, P extends any[]> = P extends [infer K, ...infer Rest]
   ? K extends keyof T
-  ? Rest extends []
-  ? T[K]
-  : PathValue<T[K], Rest>
-  : never
+    ? Rest extends []
+      ? T[K]
+      : PathValue<T[K], Rest>
+    : never
   : T;
 
 type StorageArea = "local" | "sync";
@@ -69,11 +68,17 @@ export class ConfigManager {
     return this._instance;
   }
 
-  addEventListener<K extends keyof ConfigEvents>(event: K, callback: ConfigEvents[K]) {
+  addEventListener<K extends keyof ConfigEvents>(
+    event: K,
+    callback: ConfigEvents[K],
+  ) {
     this._events.addEventListener(event, callback);
   }
 
-  removeEventListener<K extends keyof ConfigEvents>(event: K, callback: ConfigEvents[K]) {
+  removeEventListener<K extends keyof ConfigEvents>(
+    event: K,
+    callback: ConfigEvents[K],
+  ) {
     this._events.removeEventListener(event, callback);
   }
 
@@ -110,10 +115,16 @@ export class ConfigManager {
       entry = entry?.[key];
       fallback = fallback?.[key];
     }
-    return (entry !== undefined ? entry : fallback) as PathValue<ConfigSchema, P>;
+    return (entry !== undefined ? entry : fallback) as PathValue<
+      ConfigSchema,
+      P
+    >;
   }
 
-  async setPath<P extends Path<ConfigSchema>>(path: P, value: PathValue<ConfigSchema, P>): Promise<void> {
+  async setPath<P extends Path<ConfigSchema>>(
+    path: P,
+    value: PathValue<ConfigSchema, P>,
+  ): Promise<void> {
     let entry: any = this._storage;
     for (let i = 0; i < path.length - 1; i++) {
       const key = path[i];
@@ -136,7 +147,10 @@ export class ConfigManager {
     return { ...this._storage };
   }
 
-  async fromJSON(json: Partial<ConfigSchema>, persist: boolean = true): Promise<void> {
+  async fromJSON(
+    json: Partial<ConfigSchema>,
+    persist: boolean = true,
+  ): Promise<void> {
     this._storage = { ...json };
     if (persist) {
       await chrome.storage[this._storageArea].set(this._storage);

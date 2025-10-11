@@ -9,16 +9,17 @@ interface ScrollPageSettings {
 const injectedCode = (
   direction: "up" | "down",
   scrollRatio: number,
-  duration: number
+  duration: number,
 ) => {
-  const isScrollableY = (el: Element) =>
-    (el.scrollHeight > el.clientHeight);
+  const isScrollableY = (el: Element) => el.scrollHeight > el.clientHeight;
 
   const isDivScrollableY = (el: Element) => {
     const style = getComputedStyle(el);
     const overflowY = style.overflowY;
-    return isScrollableY(el) && (overflowY === 'auto' || overflowY === 'scroll');
-  }
+    return (
+      isScrollableY(el) && (overflowY === "auto" || overflowY === "scroll")
+    );
+  };
 
   const scrollToY = (y: number, duration: number, el: Element) => {
     if (!el) return;
@@ -63,7 +64,8 @@ const injectedCode = (
   if (!el) return false;
 
   const maxScroll = (el.scrollHeight ?? 0) - (el.clientHeight ?? 0);
-  const delta = scrollRatio * (el.clientHeight ?? 0) * (direction === "up" ? -1 : 1);
+  const delta =
+    scrollRatio * (el.clientHeight ?? 0) * (direction === "up" ? -1 : 1);
   let newScrollTop = (el.scrollTop ?? 0) + delta;
   newScrollTop = Math.max(0, Math.min(newScrollTop, maxScroll));
 
@@ -74,12 +76,15 @@ const injectedCode = (
   return false;
 };
 
-const createScrollPageFn = (direction: "up" | "down"): CommandFn<ScrollPageSettings> =>
+const createScrollPageFn = (
+  direction: "up" | "down",
+): CommandFn<ScrollPageSettings> =>
   async function (sender) {
     if (!sender.tab?.id) return false;
 
     const duration = Number(this.getSetting("duration")) || 300;
-    const scrollRatio = (Number(this.getSetting("scrollProportion")) || 50) / 100;
+    const scrollRatio =
+      (Number(this.getSetting("scrollProportion")) || 50) / 100;
 
     const results = await chrome.scripting.executeScript({
       target: { tabId: sender.tab.id, frameIds: [sender.frameId ?? 0] },
@@ -98,7 +103,7 @@ export const ScrollPageUp = defineCommand(
     scrollProportion: 95,
   },
   "scroll",
-  ["scripting"]
+  ["scripting"],
 );
 
 export const ScrollPageDown = defineCommand(
@@ -108,5 +113,5 @@ export const ScrollPageDown = defineCommand(
     scrollProportion: 95,
   },
   "scroll",
-  ["scripting"]
+  ["scripting"],
 );

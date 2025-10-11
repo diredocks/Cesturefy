@@ -21,5 +21,5 @@ export const ReloadTab = defineCommand(
     cache: false,
   },
   "load",
-  ['sessions']
+  ["sessions"],
 );

@@ -6,19 +6,21 @@ import { DefaultConfig } from "@model/config";
 export class TraceCommand {
   private static _instance: TraceCommand;
 
-  private overlay = document.createElement('div');
-  private canvas = document.createElement('canvas');
-  private command = document.createElement('div');
+  private overlay = document.createElement("div");
+  private canvas = document.createElement("canvas");
+  private command = document.createElement("div");
   private context: CanvasRenderingContext2D;
 
   private traceLineWidth = DefaultConfig.Settings.Gesture.Trace.Style.lineWidth;
-  private traceLineGrowth = DefaultConfig.Settings.Gesture.Trace.Style.lineGrowth;
-  private commandFollowCursor = DefaultConfig.Settings.Gesture.Command.followCursor;
+  private traceLineGrowth =
+    DefaultConfig.Settings.Gesture.Trace.Style.lineGrowth;
+  private commandFollowCursor =
+    DefaultConfig.Settings.Gesture.Command.followCursor;
   private lastTraceWidth = 0;
   private lastPoint: Point = { x: 0, y: 0 };
 
   private constructor() {
-    this.overlay.popover = 'manual';
+    this.overlay.popover = "manual";
     this.overlay.style.cssText = `
       all: initial !important;
       position: fixed !important;
@@ -30,7 +32,7 @@ export class TraceCommand {
       all: initial !important;
       pointer-events: auto !important;
     `;
-    this.context = this.canvas.getContext('2d')!;
+    this.context = this.canvas.getContext("2d")!;
 
     this.command.style.cssText = `
       --horizontalPosition: 0;
@@ -52,7 +54,7 @@ export class TraceCommand {
       pointer-events: auto !important;
     `;
 
-    window.addEventListener('resize', this.maximizeCanvas, true);
+    window.addEventListener("resize", this.maximizeCanvas, true);
     this.maximizeCanvas();
 
     configManager.addEventListener("change", () => this.applyConfig());
@@ -66,7 +68,11 @@ export class TraceCommand {
 
   initialize(x: number, y: number) {
     // overlay is not working in a pure svg or other xml pages thus do not append the overlay
-    if (!document.body && document.documentElement.namespaceURI !== "http://www.w3.org/1999/xhtml") return;
+    if (
+      !document.body &&
+      document.documentElement.namespaceURI !== "http://www.w3.org/1999/xhtml"
+    )
+      return;
 
     document.body.appendChild(this.overlay);
     this.overlay.showPopover();
@@ -75,7 +81,8 @@ export class TraceCommand {
   }
 
   updateTrace(points: Point[]) {
-    if (!this.overlay.contains(this.canvas)) this.overlay.appendChild(this.canvas);
+    if (!this.overlay.contains(this.canvas))
+      this.overlay.appendChild(this.canvas);
 
     const path = new Path2D();
 
@@ -85,21 +92,31 @@ export class TraceCommand {
 
       if (this.traceLineGrowth && this.lastTraceWidth < this.traceLineWidth) {
         const growthDistance = this.traceLineWidth * 50;
-        const distance = getDistance(this.lastPoint.x, this.lastPoint.y, point.x, point.y);
+        const distance = getDistance(
+          this.lastPoint.x,
+          this.lastPoint.y,
+          point.x,
+          point.y,
+        );
         endWidth = Math.min(
-          this.lastTraceWidth + (distance / growthDistance) * this.traceLineWidth,
-          this.traceLineWidth
+          this.lastTraceWidth +
+            (distance / growthDistance) * this.traceLineWidth,
+          this.traceLineWidth,
         );
         startWidth = this.lastTraceWidth;
         this.lastTraceWidth = endWidth;
       }
 
-      path.addPath(this.createGrowingLine(
-        this.lastPoint.x, this.lastPoint.y,
-        point.x, point.y,
-        startWidth,
-        endWidth
-      ));
+      path.addPath(
+        this.createGrowingLine(
+          this.lastPoint.x,
+          this.lastPoint.y,
+          point.x,
+          point.y,
+          startWidth,
+          endWidth,
+        ),
+      );
 
       this.lastPoint = { ...point };
     }
@@ -111,12 +128,19 @@ export class TraceCommand {
     // FIXME: when trace disabled lastPoint won't update
     if (text !== null && this.overlay.isConnected) {
       this.command.textContent = text;
-      if (!this.overlay.contains(this.command)) this.overlay.appendChild(this.command);
+      if (!this.overlay.contains(this.command))
+        this.overlay.appendChild(this.command);
       if (this.commandFollowCursor) {
         const horizontalPercent = (this.lastPoint.x / window.innerWidth) * 100;
         const verticalPercent = (this.lastPoint.y / window.innerHeight) * 100;
-        this.command.style.setProperty("--horizontalPosition", String(horizontalPercent));
-        this.command.style.setProperty("--verticalPosition", String(verticalPercent));
+        this.command.style.setProperty(
+          "--horizontalPosition",
+          String(horizontalPercent),
+        );
+        this.command.style.setProperty(
+          "--verticalPosition",
+          String(verticalPercent),
+        );
       }
     } else {
       this.command.remove();
@@ -135,25 +159,47 @@ export class TraceCommand {
   }
 
   private maximizeCanvas = () => {
-    const { lineCap, lineJoin, fillStyle, strokeStyle, lineWidth } = this.context;
+    const { lineCap, lineJoin, fillStyle, strokeStyle, lineWidth } =
+      this.context;
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
-    Object.assign(this.context, { lineCap, lineJoin, fillStyle, strokeStyle, lineWidth });
+    Object.assign(this.context, {
+      lineCap,
+      lineJoin,
+      fillStyle,
+      strokeStyle,
+      lineWidth,
+    });
   };
 
   private createGrowingLine(
-    x1: number, y1: number,
-    x2: number, y2: number,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
     startWidth: number,
-    endWidth: number
+    endWidth: number,
   ): Path2D {
     const directionVectorX = x2 - x1;
     const directionVectorY = y2 - y1;
-    const perpendicularVectorAngle = Math.atan2(directionVectorY, directionVectorX) + Math.PI / 2;
+    const perpendicularVectorAngle =
+      Math.atan2(directionVectorY, directionVectorX) + Math.PI / 2;
 
     const path = new Path2D();
-    path.arc(x1, y1, startWidth / 2, perpendicularVectorAngle, perpendicularVectorAngle + Math.PI);
-    path.arc(x2, y2, endWidth / 2, perpendicularVectorAngle + Math.PI, perpendicularVectorAngle);
+    path.arc(
+      x1,
+      y1,
+      startWidth / 2,
+      perpendicularVectorAngle,
+      perpendicularVectorAngle + Math.PI,
+    );
+    path.arc(
+      x2,
+      y2,
+      endWidth / 2,
+      perpendicularVectorAngle + Math.PI,
+      perpendicularVectorAngle,
+    );
     path.closePath();
     return path;
   }
@@ -162,7 +208,8 @@ export class TraceCommand {
 
   get gestureTraceLineColor(): string {
     const rgbHex = this.context.fillStyle as string;
-    const alpha = parseFloat(this.canvas.style.getPropertyValue("opacity")) || 1;
+    const alpha =
+      parseFloat(this.canvas.style.getPropertyValue("opacity")) || 1;
     let aHex = Math.round(alpha * 255).toString(16);
     if (aHex.length === 1) aHex = "0" + aHex;
     return rgbHex + aHex;
@@ -212,14 +259,18 @@ export class TraceCommand {
   }
 
   get gestureCommandHorizontalPosition(): number {
-    return parseFloat(this.command.style.getPropertyValue("--horizontalPosition"));
+    return parseFloat(
+      this.command.style.getPropertyValue("--horizontalPosition"),
+    );
   }
   set gestureCommandHorizontalPosition(value: number) {
     this.command.style.setProperty("--horizontalPosition", String(value));
   }
 
   get gestureCommandVerticalPosition(): number {
-    return parseFloat(this.command.style.getPropertyValue("--verticalPosition"));
+    return parseFloat(
+      this.command.style.getPropertyValue("--verticalPosition"),
+    );
   }
   set gestureCommandVerticalPosition(value: number) {
     this.command.style.setProperty("--verticalPosition", String(value));
@@ -233,16 +284,69 @@ export class TraceCommand {
   }
 
   applyConfig() {
-    this.gestureTraceLineColor = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "strokeStyle"]);
-    this.gestureTraceLineWidth = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "lineWidth"]);
-    this.gestureTraceLineGrowth = configManager.getPath(["Settings", "Gesture", "Trace", "Style", "lineGrowth"]);
+    this.gestureTraceLineColor = configManager.getPath([
+      "Settings",
+      "Gesture",
+      "Trace",
+      "Style",
+      "strokeStyle",
+    ]);
+    this.gestureTraceLineWidth = configManager.getPath([
+      "Settings",
+      "Gesture",
+      "Trace",
+      "Style",
+      "lineWidth",
+    ]);
+    this.gestureTraceLineGrowth = configManager.getPath([
+      "Settings",
+      "Gesture",
+      "Trace",
+      "Style",
+      "lineGrowth",
+    ]);
 
-    this.gestureCommandFontSize = configManager.getPath(["Settings", "Gesture", "Command", "Style", "fontSize"]);
-    this.gestureCommandFontColor = configManager.getPath(["Settings", "Gesture", "Command", "Style", "fontColor"]);
-    this.gestureCommandBackgroundColor = configManager.getPath(["Settings", "Gesture", "Command", "Style", "backgroundColor"]);
-    this.gestureCommandHorizontalPosition = configManager.getPath(["Settings", "Gesture", "Command", "Style", "horizontalPosition"]);
-    this.gestureCommandVerticalPosition = configManager.getPath(["Settings", "Gesture", "Command", "Style", "verticalPosition"]);
-    this.commandFollowCursor = configManager.getPath(["Settings", "Gesture", "Command", "followCursor"]);
+    this.gestureCommandFontSize = configManager.getPath([
+      "Settings",
+      "Gesture",
+      "Command",
+      "Style",
+      "fontSize",
+    ]);
+    this.gestureCommandFontColor = configManager.getPath([
+      "Settings",
+      "Gesture",
+      "Command",
+      "Style",
+      "fontColor",
+    ]);
+    this.gestureCommandBackgroundColor = configManager.getPath([
+      "Settings",
+      "Gesture",
+      "Command",
+      "Style",
+      "backgroundColor",
+    ]);
+    this.gestureCommandHorizontalPosition = configManager.getPath([
+      "Settings",
+      "Gesture",
+      "Command",
+      "Style",
+      "horizontalPosition",
+    ]);
+    this.gestureCommandVerticalPosition = configManager.getPath([
+      "Settings",
+      "Gesture",
+      "Command",
+      "Style",
+      "verticalPosition",
+    ]);
+    this.commandFollowCursor = configManager.getPath([
+      "Settings",
+      "Gesture",
+      "Command",
+      "followCursor",
+    ]);
   }
 }
 

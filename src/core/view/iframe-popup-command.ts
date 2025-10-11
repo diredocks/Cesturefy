@@ -13,13 +13,13 @@ const handler = (port: chrome.runtime.Port) => {
     channel.onMessage.addListener(initializePopup);
     channel.onDisconnect.addListener(terminatePopup);
   }
-}
+};
 
 chrome.runtime.onConnect.addListener(handler);
 
 let channel: chrome.runtime.Port | null = null;
 
-const initializePopup = async (msg: PopupIframeMessages['popupConnection']) => {
+const initializePopup = async (msg: PopupIframeMessages["popupConnection"]) => {
   const list = document.createElement("ul");
   list.id = "list";
 
@@ -82,7 +82,7 @@ const initializePopup = async (msg: PopupIframeMessages['popupConnection']) => {
           Math.round(requiredDimensions.height - availableDimensions.height);
         buttonDown.classList.toggle("hidden", isOnBottom);
       },
-      { passive: true }
+      { passive: true },
     );
 
     document.body.append(buttonUp, buttonDown);

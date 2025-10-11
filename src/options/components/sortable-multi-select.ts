@@ -30,7 +30,7 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
     this._draggedItemOriginalSuccessor = null;
 
     // Update box dimensions on change
-    this._resizeObserver = new ResizeObserver(entries => {
+    this._resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.borderBoxSize) {
           const borderBoxSize = Array.isArray(entry.borderBoxSize)
@@ -38,8 +38,14 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
             : entry.borderBoxSize;
 
           const target = entry.target as HTMLElement;
-          target.style.setProperty("--bboxHeight", String(borderBoxSize.blockSize));
-          target.style.setProperty("--bboxWidth", String(borderBoxSize.inlineSize));
+          target.style.setProperty(
+            "--bboxHeight",
+            String(borderBoxSize.blockSize),
+          );
+          target.style.setProperty(
+            "--bboxWidth",
+            String(borderBoxSize.inlineSize),
+          );
         }
       }
     });
@@ -55,12 +61,18 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
     this._resizeObserver.disconnect();
   }
 
-  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+  attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
     if (!this.isConnected) return;
 
     switch (name) {
       case "placeholder": {
-        const search = this.shadowRoot!.getElementById("search") as HTMLInputElement;
+        const search = this.shadowRoot!.getElementById(
+          "search",
+        ) as HTMLInputElement;
         if (search) search.placeholder = newValue || "";
         break;
       }
@@ -75,7 +87,7 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
   get value(): T[] {
     const items = this.shadowRoot!.getElementById("items")!;
     return Array.from(items.children).map(
-      (item) => (item as HTMLElement).dataset.value as unknown as T
+      (item) => (item as HTMLElement).dataset.value as unknown as T,
     );
   }
 
@@ -86,13 +98,21 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
     const items = this.shadowRoot!.getElementById("items")!;
     while (items.firstChild) items.firstChild.remove();
 
-    const dropdown = this.shadowRoot!.getElementById("dropdown") as HTMLSlotElement;
-    const dropdownItems = dropdown.assignedElements() as SortableMultiSelectItem[];
+    const dropdown = this.shadowRoot!.getElementById(
+      "dropdown",
+    ) as HTMLSlotElement;
+    const dropdownItems =
+      dropdown.assignedElements() as SortableMultiSelectItem[];
 
     for (const itemValue of values) {
-      const dropdownItem = dropdownItems.find(item => item.value === itemValue);
+      const dropdownItem = dropdownItems.find(
+        (item) => item.value === itemValue,
+      );
       if (dropdownItem) {
-        const newItem = this._buildSelectedItem(dropdownItem.value, dropdownItem.label);
+        const newItem = this._buildSelectedItem(
+          dropdownItem.value,
+          dropdownItem.label,
+        );
         items.append(newItem);
       }
     }
@@ -128,10 +148,12 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
 
     const selection = this.shadowRoot!.getElementById("selection")!;
     selection.addEventListener("focus", () => this._handleSelectionFocus());
-    selection.addEventListener("dragover", (e) => this._handleSelectionDragover(e as DragEvent));
+    selection.addEventListener("dragover", (e) =>
+      this._handleSelectionDragover(e as DragEvent),
+    );
 
     const items = this.shadowRoot!.getElementById("items")!;
-    const mutationObserver = new MutationObserver(entries => {
+    const mutationObserver = new MutationObserver((entries) => {
       const lastEntry = entries[entries.length - 1];
       const target = lastEntry.target as HTMLElement;
       const items = target.children;
@@ -144,13 +166,21 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
     const search = this.shadowRoot!.getElementById("search")!;
     search.addEventListener("input", () => this._handleSearchInput());
     search.addEventListener("focus", () => this._handleSearchFocus());
-    search.addEventListener("keydown", (e) => this._handleSearchKeydown(e as KeyboardEvent));
+    search.addEventListener("keydown", (e) =>
+      this._handleSearchKeydown(e as KeyboardEvent),
+    );
 
     const dropdown = this.shadowRoot!.getElementById("dropdown")!;
     dropdown.addEventListener("click", (e) => this._handleDropdownClick(e));
-    dropdown.addEventListener("keydown", (e) => this._handleDropdownKeydown(e as KeyboardEvent));
-    dropdown.addEventListener("animationend", (e) => this._handleDropdownAnimationend(e as AnimationEvent));
-    dropdown.addEventListener("slotchange", () => this._handleDropdownSlotchange());
+    dropdown.addEventListener("keydown", (e) =>
+      this._handleDropdownKeydown(e as KeyboardEvent),
+    );
+    dropdown.addEventListener("animationend", (e) =>
+      this._handleDropdownAnimationend(e as AnimationEvent),
+    );
+    dropdown.addEventListener("slotchange", () =>
+      this._handleDropdownSlotchange(),
+    );
 
     this.addEventListener("dragleave", (e) => this._handleDragleave(e));
   }
@@ -162,9 +192,15 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
     item.draggable = true;
     item.tabIndex = 0;
     item.dataset.value = itemValue;
-    item.addEventListener("dragstart", (e) => this._handleItemDragstart(e as DragEvent));
-    item.addEventListener("dragend", (e) => this._handleItemDragend(e as DragEvent));
-    item.addEventListener("animationend", (e) => this._handleItemAnimationend(e as AnimationEvent));
+    item.addEventListener("dragstart", (e) =>
+      this._handleItemDragstart(e as DragEvent),
+    );
+    item.addEventListener("dragend", (e) =>
+      this._handleItemDragend(e as DragEvent),
+    );
+    item.addEventListener("animationend", (e) =>
+      this._handleItemAnimationend(e as AnimationEvent),
+    );
 
     const itemContent = document.createElement("span");
     itemContent.part.add("item-inner-text");
@@ -174,19 +210,25 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
     const itemRemoveButton = document.createElement("button");
     itemRemoveButton.part.add("item-remove-button");
     itemRemoveButton.classList.add("item-remove-button");
-    itemRemoveButton.addEventListener("click", (e) => this._handleItemRemoveButtonClick(e));
+    itemRemoveButton.addEventListener("click", (e) =>
+      this._handleItemRemoveButtonClick(e),
+    );
 
     item.append(itemContent, itemRemoveButton);
     return item;
   }
 
   private _focusSearch(): void {
-    const search = this.shadowRoot!.getElementById("search") as HTMLInputElement;
+    const search = this.shadowRoot!.getElementById(
+      "search",
+    ) as HTMLInputElement;
     search?.focus();
   }
 
   private _clearSearch(): void {
-    const search = this.shadowRoot!.getElementById("search") as HTMLInputElement;
+    const search = this.shadowRoot!.getElementById(
+      "search",
+    ) as HTMLInputElement;
     if (search) search.value = "";
   }
 
@@ -210,13 +252,17 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
   }
 
   private _filterDropdown(filterString: string): void {
-    const dropdown = this.shadowRoot!.getElementById("dropdown") as HTMLSlotElement;
+    const dropdown = this.shadowRoot!.getElementById(
+      "dropdown",
+    ) as HTMLSlotElement;
     const filterStringKeywords = filterString.toLowerCase().trim().split(" ");
     let hasResults = false;
 
     for (const item of dropdown.assignedElements() as SortableMultiSelectItem[]) {
       const itemContent = item.value.toLowerCase().trim();
-      const isMatching = filterStringKeywords.every(keyword => itemContent.includes(keyword));
+      const isMatching = filterStringKeywords.every((keyword) =>
+        itemContent.includes(keyword),
+      );
       item.hidden = !isMatching;
       if (isMatching) hasResults = true;
     }
@@ -246,17 +292,25 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
   }
 
   private _handleDropdownSlotchange(): void {
-    const dropdown = this.shadowRoot!.getElementById("dropdown") as HTMLSlotElement;
-    const expectedChildElements = dropdown.assignedElements().every(element => {
-      return element instanceof SortableMultiSelectItem;
-    });
+    const dropdown = this.shadowRoot!.getElementById(
+      "dropdown",
+    ) as HTMLSlotElement;
+    const expectedChildElements = dropdown
+      .assignedElements()
+      .every((element) => {
+        return element instanceof SortableMultiSelectItem;
+      });
     if (!expectedChildElements) {
-      throw new Error("All sortable-multi-select children should be of type sortable-multi-select-item.");
+      throw new Error(
+        "All sortable-multi-select children should be of type sortable-multi-select-item.",
+      );
     }
   }
 
   _handleDropdownClick(event: Event): void {
-    const dropdown = this.shadowRoot!.getElementById("dropdown") as HTMLSlotElement;
+    const dropdown = this.shadowRoot!.getElementById(
+      "dropdown",
+    ) as HTMLSlotElement;
 
     const item = event.composedPath().find((ele: EventTarget) => {
       return (ele as HTMLElement).assignedSlot === dropdown;
@@ -280,12 +334,18 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
   private _handleDropdownKeydown(event: KeyboardEvent): void {
     if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
 
-    const dropdown = this.shadowRoot!.getElementById("dropdown") as HTMLSlotElement;
-    const matchingItems = (dropdown.assignedElements() as SortableMultiSelectItem[]).filter(item => !item.hidden);
+    const dropdown = this.shadowRoot!.getElementById(
+      "dropdown",
+    ) as HTMLSlotElement;
+    const matchingItems = (
+      dropdown.assignedElements() as SortableMultiSelectItem[]
+    ).filter((item) => !item.hidden);
 
     if (matchingItems.length === 0) return;
 
-    const focusedItemIndex = matchingItems.findIndex(item => item === event.target);
+    const focusedItemIndex = matchingItems.findIndex(
+      (item) => item === event.target,
+    );
 
     switch (event.key) {
       case "ArrowUp":
@@ -308,7 +368,9 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
   }
 
   private _handleSearchInput(): void {
-    const search = this.shadowRoot!.getElementById("search") as HTMLInputElement;
+    const search = this.shadowRoot!.getElementById(
+      "search",
+    ) as HTMLInputElement;
     this._filterDropdown(search.value);
   }
 
@@ -317,10 +379,13 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
   }
 
   _handleItemRemoveButtonClick(event: Event): void {
-    const item = (event.target as HTMLElement).closest(".item") as HTMLElement | null;
+    const item = (event.target as HTMLElement).closest(
+      ".item",
+    ) as HTMLElement | null;
     if (!item) return;
 
-    const nextFocus = (item.nextElementSibling ?? item.previousElementSibling) as HTMLElement;
+    const nextFocus = (item.nextElementSibling ??
+      item.previousElementSibling) as HTMLElement;
     nextFocus.focus();
     item.remove();
     this.dispatchEvent(new CustomEvent("change", { detail: this.value }));
@@ -353,7 +418,10 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
       } else {
         items.append(this._draggedItem);
       }
-    } else if (this._draggedItemOriginalSuccessor !== this._draggedItem.nextElementSibling) {
+    } else if (
+      this._draggedItemOriginalSuccessor !==
+      this._draggedItem.nextElementSibling
+    ) {
       this.dispatchEvent(new CustomEvent("change", { detail: this.value }));
     }
 
@@ -398,7 +466,9 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
       const itemCenterY = nearestItemBBox.y + nearestItemBBox.height / 2;
 
       const wrapper = this.shadowRoot!.getElementById("wrapper") as HTMLElement;
-      const containerWidth = Number(wrapper.style.getPropertyValue("--bboxWidth"));
+      const containerWidth = Number(
+        wrapper.style.getPropertyValue("--bboxWidth"),
+      );
 
       if (containerWidth - nearestItemBBox.width < draggedItemBBox.width) {
         if (itemCenterY > event.clientY) {
@@ -430,16 +500,22 @@ export class SortableMultiSelect<T = string> extends HTMLElement {
 
   addEventListener<K extends keyof SortableMultiSelectEventMap>(
     type: K,
-    listener: (this: SortableMultiSelect, ev: SortableMultiSelectEventMap[K]) => any,
-    options?: boolean | AddEventListenerOptions
+    listener: (
+      this: SortableMultiSelect,
+      ev: SortableMultiSelectEventMap[K],
+    ) => any,
+    options?: boolean | AddEventListenerOptions,
   ): void {
     super.addEventListener(type, listener as EventListener, options);
   }
 
   removeEventListener<K extends keyof SortableMultiSelectEventMap>(
     type: K,
-    listener: (this: SortableMultiSelect, ev: SortableMultiSelectEventMap[K]) => any,
-    options?: boolean | EventListenerOptions
+    listener: (
+      this: SortableMultiSelect,
+      ev: SortableMultiSelectEventMap[K],
+    ) => any,
+    options?: boolean | EventListenerOptions,
   ): void {
     super.removeEventListener(type, listener as EventListener, options);
   }

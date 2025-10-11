@@ -13,7 +13,9 @@ export const TogglePin = defineCommand(TogglePinFn, {}, "toggle");
 const ToggleMuteFn: CommandFn = async function (sender) {
   if (!sender.tab?.id) return false;
 
-  await chrome.tabs.update(sender.tab.id, { muted: !sender.tab.mutedInfo?.muted });
+  await chrome.tabs.update(sender.tab.id, {
+    muted: !sender.tab.mutedInfo?.muted,
+  });
   return true;
 };
 
@@ -34,4 +36,6 @@ const ToggleBookmarkFn: CommandFn = async function (sender) {
   return true;
 };
 
-export const ToggleBookmark = defineCommand(ToggleBookmarkFn, {}, "toggle", ['bookmarks']);
+export const ToggleBookmark = defineCommand(ToggleBookmarkFn, {}, "toggle", [
+  "bookmarks",
+]);

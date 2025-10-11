@@ -6,7 +6,7 @@ export default class Context {
     public mouse: MouseData,
     public link?: LinkData,
     public selection?: SelectionData,
-  ) { }
+  ) {}
 
   static fromEvent(event: MouseEvent): Context {
     const composedPath = event.composedPath();
@@ -17,24 +17,16 @@ export default class Context {
     const target = img ?? rawTarget;
 
     const link = composedPath.find(
-      (el) => el instanceof HTMLAnchorElement || el instanceof HTMLAreaElement
+      (el) => el instanceof HTMLAnchorElement || el instanceof HTMLAreaElement,
     );
 
     const imageData = img
-      ? new ImageData(
-        img.currentSrc || img.src,
-        img.title,
-        img.alt,
-      )
+      ? new ImageData(img.currentSrc || img.src, img.title, img.alt)
       : undefined;
 
     const linkData = link
-      ? new LinkData(
-        link.href,
-        link.title,
-        link.textContent?.trim(),
-      )
-      : undefined
+      ? new LinkData(link.href, link.title, link.textContent?.trim())
+      : undefined;
 
     return new Context(
       new ElementData(
@@ -57,7 +49,7 @@ export class ElementData {
     public nodeName: string,
     public textContent: string,
     public imageData?: ImageData,
-  ) { }
+  ) {}
 }
 
 export class ImageData {
@@ -65,7 +57,7 @@ export class ImageData {
     public src: string,
     public title: string,
     public alt: string,
-  ) { }
+  ) {}
 }
 
 export class LinkData {
@@ -73,11 +65,11 @@ export class LinkData {
     public href: string,
     public title: string,
     public textContent: string,
-  ) { }
+  ) {}
 }
 
 export class SelectionData {
-  constructor(public text: string = "") { }
+  constructor(public text: string = "") {}
 
   static fromWindow(): SelectionData {
     return new SelectionData(SelectionData._getTextSelection());
@@ -100,16 +92,15 @@ export class SelectionData {
 }
 
 export class MouseData {
-  constructor(public endpoint: Point) { }
+  constructor(public endpoint: Point) {}
 }
 
 function getImageFromPoint(
   x: number,
   y: number,
   root: HTMLElement | null = null,
-  maxDepth = 5
+  maxDepth = 5,
 ): HTMLImageElement | null {
-
   // WARN: in some condition it just cannot get image lol
 
   if (maxDepth <= 0) return null;
@@ -140,7 +131,9 @@ function getImageFromPoint(
   // if sub-level elements hit
   const parent = el.parentElement;
   if (parent) {
-    const siblings = Array.from(parent.children).filter((c) => c !== el) as HTMLElement[];
+    const siblings = Array.from(parent.children).filter(
+      (c) => c !== el,
+    ) as HTMLElement[];
     for (const sibling of siblings) {
       if (sibling instanceof HTMLImageElement) return sibling;
       if (sibling.tagName.toLowerCase() === "picture") {

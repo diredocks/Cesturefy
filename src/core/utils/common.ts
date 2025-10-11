@@ -12,8 +12,10 @@ export function getDistance(x1: number, y1: number, x2: number, y2: number) {
 }
 
 export function vectorDirectionDifference(
-  V1X: number, V1Y: number,
-  V2X: number, V2Y: number
+  V1X: number,
+  V1Y: number,
+  V2X: number,
+  V2Y: number,
 ): number {
   let angleDifference = Math.atan2(V1X, V1Y) - Math.atan2(V2X, V2Y);
 
@@ -28,10 +30,10 @@ export function vectorDirectionDifference(
 
 export function matchesURL(url: string, urlPattern: string): boolean {
   const pattern = urlPattern.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, (match) =>
-    match === '*' ? '.*' : '\\' + match
+    match === "*" ? ".*" : "\\" + match,
   );
 
-  const regex = new RegExp('^' + pattern + '$');
+  const regex = new RegExp("^" + pattern + "$");
   return regex.test(url);
 }
 
@@ -65,8 +67,7 @@ export function toSingleButton(b: number) {
 export function isEmbeddedFrame() {
   try {
     return window.self !== window.top;
-  }
-  catch (e) {
+  } catch (e) {
     return true;
   }
 }
@@ -74,7 +75,7 @@ export function isEmbeddedFrame() {
 export function displayNotification(
   title: string,
   message: string,
-  link?: string
+  link?: string,
 ): void {
   const createNotification = chrome.notifications.create({
     type: "basic",

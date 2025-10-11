@@ -10,20 +10,26 @@ ContentLoaded.then(main);
 
 function main() {
   const resetButton = document.getElementById("resetButton")!;
-  resetButton.addEventListener('click', onResetButton);
+  resetButton.addEventListener("click", onResetButton);
   const backupButton = document.getElementById("backupButton")!;
-  backupButton.addEventListener('click', onBackupButton);
-  const restoreButton = document.getElementById("restoreButton") as HTMLInputElement;
+  backupButton.addEventListener("click", onBackupButton);
+  const restoreButton = document.getElementById(
+    "restoreButton",
+  ) as HTMLInputElement;
   restoreButton.addEventListener("change", onRestoreButton);
 }
 
 async function onResetButton() {
   const popup = document.getElementById("resetConfirm")! as PopupBox;
-  popup.addEventListener("close", async (event) => {
-    if (!event.detail) return;
-    await removePermissions();
-    configManager.clear().then(() => window.location.reload());
-  }, { once: true });
+  popup.addEventListener(
+    "close",
+    async (event) => {
+      if (!event.detail) return;
+      await removePermissions();
+      configManager.clear().then(() => window.location.reload());
+    },
+    { once: true },
+  );
   popup.open = true;
 }
 
@@ -33,25 +39,32 @@ function onBackupButton() {
   linkElement.download = `${manifest.name}_${manifest.version}_${new Date().getTime()}.json`;
   // creates a json file with the current config
   linkElement.href = URL.createObjectURL(
-    new Blob([JSON.stringify(configManager.toJSON(), null, '  ')], { type: 'application/json' })
+    new Blob([JSON.stringify(configManager.toJSON(), null, "  ")], {
+      type: "application/json",
+    }),
   );
   document.body.appendChild(linkElement);
   linkElement.click();
   document.body.removeChild(linkElement);
 }
 
-async function onRestoreButton(this: HTMLInputElement, _event: Event): Promise<void> {
+async function onRestoreButton(
+  this: HTMLInputElement,
+  _event: Event,
+): Promise<void> {
   const file = this.files?.[0];
   if (!file || file.type !== "application/json") {
     const popup = document.getElementById("restoreAlertWrongFile") as any;
-    popup.addEventListener("close", () => window.location.reload(), { once: true });
+    popup.addEventListener("close", () => window.location.reload(), {
+      once: true,
+    });
     popup.open = true;
     return;
   }
 
   try {
     // FIXME: mouseButton from Gesturefy is string, causing wrong behaviour
-    const restoredConfig = await readJsonFile(file) as Partial<ConfigSchema>;
+    const restoredConfig = (await readJsonFile(file)) as Partial<ConfigSchema>;
 
     const gestures = restoredConfig.Gestures ?? [];
     const permissions = new Set<CommandPermission>();
@@ -59,7 +72,7 @@ async function onRestoreButton(this: HTMLInputElement, _event: Event): Promise<v
     for (const g of gestures) {
       const def = commands[g.command.name as CommandName];
       if (!def) throw new Error(`Command not found: ${g.command.name}`);
-      def.permissions?.forEach(p => permissions.add(p));
+      def.permissions?.forEach((p) => permissions.add(p));
     }
 
     if (permissions.size > 0) {
@@ -74,11 +87,15 @@ async function onRestoreButton(this: HTMLInputElement, _event: Event): Promise<v
     configManager.fromJSON(restoredConfig);
 
     const popup = document.getElementById("restoreAlertSuccess") as any;
-    popup.addEventListener("close", () => window.location.reload(), { once: true });
+    popup.addEventListener("close", () => window.location.reload(), {
+      once: true,
+    });
     popup.open = true;
   } catch {
     const popup = document.getElementById("restoreAlertNoConfigFile") as any;
-    popup.addEventListener("close", () => window.location.reload(), { once: true });
+    popup.addEventListener("close", () => window.location.reload(), {
+      once: true,
+    });
     popup.open = true;
   }
 }
@@ -108,9 +125,8 @@ export async function removePermissions() {
 
   const current = await chrome.permissions.getAll();
 
-  const permsToRemove = current.permissions?.filter((p) =>
-    optionalPermissions.has(p)
-  ) ?? [];
+  const permsToRemove =
+    current.permissions?.filter((p) => optionalPermissions.has(p)) ?? [];
 
   // const originsToRemove = current.origins?.filter((o) =>
   //   optionalOrigins.has(o)

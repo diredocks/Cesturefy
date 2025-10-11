@@ -1,6 +1,9 @@
-import { COMMAND_SETTING_TEMPLATES, COMMAND_ITEMS } from '@options/utils/common';
-import { SortableMultiSelect } from '@options/components/sortable-multi-select';
-import Command from '@model/command'; // TODO: Maybe CommandJSON here
+import {
+  COMMAND_SETTING_TEMPLATES,
+  COMMAND_ITEMS,
+} from "@options/utils/common";
+import { SortableMultiSelect } from "@options/components/sortable-multi-select";
+import Command from "@model/command"; // TODO: Maybe CommandJSON here
 
 export class CommandMultiSelect extends SortableMultiSelect<Command> {
   private _commandSettingsRelation: WeakMap<Element, HTMLElement>;
@@ -18,10 +21,14 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
     this.shadowRoot!.append(settingsContainer);
 
     // Build command selection list
-    COMMAND_ITEMS.forEach(commandItem => {
-      const commandMultiSelectItem = document.createElement("sortable-multi-select-item");
+    COMMAND_ITEMS.forEach((commandItem) => {
+      const commandMultiSelectItem = document.createElement(
+        "sortable-multi-select-item",
+      );
       commandMultiSelectItem.dataset.command = commandItem.command;
-      commandMultiSelectItem.textContent = chrome.i18n.getMessage(`commandLabel${commandItem.command}`);
+      commandMultiSelectItem.textContent = chrome.i18n.getMessage(
+        `commandLabel${commandItem.command}`,
+      );
       this.append(commandMultiSelectItem);
     });
 
@@ -29,8 +36,12 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
   }
 
   connectedCallback(): void {
-    this.placeholder = chrome.i18n.getMessage("commandMultiSelectAddPlaceholder");
-    this.dropdownPlaceholder = chrome.i18n.getMessage("commandMultiSelectNoResultsPlaceholder");
+    this.placeholder = chrome.i18n.getMessage(
+      "commandMultiSelectAddPlaceholder",
+    );
+    this.dropdownPlaceholder = chrome.i18n.getMessage(
+      "commandMultiSelectNoResultsPlaceholder",
+    );
   }
 
   get value(): Command[] {
@@ -39,21 +50,24 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
     const items = this.shadowRoot!.getElementById("items")!;
     for (const item of Array.from(items.children) as HTMLElement[]) {
       // Create command object and add it to the return value list
-      const command = Command.fromJSON({ name: item.dataset.value! }) as Command;
+      const command = Command.fromJSON({
+        name: item.dataset.value!,
+      }) as Command;
       commandList.push(command);
 
       const settings = this._commandSettingsRelation.get(item);
       // If no settings exist skip to next command
       if (!settings) continue;
 
-      const settingInputs = settings.querySelectorAll<HTMLInputElement>("[name]");
-      settingInputs.forEach(input => {
+      const settingInputs =
+        settings.querySelectorAll<HTMLInputElement>("[name]");
+      settingInputs.forEach((input) => {
         let value: any;
-        if (input.type === 'checkbox') value = input.checked;
+        if (input.type === "checkbox") value = input.checked;
         else if (!isNaN(input.valueAsNumber)) value = input.valueAsNumber;
         else value = input.value;
         command.setSetting(input.name, value);
-      })
+      });
     }
 
     return commandList;
@@ -70,7 +84,10 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
     // Add new command items and settings
     for (let command of value) {
       // Convert command JSON object to Command
-      command = Command.fromJSON({ name: command.name, settings: command.settings });
+      command = Command.fromJSON({
+        name: command.name,
+        settings: command.settings,
+      });
       this._createCommandItem(command);
     }
   }
@@ -83,7 +100,10 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
    */
   private async _createCommandItem(command: Command): Promise<HTMLElement> {
     const items = this.shadowRoot!.getElementById("items")!;
-    const commandItem = this._buildSelectedItem(command.getName(), command.toString());
+    const commandItem = this._buildSelectedItem(
+      command.getName(),
+      command.toString(),
+    );
     items.append(commandItem);
 
     // If the command offers any settings create the necessary inputs
@@ -100,11 +120,14 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
 
   private _selectCommandItem(commandItem: HTMLElement | null): void {
     // Unmark current command if any
-    const currentlySelectedCommandItem = this.shadowRoot!.querySelector("#items .item.selected");
+    const currentlySelectedCommandItem = this.shadowRoot!.querySelector(
+      "#items .item.selected",
+    );
     if (currentlySelectedCommandItem) {
       currentlySelectedCommandItem.classList.remove("selected");
       // Hide settings if available
-      const currentlySelectedCommandSettings = this._commandSettingsRelation.get(currentlySelectedCommandItem);
+      const currentlySelectedCommandSettings =
+        this._commandSettingsRelation.get(currentlySelectedCommandItem);
       if (currentlySelectedCommandSettings) {
         currentlySelectedCommandSettings.hidden = true;
       }
@@ -113,7 +136,8 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
     if (commandItem) {
       commandItem.classList.add("selected");
       // Show settings if available
-      const newlySelectedCommandSettings = this._commandSettingsRelation.get(commandItem);
+      const newlySelectedCommandSettings =
+        this._commandSettingsRelation.get(commandItem);
       if (newlySelectedCommandSettings) {
         newlySelectedCommandSettings.hidden = false;
       }
@@ -135,7 +159,9 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
     const settingTemplates = await COMMAND_SETTING_TEMPLATES;
 
     // Build and insert the corresponding setting templates
-    for (const template of settingTemplates.querySelectorAll<HTMLTemplateElement>(`[data-commands~="${command.getName()}"]`)) {
+    for (const template of settingTemplates.querySelectorAll<HTMLTemplateElement>(
+      `[data-commands~="${command.getName()}"]`,
+    )) {
       const settingContainer = document.createElement("div");
       settingContainer.classList.add("cb-setting");
       const setting = document.importNode(template.content, true);
@@ -145,19 +171,22 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
     }
 
     // Insert text from language files
-    for (const element of settingsPanel.querySelectorAll<HTMLElement>('[data-i18n]')) {
+    for (const element of settingsPanel.querySelectorAll<HTMLElement>(
+      "[data-i18n]",
+    )) {
       element.textContent = chrome.i18n.getMessage(element.dataset.i18n!);
     }
 
     // Insert command settings
-    for (const settingInput of settingsPanel.querySelectorAll<HTMLInputElement>("[name]")) {
+    for (const settingInput of settingsPanel.querySelectorAll<HTMLInputElement>(
+      "[name]",
+    )) {
       if (!command.hasSetting(settingInput.name)) {
         continue;
       }
       if (settingInput.type === "checkbox") {
         settingInput.checked = Boolean(command.getSetting(settingInput.name));
-      }
-      else {
+      } else {
         settingInput.value = String(command.getSetting(settingInput.name));
       }
     }
@@ -166,7 +195,9 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
   }
 
   async _handleDropdownClick(event: Event): Promise<void> {
-    const dropdown = this.shadowRoot!.getElementById("dropdown") as HTMLSlotElement;
+    const dropdown = this.shadowRoot!.getElementById(
+      "dropdown",
+    ) as HTMLSlotElement;
     // Get closest slotted element
     const commandSelectItem = event.composedPath().find((ele) => {
       return (ele as HTMLElement).assignedSlot === dropdown;
@@ -188,10 +219,13 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
           permissions: commandObject.permissions,
         });
         // Exit if permissions aren't granted
-        if (!await permissionRequest) return;
+        if (!(await permissionRequest)) return;
       }
 
-      const command = Command.fromJSON({ name: commandObject.command, settings: commandObject.settings });
+      const command = Command.fromJSON({
+        name: commandObject.command,
+        settings: commandObject.settings,
+      });
       const commandItem = await this._createCommandItem(command);
       commandItem.classList.add("animate");
       // Mark new command item as active and show settings
@@ -215,4 +249,4 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
 }
 
 // Define custom element <command-multi-select></command-multi-select>
-customElements.define('command-multi-select', CommandMultiSelect);
+customElements.define("command-multi-select", CommandMultiSelect);

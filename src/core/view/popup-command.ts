@@ -1,8 +1,19 @@
 import { isEmbeddedFrame } from "@utils/common";
-import { HandlerMap, PopupMessages, registerHandlers, Handler, waitForVoidMessage } from "@utils/message";
+import {
+  HandlerMap,
+  PopupMessages,
+  registerHandlers,
+  Handler,
+  waitForVoidMessage,
+} from "@utils/message";
 
-const PopupURL = new URL(chrome.runtime.getURL("/core/view/iframe-popup-command.html"));
-const Popup: HTMLIFrameElement = document.createElementNS("http://www.w3.org/1999/xhtml", "iframe") as HTMLIFrameElement;
+const PopupURL = new URL(
+  chrome.runtime.getURL("/core/view/iframe-popup-command.html"),
+);
+const Popup: HTMLIFrameElement = document.createElementNS(
+  "http://www.w3.org/1999/xhtml",
+  "iframe",
+) as HTMLIFrameElement;
 Popup.popover = "manual";
 
 let mousePositionX = 0;
@@ -30,7 +41,10 @@ const loadPopup: Handler<"popupRequest", PopupMessages> = async (msg) => {
   }
 
   // popup is not working in a pure svg or other xml pages thus cancel the popup creation
-  if (!document.body && document.documentElement.namespaceURI !== "http://www.w3.org/1999/xhtml") {
+  if (
+    !document.body &&
+    document.documentElement.namespaceURI !== "http://www.w3.org/1999/xhtml"
+  ) {
     return false;
   }
 
@@ -54,7 +68,10 @@ const loadPopup: Handler<"popupRequest", PopupMessages> = async (msg) => {
   mousePositionY = msg.data.mousePositionY;
 
   // appending the element to the DOM will start loading the iframe content
-  const parent = document.body.tagName.toUpperCase() === "FRAMESET" ? document.documentElement : document.body;
+  const parent =
+    document.body.tagName.toUpperCase() === "FRAMESET"
+      ? document.documentElement
+      : document.body;
   parent.appendChild(Popup);
 
   // required here because popovers are set to display=none which prevents iframe from loading
@@ -75,11 +92,16 @@ const initiatePopup: Handler<"popupInitiation", PopupMessages> = (msg) => {
   const docEl = document.documentElement;
   const body = document.body;
 
-  const relativeScreenWidth = docEl.clientWidth || body.clientWidth || window.innerWidth;
-  const relativeScreenHeight = docEl.clientHeight || body.clientHeight || window.innerHeight;
+  const relativeScreenWidth =
+    docEl.clientWidth || body.clientWidth || window.innerWidth;
+  const relativeScreenHeight =
+    docEl.clientHeight || body.clientHeight || window.innerHeight;
 
   // get the absolute maximum available height from the current position either from the top or bottom
-  const maxAvailableHeight = Math.max(relativeScreenHeight - mousePositionY, mousePositionY);
+  const maxAvailableHeight = Math.max(
+    relativeScreenHeight - mousePositionY,
+    mousePositionY,
+  );
 
   // get absolute list dimensions
   const width = msg.data.width;
@@ -90,14 +112,20 @@ const initiatePopup: Handler<"popupInitiation", PopupMessages> = (msg) => {
   const availableSpaceBottom = relativeScreenHeight - mousePositionY;
 
   // get the ideal relative position based on the given available space and dimensions
-  const x = availableSpaceRight >= width ? mousePositionX : mousePositionX - width;
-  const y = availableSpaceBottom >= height ? mousePositionY : mousePositionY - height;
+  const x =
+    availableSpaceRight >= width ? mousePositionX : mousePositionX - width;
+  const y =
+    availableSpaceBottom >= height ? mousePositionY : mousePositionY - height;
 
   // apply scale, position, dimensions to Popup / iframe and make it visible
   Popup.style.setProperty("width", `${Math.round(width)}px`, "important");
   Popup.style.setProperty("height", `${Math.round(height)}px`, "important");
   Popup.style.setProperty("transform-origin", "0 0", "important");
-  Popup.style.setProperty("transform", `translate(${Math.round(x)}px, ${Math.round(y)}px)`, "important");
+  Popup.style.setProperty(
+    "transform",
+    `translate(${Math.round(x)}px, ${Math.round(y)}px)`,
+    "important",
+  );
   Popup.style.setProperty("opacity", "1", "important");
   Popup.style.setProperty("visibility", "visible", "important");
 
