@@ -5,10 +5,21 @@
 	"scripts": {
 		"watch": "ts-node build.ts --watch",
 		"build": "ts-node build.ts",
-		"clean": "rm -rf dist"
+		"clean": "rm -rf dist",
+		"lint": "eslint src --ext .ts",
+		"lint:fix": "eslint src --ext .ts --fix"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.37.0",
 		"@types/chrome": "^0.1.12",
+		"@typescript-eslint/eslint-plugin": "^8.46.0",
+		"@typescript-eslint/parser": "^8.46.0",
+		"eslint": "^9.37.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-import-x": "^4.16.1",
+		"eslint-plugin-prettier": "^5.5.4",
+		"eslint-plugin-unused-imports": "^4.2.0",
+		"globals": "^16.4.0",
 		"ts-node": "^10.9.2",
 		"tslib": "^2.8.1",
 		"typescript": "^5.9.2",
