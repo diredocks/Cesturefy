@@ -51,6 +51,11 @@ const applySettings = () => {
     "Gesture",
     "suppressionKey",
   ]);
+  wheelController.mouseButton = configManager.getPath([
+    "Settings",
+    "Wheel",
+    "mouseButton",
+  ]);
   displayTrace = configManager.getPath([
     "Settings",
     "Gesture",
