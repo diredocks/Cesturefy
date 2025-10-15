@@ -82,12 +82,14 @@ import {
   DecreaseURLNumber,
   IncreaseURLNumber,
 } from "@commands/crease-url-number";
+import { UnloadTab } from "./unload";
 
 export const commands = {
   NewTab,
   DuplicateTab,
   StopLoading,
   CloseTab,
+  UnloadTab,
   CloseRightTabs,
   CloseLeftTabs,
   CloseOtherTabs,

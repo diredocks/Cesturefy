@@ -391,6 +391,10 @@
     "message": "Cerrar pestaña",
     "description": "Close tab"
   },
+  "commandLabelUnloadTab": {
+    "message": "Descargar pestaña",
+    "description": "Unload tab"
+  },
   "commandLabelRestoreTab": {
     "message": "Restaurar pestaña",
     "description": "Restore tab"
@@ -754,6 +758,10 @@
   "commandDescriptionCloseTab": {
     "message": "Cierra la pestaña actual.",
     "description": "Closes the current tab."
+  },
+  "commandDescriptionUnloadTab": {
+    "message": "Libera los recursos de la pestaña para ahorrar memoria mientras permanece visible.",
+    "description": "Releases the tab's resources to free up memory while keeping the tab visible."
   },
   "commandDescriptionRestoreTab": {
     "message": "Restaura la última pestaña cerrada.",

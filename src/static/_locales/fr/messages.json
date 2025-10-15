@@ -391,6 +391,10 @@
     "message": "Fermer l'onglet",
     "description": "Close tab"
   },
+  "commandLabelUnloadTab": {
+    "message": "Décharger l’onglet",
+    "description": "Unload tab"
+  },
   "commandLabelRestoreTab": {
     "message": "Restaurer l'onglet",
     "description": "Restore tab"
@@ -754,6 +758,10 @@
   "commandDescriptionCloseTab": {
     "message": "Ferme l'onglet actuel.",
     "description": "Closes the current tab."
+  },
+  "commandDescriptionUnloadTab": {
+    "message": "Libère les ressources de l’onglet pour économiser de la mémoire tout en le gardant visible.",
+    "description": "Releases the tab's resources to free up memory while keeping the tab visible."
   },
   "commandDescriptionRestoreTab": {
     "message": "Restaure le dernier onglet fermé.",
