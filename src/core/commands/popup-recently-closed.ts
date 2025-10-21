@@ -39,7 +39,7 @@ const fn: CommandFn = async function (sender, data) {
   channel.postMessage(dataset);
 
   channel.onMessage.addListener((message) => {
-    chrome.tabs.update(Number(message.id), { active: true });
+    chrome.sessions.restore(message.id);
     channel.disconnect();
   });
 
