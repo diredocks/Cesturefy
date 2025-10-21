@@ -1,6 +1,6 @@
 {
 	"name": "Cesturefy",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"type": "module",
 	"scripts": {
 		"watch": "ts-node build.ts --watch",
