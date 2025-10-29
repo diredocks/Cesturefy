@@ -1,5 +1,6 @@
 import { CommandFn } from "@utils/types";
 import { defineCommand } from "@commands/commands";
+import Context from "@model/context";
 
 interface ScrollPageSettings {
   duration?: number;
@@ -10,15 +11,58 @@ const injectedCode = (
   direction: "up" | "down",
   scrollRatio: number,
   duration: number,
+  context: Context,
 ) => {
-  const isScrollableY = (el: Element) => el.scrollHeight > el.clientHeight;
+  const isScrollableY = (element: Element | null): boolean => {
+    if (!(element instanceof Element)) {
+      return false;
+    }
 
-  const isDivScrollableY = (el: Element) => {
-    const style = getComputedStyle(el);
-    const overflowY = style.overflowY;
-    return (
-      isScrollableY(el) && (overflowY === "auto" || overflowY === "scroll")
-    );
+    const style = window.getComputedStyle(element);
+
+    if (
+      element.scrollHeight > element.clientHeight &&
+      style.overflowY !== "hidden" &&
+      style.overflowY !== "clip"
+    ) {
+      if (element === document.scrollingElement) {
+        console.log(element);
+        return true;
+      } else if (element.tagName.toLowerCase() === "textarea") {
+        console.log(element);
+        return true;
+      } else if (style.overflowY !== "visible" && style.display !== "inline") {
+        if (element === document.body) {
+          const parentStyle = window.getComputedStyle(element.parentElement!);
+          if (
+            parentStyle.overflowY !== "visible" &&
+            parentStyle.overflowY !== "clip"
+          ) {
+            console.log(element);
+            return true;
+          }
+        } else {
+          console.log(element);
+          return true;
+        }
+      }
+    }
+
+    return false;
+  };
+
+  const getClosestScrollableParent = (
+    startNode: Element | null,
+  ): Element | null => {
+    let node: Element | null = startNode;
+
+    while (node != null && !isScrollableY(node)) {
+      node =
+        node.parentElement ??
+        (node.parentNode instanceof ShadowRoot ? node.parentNode.host : null);
+    }
+
+    return node;
   };
 
   const scrollToY = (y: number, duration: number, el: Element) => {
@@ -41,7 +85,7 @@ const injectedCode = (
     const scrollables: Element[] = [];
 
     const traverse = (node: Element) => {
-      if (isDivScrollableY(node)) scrollables.push(node);
+      if (isScrollableY(node)) scrollables.push(node);
       Array.from(node.children).forEach((child) => traverse(child as Element));
     };
 
@@ -50,11 +94,13 @@ const injectedCode = (
   };
 
   const getScrollableElement = (): Element | null => {
-    const target = (window as any).TARGET as Element | null | undefined;
-    if (target && isScrollableY(target)) return target;
-
-    const docEl = document.scrollingElement as Element | null;
-    if (docEl && isScrollableY(docEl)) return docEl;
+    const target = getClosestScrollableParent(
+      document.elementFromPoint(
+        context.mouse.endpoint.x,
+        context.mouse.endpoint.y,
+      ),
+    );
+    if (target) return target;
 
     const scrollables = getAllScrollableElements();
     return scrollables.length > 0 ? scrollables[0] : null;
@@ -79,7 +125,7 @@ const injectedCode = (
 const createScrollPageFn = (
   direction: "up" | "down",
 ): CommandFn<ScrollPageSettings> =>
-  async function (sender) {
+  async function (sender, context) {
     if (!sender.tab?.id) return false;
 
     const duration = Number(this.getSetting("duration")) || 300;
@@ -89,7 +135,7 @@ const createScrollPageFn = (
     const results = await chrome.scripting.executeScript({
       target: { tabId: sender.tab.id, frameIds: [sender.frameId ?? 0] },
       func: injectedCode,
-      args: [direction, scrollRatio, duration],
+      args: [direction, scrollRatio, duration, context!],
       world: "MAIN",
     });
 

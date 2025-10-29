@@ -24,7 +24,7 @@ const fn: CommandFn<UnloadTabSettings> = async function (sender) {
         // get closest tab to the right (if not found it will return the closest tab to the left)
         nextTab = tabs.reduce((acc, cur) =>
           (acc.index <= tab.index && cur.index > acc.index) ||
-            (cur.index > tab.index && cur.index < acc.index)
+          (cur.index > tab.index && cur.index < acc.index)
             ? cur
             : acc,
         );
@@ -33,7 +33,7 @@ const fn: CommandFn<UnloadTabSettings> = async function (sender) {
         // get closest tab to the left (if not found it will return the closest tab to the right)
         nextTab = tabs.reduce((acc, cur) =>
           (acc.index >= tab.index && cur.index < acc.index) ||
-            (cur.index < tab.index && cur.index > acc.index)
+          (cur.index < tab.index && cur.index > acc.index)
             ? cur
             : acc,
         );
