@@ -26,10 +26,8 @@ const injectedCode = (
       style.overflowY !== "clip"
     ) {
       if (element === document.scrollingElement) {
-        console.log(element);
         return true;
       } else if (element.tagName.toLowerCase() === "textarea") {
-        console.log(element);
         return true;
       } else if (style.overflowY !== "visible" && style.display !== "inline") {
         if (element === document.body) {
@@ -38,11 +36,9 @@ const injectedCode = (
             parentStyle.overflowY !== "visible" &&
             parentStyle.overflowY !== "clip"
           ) {
-            console.log(element);
             return true;
           }
         } else {
-          console.log(element);
           return true;
         }
       }
