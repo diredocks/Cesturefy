@@ -3,14 +3,16 @@ import { defineCommand } from "@commands/commands";
 import Context from "@model/context";
 
 interface ScrollPageSettings {
-  duration?: number;
-  scrollProportion?: number;
+  duration: number;
+  scrollProportion: number;
+  behavior: "smooth" | "instant" | "auto";
 }
 
 const injectedCode = (
   direction: "up" | "down",
   scrollRatio: number,
   duration: number,
+  behavior: "smooth" | "instant" | "auto",
   context: Context,
 ) => {
   const isScrollableY = (element: Element | null): boolean => {
@@ -70,7 +72,10 @@ const injectedCode = (
     const step = (time: number) => {
       const elapsed = time - startTime;
       const t = duration > 0 ? Math.min(elapsed / duration, 1) : 1;
-      (el as any).scrollTop = start + change * t;
+      el.scrollTo({
+        top: start + change * t,
+        behavior,
+      });
       if (t < 1) requestAnimationFrame(step);
     };
 
@@ -127,11 +132,12 @@ const createScrollPageFn = (
     const duration = Number(this.getSetting("duration")) || 300;
     const scrollRatio =
       (Number(this.getSetting("scrollProportion")) || 50) / 100;
+    const behavior = this.getSetting("behavior");
 
     const results = await chrome.scripting.executeScript({
       target: { tabId: sender.tab.id, frameIds: [sender.frameId ?? 0] },
       func: injectedCode,
-      args: [direction, scrollRatio, duration, context!],
+      args: [direction, scrollRatio, duration, behavior, context!],
       world: "MAIN",
     });
 
@@ -143,6 +149,7 @@ export const ScrollPageUp = defineCommand(
   {
     duration: 100,
     scrollProportion: 95,
+    behavior: "instant",
   },
   "scroll",
   ["scripting"],
@@ -153,6 +160,7 @@ export const ScrollPageDown = defineCommand(
   {
     duration: 100,
     scrollProportion: 95,
+    behavior: "instant",
   },
   "scroll",
   ["scripting"],

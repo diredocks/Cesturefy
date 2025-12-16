@@ -115,6 +115,18 @@
   <input name="scrollProportion" class="input-field" required="" step="0.1" max="100" min="0.1" type="number">
 </template>
 
+<template data-commands="ScrollTop ScrollBottom ScrollPageDown ScrollPageUp">
+  <span data-i18n="commandSettingLabelScrollBehavior" class="cb-setting-name"></span>
+  <p data-i18n="commandSettingDescriptionScrollBehavior" class="cb-setting-description"></p>
+  <div class="select-wrapper">
+    <select name="behavior" class="select-field">
+      <option value="smooth" data-i18n="commandSettingLabelScrollBehaviorSmooth"></option>
+      <option value="instant" data-i18n="commandSettingLabelScrollBehaviorInstant"></option>
+      <option value="before" data-i18n="commandSettingLabelScrollBehaviorAuto"></option>
+    </select>
+  </div>
+</template>
+
 <template data-commands="FocusFirstTab">
   <span data-i18n="commandSettingLabelFocusIncludePinned" class="cb-setting-name"></span>
   <input name="includePinned" class="toggle-button" type="checkbox">

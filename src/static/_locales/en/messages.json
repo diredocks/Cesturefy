@@ -1187,6 +1187,22 @@
     "message": "Scroll proportion",
     "description": "Scroll proportion"
   },
+  "commandSettingLabelScrollBehavior": {
+    "message": "Scroll behavior",
+    "description": "Scroll behavior"
+  },
+  "commandSettingLabelScrollBehaviorSmooth": {
+    "message": "Smooth",
+    "description": "Smooth"
+  },
+  "commandSettingLabelScrollBehaviorInstant": {
+    "message": "Instant",
+    "description": "Instant"
+  },
+  "commandSettingLabelScrollBehaviorAuto": {
+    "message": "Auto",
+    "description": "Auto"
+  },
   "commandSettingLabelFocusIncludePinned": {
     "message": "Include pinned tabs",
     "description": "Include pinned tabs"
@@ -1383,6 +1399,10 @@
   "commandSettingDescriptionScrollProportion": {
     "message": "The percentage of the viewport height by which the page should be scrolled.",
     "description": "The percentage of the viewport height by which the page should be scrolled."
+  },
+  "commandSettingDescriptionScrollBehavior": {
+    "message": "Determines whether scrolling is instant or animates smoothly",
+    "description": "Determines whether scrolling is instant or animates smoothly"
   },
   "commandSettingDescriptionFocusIncludePinned": {
     "message": "Determines if pinned tabs should be treated as the leftmost tabs.",
