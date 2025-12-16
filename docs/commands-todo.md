@@ -83,10 +83,10 @@ This is a TODO list of commands to be implemented
 - [x]  OpenURLFromClipboardInNewPrivateWindow
 - [x]  DecreaseURLNumber
 - [x]  IncreaseURLNumber
+- [x]  ExecuteUserScript
 
 ## What's not done yet?
 
-- [ ]  ExecuteUserScript
 - [ ]  InsertCustomText
 - [ ]  OpenImageInNewTab
 - [ ]  SaveImage(WIP)

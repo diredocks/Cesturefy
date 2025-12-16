@@ -1499,7 +1499,10 @@
     "message": "Cesturefy does not have permission for incognito mode. Click here for more information.",
     "description": "Cesturefy does not have permission for incognito mode. Click here for more information."
   },
-
+  "commandErrorNotificationMessageMissingUserScriptPermissions": {
+    "message": "Cesturefy does not have permission for executing user scripts. Click here for more information.",
+    "description": "Cesturefy does not have permission for executing user scripts. Click here for more information."
+  },
   "commandBarTitle": {
     "message": "Command bar",
     "description": "Command bar"

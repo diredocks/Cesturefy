@@ -50,6 +50,7 @@ export type CommandPermission = Extract<
   | "clipboardRead"
   | "search"
   | "downloads"
+  | "userScripts"
 >;
 
 export interface CommandDefinition<TSettings> {
