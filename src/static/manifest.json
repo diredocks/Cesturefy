@@ -35,6 +35,7 @@
   "background": {
     "service_worker": "background.bundle.js"
   },
+  "action": {},
   "content_scripts": [
     {
       "js": ["content.bundle.js"],
