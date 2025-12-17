@@ -18,21 +18,22 @@ const FocusRightTabFn: CommandFn<FocusLRSettings> = async function (sender) {
 
   const tabs = await chrome.tabs.query(queryInfo);
 
-  let nextTab = tabs.reduce((acc, cur) => {
-    if (acc.index <= sender.tab!.index && cur.index > acc.index) return cur;
-    if (cur.index > sender.tab!.index && cur.index < acc.index) return cur;
-    return acc;
-  }, tabs[0]);
+  const maxIndex = Math.max(...tabs.map(t => t.index));
 
-  if (
-    !tabs.some((t) => t.index > sender.tab!.index) &&
-    this.getSetting("cycling") &&
-    tabs.length > 0
-  ) {
-    nextTab = tabs.reduce((acc, cur) => (acc.index < cur.index ? acc : cur));
+  let nextIndex: number;
+  if (sender.tab.index < maxIndex) {
+    nextIndex = sender.tab.index + 1;
+  } else if (this.getSetting("cycling") && tabs.length > 0) {
+    nextIndex = 0;
+  } else {
+    return true;
   }
 
-  if (nextTab) await chrome.tabs.update(nextTab.id!, { active: true });
+  await chrome.tabs.highlight({
+    windowId: sender.tab.windowId,
+    tabs: nextIndex
+  });
+
   return true;
 };
 
@@ -48,21 +49,22 @@ const FocusLeftTabFn: CommandFn<FocusLRSettings> = async function (sender) {
 
   const tabs = await chrome.tabs.query(queryInfo);
 
-  let nextTab = tabs.reduce((acc, cur) => {
-    if (acc.index >= sender.tab!.index && cur.index < acc.index) return cur;
-    if (cur.index < sender.tab!.index && cur.index > acc.index) return cur;
-    return acc;
-  }, tabs[0]);
+  const maxIndex = Math.max(...tabs.map(t => t.index));
 
-  if (
-    !tabs.some((t) => t.index < sender.tab!.index) &&
-    this.getSetting("cycling") &&
-    tabs.length > 0
-  ) {
-    nextTab = tabs.reduce((acc, cur) => (acc.index > cur.index ? acc : cur));
+  let nextIndex: number;
+  if (sender.tab.index > 0) {
+    nextIndex = sender.tab.index - 1;
+  } else if (this.getSetting("cycling") && tabs.length > 0) {
+    nextIndex = maxIndex;
+  } else {
+    return true;
   }
 
-  if (nextTab) await chrome.tabs.update(nextTab.id!, { active: true });
+  await chrome.tabs.highlight({
+    windowId: sender.tab.windowId,
+    tabs: nextIndex
+  });
+
   return true;
 };
 
