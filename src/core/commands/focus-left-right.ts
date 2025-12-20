@@ -18,7 +18,7 @@ const FocusRightTabFn: CommandFn<FocusLRSettings> = async function (sender) {
 
   const tabs = await chrome.tabs.query(queryInfo);
 
-  const maxIndex = Math.max(...tabs.map(t => t.index));
+  const maxIndex = Math.max(...tabs.map((t) => t.index));
 
   let nextIndex: number;
   if (sender.tab.index < maxIndex) {
@@ -31,7 +31,7 @@ const FocusRightTabFn: CommandFn<FocusLRSettings> = async function (sender) {
 
   await chrome.tabs.highlight({
     windowId: sender.tab.windowId,
-    tabs: nextIndex
+    tabs: nextIndex,
   });
 
   return true;
@@ -49,7 +49,7 @@ const FocusLeftTabFn: CommandFn<FocusLRSettings> = async function (sender) {
 
   const tabs = await chrome.tabs.query(queryInfo);
 
-  const maxIndex = Math.max(...tabs.map(t => t.index));
+  const maxIndex = Math.max(...tabs.map((t) => t.index));
 
   let nextIndex: number;
   if (sender.tab.index > 0) {
@@ -62,7 +62,7 @@ const FocusLeftTabFn: CommandFn<FocusLRSettings> = async function (sender) {
 
   await chrome.tabs.highlight({
     windowId: sender.tab.windowId,
-    tabs: nextIndex
+    tabs: nextIndex,
   });
 
   return true;

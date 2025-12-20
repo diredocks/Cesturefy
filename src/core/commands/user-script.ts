@@ -3,7 +3,7 @@ import { defineCommand } from "@commands/commands";
 import { displayNotification } from "@utils/common";
 
 interface UserScriptSettings {
-  targetFrame: 'allFrames' | 'topFrame' | 'sourceFrame';
+  targetFrame: "allFrames" | "topFrame" | "sourceFrame";
   userScript: string;
 }
 
@@ -16,31 +16,36 @@ const isUserScriptsAvailable = () => {
     // Not available.
     return false;
   }
-}
+};
 
-const ExecuteUserScriptFn: CommandFn<UserScriptSettings> = async function (sender, data) {
+const ExecuteUserScriptFn: CommandFn<UserScriptSettings> = async function (
+  sender,
+  data,
+) {
   if (!isUserScriptsAvailable()) {
     displayNotification(
       chrome.i18n.getMessage(
         "commandErrorNotificationTitle",
         chrome.i18n.getMessage("commandLabelExecuteUserScript"),
       ),
-      chrome.i18n.getMessage("commandErrorNotificationMessageMissingUserScriptPermissions"),
-      "https://developer.chrome.com/blog/chrome-userscript"
+      chrome.i18n.getMessage(
+        "commandErrorNotificationMessageMissingUserScriptPermissions",
+      ),
+      "https://developer.chrome.com/blog/chrome-userscript",
     );
     return false;
   }
 
   const frameId = () => {
-    switch (this.getSetting('targetFrame')) {
-      case 'allFrames':
+    switch (this.getSetting("targetFrame")) {
+      case "allFrames":
         return undefined;
-      case 'topFrame':
+      case "topFrame":
         return [0];
-      case 'sourceFrame':
+      case "sourceFrame":
         return [sender.frameId || 0];
     }
-  }
+  };
 
   await chrome.userScripts.execute({
     target: {
@@ -48,11 +53,18 @@ const ExecuteUserScriptFn: CommandFn<UserScriptSettings> = async function (sende
       frameIds: frameId(),
     },
     js: [
-      { code: `CTX = ${JSON.stringify(data)};` + this.getSetting("userScript") }
+      {
+        code: `CTX = ${JSON.stringify(data)};` + this.getSetting("userScript"),
+      },
     ],
   });
 
   return true;
-}
+};
 
-export const ExecuteUserScript = defineCommand(ExecuteUserScriptFn, { targetFrame: 'allFrames', userScript: '' }, "advanced", ["userScripts"]);
+export const ExecuteUserScript = defineCommand(
+  ExecuteUserScriptFn,
+  { targetFrame: "allFrames", userScript: "" },
+  "advanced",
+  ["userScripts"],
+);
