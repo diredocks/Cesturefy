@@ -6,6 +6,9 @@ import { DefaultConfig } from "@model/config";
 export class TraceCommand {
   private static _instance: TraceCommand;
 
+  private host = document.createElement("div");
+  private shadow: ShadowRoot;
+
   private overlay = document.createElement("div");
   private canvas = document.createElement("canvas");
   private command = document.createElement("div");
@@ -20,38 +23,60 @@ export class TraceCommand {
   private lastPoint: Point = { x: 0, y: 0 };
 
   private constructor() {
-    this.overlay.popover = "manual";
-    this.overlay.style.cssText = `
-      all: initial !important;
-      position: fixed !important;
-      inset: 0 !important;
-      pointer-events: auto !important;
+    this.host.style.cssText = `
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
     `;
 
+    this.shadow = this.host.attachShadow({ mode: "open" });
+
+    const reset = document.createElement("style");
+    reset.textContent = `
+      :host * {
+        all: initial;
+      }
+
+      :host style {
+        display: none;
+      }
+    `;
+    this.shadow.appendChild(reset);
+
+    this.overlay.popover = "manual";
+    this.overlay.style.cssText = `
+      position: fixed;
+      inset: 0;
+      pointer-events: auto;
+    `;
+    this.shadow.appendChild(this.overlay);
+
     this.canvas.style.cssText = `
-      all: initial !important;
-      pointer-events: auto !important;
+      pointer-events: auto;
     `;
     this.context = this.canvas.getContext("2d")!;
 
     this.command.style.cssText = `
       --horizontalPosition: 0;
       --verticalPosition: 0;
-      all: initial !important;
-      position: absolute !important;
-      top: calc(var(--verticalPosition) * 1%) !important;
-      left: calc(var(--horizontalPosition) * 1%) !important;
-      transform: translate(calc(var(--horizontalPosition) * -1%), calc(var(--verticalPosition) * -1%)) !important;
-      font-family: "NunitoSans Regular", "Arial", sans-serif !important;
-      line-height: normal !important;
-      text-shadow: 0.01em 0.01em 0.01em rgba(0,0,0,0.5) !important;
-      text-align: center !important;
-      padding: 0.4em 0.4em 0.3em !important;
-      font-weight: bold !important;
-      background-color: transparent !important;
-      width: max-content !important;
-      max-width: 50vw !important;
-      pointer-events: auto !important;
+      position: absolute;
+      top: calc(var(--verticalPosition) * 1%);
+      left: calc(var(--horizontalPosition) * 1%);
+      transform: translate(
+        calc(var(--horizontalPosition) * -1%),
+        calc(var(--verticalPosition) * -1%)
+      );
+      font-family: "NunitoSans Regular", "Arial", sans-serif;
+      line-height: normal;
+      font-weight: bold;
+      text-align: center;
+      text-shadow: 0.01em 0.01em 0.01em rgba(0,0,0,0.5);
+      padding: 0.4em 0.4em 0.3em;
+      background-color: transparent;
+      width: max-content;
+      max-width: 50vw;
+      pointer-events: auto;
     `;
 
     window.addEventListener("resize", this.maximizeCanvas, true);
@@ -67,22 +92,36 @@ export class TraceCommand {
   }
 
   initialize(x: number, y: number) {
-    // overlay is not working in a pure svg or other xml pages thus do not append the overlay
     if (
       !document.body &&
       document.documentElement.namespaceURI !== "http://www.w3.org/1999/xhtml"
     )
       return;
 
-    document.body.appendChild(this.overlay);
-    this.overlay.showPopover();
+    if (!this.host.isConnected) {
+      document.body.appendChild(this.host);
+    }
 
+    this.overlay.showPopover();
     this.lastPoint = { x, y };
   }
 
+  terminate() {
+    this.overlay.hidePopover();
+    this.host.remove();
+
+    this.canvas.remove();
+    this.command.remove();
+
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.lastTraceWidth = 0;
+    this.command.textContent = "";
+  }
+
   updateTrace(points: Point[]) {
-    if (!this.overlay.contains(this.canvas))
+    if (!this.overlay.contains(this.canvas)) {
       this.overlay.appendChild(this.canvas);
+    }
 
     const path = new Path2D();
 
@@ -100,7 +139,7 @@ export class TraceCommand {
         );
         endWidth = Math.min(
           this.lastTraceWidth +
-            (distance / growthDistance) * this.traceLineWidth,
+          (distance / growthDistance) * this.traceLineWidth,
           this.traceLineWidth,
         );
         startWidth = this.lastTraceWidth;
@@ -125,37 +164,24 @@ export class TraceCommand {
   }
 
   updateCommand(text: string | null) {
-    // FIXME: when trace disabled lastPoint won't update
     if (text !== null && this.overlay.isConnected) {
       this.command.textContent = text;
-      if (!this.overlay.contains(this.command))
+      if (!this.overlay.contains(this.command)) {
         this.overlay.appendChild(this.command);
+      }
       if (this.commandFollowCursor) {
-        const horizontalPercent = (this.lastPoint.x / window.innerWidth) * 100;
-        const verticalPercent = (this.lastPoint.y / window.innerHeight) * 100;
         this.command.style.setProperty(
           "--horizontalPosition",
-          String(horizontalPercent),
+          String((this.lastPoint.x / window.innerWidth) * 100),
         );
         this.command.style.setProperty(
           "--verticalPosition",
-          String(verticalPercent),
+          String((this.lastPoint.y / window.innerHeight) * 100),
         );
       }
     } else {
       this.command.remove();
     }
-  }
-
-  terminate() {
-    this.overlay.hidePopover();
-    this.overlay.remove();
-    this.canvas.remove();
-    this.command.remove();
-
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.lastTraceWidth = 0;
-    this.command.textContent = "";
   }
 
   private maximizeCanvas = () => {
@@ -180,31 +206,16 @@ export class TraceCommand {
     startWidth: number,
     endWidth: number,
   ): Path2D {
-    const directionVectorX = x2 - x1;
-    const directionVectorY = y2 - y1;
-    const perpendicularVectorAngle =
-      Math.atan2(directionVectorY, directionVectorX) + Math.PI / 2;
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const angle = Math.atan2(dy, dx) + Math.PI / 2;
 
     const path = new Path2D();
-    path.arc(
-      x1,
-      y1,
-      startWidth / 2,
-      perpendicularVectorAngle,
-      perpendicularVectorAngle + Math.PI,
-    );
-    path.arc(
-      x2,
-      y2,
-      endWidth / 2,
-      perpendicularVectorAngle + Math.PI,
-      perpendicularVectorAngle,
-    );
+    path.arc(x1, y1, startWidth / 2, angle, angle + Math.PI);
+    path.arc(x2, y2, endWidth / 2, angle + Math.PI, angle);
     path.closePath();
     return path;
   }
-
-  // Styles
 
   get gestureTraceLineColor(): string {
     const rgbHex = this.context.fillStyle as string;
@@ -220,45 +231,45 @@ export class TraceCommand {
     const aHex = value.slice(7);
     const alpha = parseInt(aHex, 16) / 255;
     this.context.fillStyle = rgbHex;
-    this.canvas.style.setProperty("opacity", String(alpha), "important");
+    this.canvas.style.setProperty("opacity", String(alpha));
   }
 
-  get gestureTraceLineWidth(): number {
+  get gestureTraceLineWidth() {
     return this.traceLineWidth;
   }
   set gestureTraceLineWidth(value: number) {
     this.traceLineWidth = value;
   }
 
-  get gestureTraceLineGrowth(): boolean {
+  get gestureTraceLineGrowth() {
     return this.traceLineGrowth;
   }
   set gestureTraceLineGrowth(value: boolean) {
     this.traceLineGrowth = Boolean(value);
   }
 
-  get gestureCommandFontSize(): string {
+  get gestureCommandFontSize() {
     return this.command.style.getPropertyValue("font-size");
   }
   set gestureCommandFontSize(value: string) {
-    this.command.style.setProperty("font-size", value, "important");
+    this.command.style.setProperty("font-size", value);
   }
 
-  get gestureCommandFontColor(): string {
+  get gestureCommandFontColor() {
     return this.command.style.getPropertyValue("color");
   }
   set gestureCommandFontColor(value: string) {
-    this.command.style.setProperty("color", value, "important");
+    this.command.style.setProperty("color", value);
   }
 
-  get gestureCommandBackgroundColor(): string {
+  get gestureCommandBackgroundColor() {
     return this.command.style.getPropertyValue("background-color");
   }
   set gestureCommandBackgroundColor(value: string) {
-    this.command.style.setProperty("background-color", value, "important");
+    this.command.style.setProperty("background-color", value);
   }
 
-  get gestureCommandHorizontalPosition(): number {
+  get gestureCommandHorizontalPosition() {
     return parseFloat(
       this.command.style.getPropertyValue("--horizontalPosition"),
     );
@@ -267,7 +278,7 @@ export class TraceCommand {
     this.command.style.setProperty("--horizontalPosition", String(value));
   }
 
-  get gestureCommandVerticalPosition(): number {
+  get gestureCommandVerticalPosition() {
     return parseFloat(
       this.command.style.getPropertyValue("--verticalPosition"),
     );
@@ -276,7 +287,7 @@ export class TraceCommand {
     this.command.style.setProperty("--verticalPosition", String(value));
   }
 
-  get gestureCommandFollowCursor(): boolean {
+  get gestureCommandFollowCursor() {
     return this.commandFollowCursor;
   }
   set gestureCommandFollowCursor(value: boolean) {
@@ -305,7 +316,6 @@ export class TraceCommand {
       "Style",
       "lineGrowth",
     ]);
-
     this.gestureCommandFontSize = configManager.getPath([
       "Settings",
       "Gesture",
