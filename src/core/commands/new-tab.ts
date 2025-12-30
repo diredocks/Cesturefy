@@ -28,7 +28,11 @@ const fn: CommandFn<NewTabSettings> = async function (sender) {
       // intended because default is end
       break;
   }
-  await chrome.tabs.create({ active: this.getSetting("focus"), index });
+  await chrome.tabs.create({
+    active: this.getSetting("focus"),
+    index,
+    openerTabId: sender.tab.id,
+  });
 
   return true;
 };

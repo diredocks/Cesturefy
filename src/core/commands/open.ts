@@ -13,6 +13,7 @@ const ViewPageSourceCodeFn: CommandFn = async function (sender) {
     active: true,
     index: sender.tab.index + 1,
     url: "view-source:" + sender.tab.url,
+    openerTabId: sender.tab.id,
   });
 
   return true;

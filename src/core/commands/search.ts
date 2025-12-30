@@ -133,6 +133,7 @@ const SearchClipboardNewTabFn: CommandFn<SearchNewTabSettings> =
       index,
       active: this.getSetting("focus"),
       url: "about:blank",
+      openerTabId: sender.tab.id,
     });
 
     const clipboardText = await sendTabMessage(
@@ -201,6 +202,7 @@ const SearchTextSelectionNewTabFn: CommandFn<SearchNewTabSettings> =
       index,
       active: this.getSetting("focus"),
       url: "about:blank",
+      openerTabId: sender.tab.id,
     });
 
     const selectionText = data.selection?.text;

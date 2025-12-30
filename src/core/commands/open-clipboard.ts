@@ -118,6 +118,7 @@ const OpenURLFromClipboardInNewTabFn: CommandFn<OpenURLNewTabSettings> =
       url,
       active: this.getSetting("focus"),
       index,
+      openerTabId: sender.tab.id,
     });
 
     return true;
