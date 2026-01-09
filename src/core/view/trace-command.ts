@@ -26,7 +26,6 @@ export class TraceCommand {
     this.host.style.cssText = `
       position: fixed;
       inset: 0;
-      z-index: 9999;
       pointer-events: none;
     `;
 
@@ -48,12 +47,12 @@ export class TraceCommand {
     this.overlay.style.cssText = `
       position: fixed;
       inset: 0;
-      pointer-events: auto;
+      pointer-events: none;
     `;
     this.shadow.appendChild(this.overlay);
 
     this.canvas.style.cssText = `
-      pointer-events: auto;
+      pointer-events: none;
     `;
     this.context = this.canvas.getContext("2d")!;
 
@@ -76,7 +75,7 @@ export class TraceCommand {
       background-color: transparent;
       width: max-content;
       max-width: 50vw;
-      pointer-events: auto;
+      pointer-events: none;
     `;
 
     window.addEventListener("resize", this.maximizeCanvas, true);
