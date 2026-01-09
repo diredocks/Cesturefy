@@ -1,4 +1,0 @@
-- [ ] Normalize wild coding patterns in components (e.g., mixing `this._shadow` with `this.shadowRoot`).  
-- [ ] Plenty of other legacy quirks exist, but we’ll skip the refactor—plan is to move to WXT + SolidJS and drop this handmade spaghetti.  
-- [ ] Hunt down and triage the scattered TODOs across the codebase.
-- [ ] Sync `command-setting-templates.html` to commands new available

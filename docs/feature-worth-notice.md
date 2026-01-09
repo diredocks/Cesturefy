@@ -1,2 +1,0 @@
-- [Activate gestures with modifier keys instead of mouse buttons](https://github.com/Robbendebiene/Gesturefy/issues/274)
-- [Keypress Gestures](https://github.com/Robbendebiene/Gesturefy/issues/47)
