@@ -27,6 +27,8 @@ export class TraceCommand {
       position: fixed;
       inset: 0;
       pointer-events: none;
+      background: transparent;
+      display: block;
     `;
 
     this.shadow = this.host.attachShadow({ mode: "open" });
@@ -138,7 +140,7 @@ export class TraceCommand {
         );
         endWidth = Math.min(
           this.lastTraceWidth +
-            (distance / growthDistance) * this.traceLineWidth,
+          (distance / growthDistance) * this.traceLineWidth,
           this.traceLineWidth,
         );
         startWidth = this.lastTraceWidth;
