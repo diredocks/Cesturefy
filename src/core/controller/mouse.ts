@@ -120,6 +120,11 @@ export class MouseController {
       this._handleVisibilityChange,
       true,
     );
+
+    if (e.buttons !== MouseButton.LEFT) {
+      const target = e.composedPath()[0] ?? e.target;
+      (target as Element).setPointerCapture(e.pointerId);
+    }
   }
 
   private _enablePreventDefault() {
@@ -184,6 +189,7 @@ export class MouseController {
           this._events.dispatchEvent("start", this._buffer, initial);
           this._state = State.ACTIVE;
           this._enablePreventDefault();
+          document.documentElement.setPointerCapture(e.pointerId);
         }
         break;
       }
