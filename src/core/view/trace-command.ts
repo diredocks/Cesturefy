@@ -140,7 +140,7 @@ export class TraceCommand {
         );
         endWidth = Math.min(
           this.lastTraceWidth +
-          (distance / growthDistance) * this.traceLineWidth,
+            (distance / growthDistance) * this.traceLineWidth,
           this.traceLineWidth,
         );
         startWidth = this.lastTraceWidth;
