@@ -38,8 +38,7 @@ export class MouseController {
   private _abortTimeoutId: number | null = null;
   private _abortTimeout: number =
     1000 * DefaultConfig.Settings.Gesture.Timeout.duration; // ms
-  private _contextMenuTimeoutId: number | null = null;
-  private _contextMenuTimeout: number = doubleClickThreshold; // TODO: funny uh huh
+  private _pendingPreventionTimeout: number | null = null;
 
   public isTimeoutAbort: boolean =
     DefaultConfig.Settings.Gesture.Timeout.active;
@@ -86,17 +85,6 @@ export class MouseController {
   };
 
   private _handleContextMenu = (e: MouseEvent) => {
-    // On Windows: prevent the default context menu only when moving
-    // from PENDING to ACTIVE state. This ensures that if no gesture
-    // is triggered, the context menu behaves normally.
-    //
-    // On macOS/Linux: prevent the context menu immediately on pointer
-    // down, since it would otherwise appear right away.
-    if (this.currentOS === "win") {
-      preventDefault(e);
-      return;
-    }
-
     const now = Date.now();
     const withinTime = now - this._lastClick.time < doubleClickThreshold;
     const withinDist =
@@ -135,6 +123,13 @@ export class MouseController {
   }
 
   private _enablePreventDefault() {
+    if (this.currentOS === "win") {
+      if (this._pendingPreventionTimeout !== null) {
+        window.clearTimeout(this._pendingPreventionTimeout);
+        this._pendingPreventionTimeout = null;
+      }
+      this._target.addEventListener("contextmenu", preventDefault, true);
+    }
     this._target.addEventListener("click", preventDefault, true);
     this._target.addEventListener("auxclick", preventDefault, true);
     this._target.addEventListener("mouseup", preventDefault, true);
@@ -142,6 +137,10 @@ export class MouseController {
   }
 
   private _disablePreventDefault() {
+    if (this.currentOS === "win") {
+      this._pendingPreventionTimeout = null;
+      this._target.removeEventListener("contextmenu", preventDefault, true);
+    }
     this._target.removeEventListener("click", preventDefault, true);
     this._target.removeEventListener("auxclick", preventDefault, true);
     this._target.removeEventListener("mouseup", preventDefault, true);
@@ -184,14 +183,6 @@ export class MouseController {
         if (distance > this.distanceThreshold) {
           this._events.dispatchEvent("start", this._buffer, initial);
           this._state = State.ACTIVE;
-
-          if (this.currentOS === "win") {
-            this._target.addEventListener(
-              "contextmenu",
-              this._handleContextMenu,
-              true,
-            );
-          }
           this._enablePreventDefault();
         }
         break;
@@ -225,18 +216,11 @@ export class MouseController {
     this._clearTimeout();
 
     if (this.currentOS === "win") {
-      // Ensure only one timeout exists to delay removing the contextmenu prevention.
-      // This keeps the prevention active briefly after pointer-up, avoiding menu display.
-      if (this._contextMenuTimeoutId) {
-        clearTimeout(this._contextMenuTimeoutId);
-      }
-      this._contextMenuTimeoutId = setTimeout(() => {
-        this._target.removeEventListener(
-          "contextmenu",
-          this._handleContextMenu,
-          true,
-        );
-      }, this._contextMenuTimeout);
+      // TODO: doubleClickThreshold - 100 is basicly a magic number
+      this._pendingPreventionTimeout = window.setTimeout(
+        () => this._disablePreventDefault(),
+        doubleClickThreshold - 100,
+      );
     } else {
       // Immediately remove the contextmenu prevention for non-Windows platforms
       this._target.removeEventListener(
@@ -244,6 +228,7 @@ export class MouseController {
         this._handleContextMenu,
         true,
       );
+      this._disablePreventDefault();
     }
 
     this._target.removeEventListener(
@@ -257,8 +242,6 @@ export class MouseController {
       this._handleVisibilityChange,
       true,
     );
-
-    this._disablePreventDefault();
 
     const initial = this._buffer[0];
     if (initial) {
