@@ -1,37 +1,38 @@
-# <sub><img src="https://github.com/diredocks/Cesturefy/blob/main/src/static/images/iconx48.png" height="38" width="38"></sub>esturefy
+## Cesturefy 改进版
 
-#### Still your favorite gesture extension, now on Chromium-based browsers
+基于 [Cesturefy](https://github.com/diredocks/Cesturefy) 的 Fork 版本，增加了以下功能改进：
 
-Cesturefy is a Chromium adaptation of the popular [Robbendebiene/Gesturefy](https://github.com/Robbendebiene/Gesturefy) mouse gesture extension originally for Firefox, bringing the same smooth gesture control to Chrome, Edge, and other Chromium-based browsers.
+------
 
-#### [<img height="62" src="https://learn.microsoft.com/en-us/microsoft-edge/extensions/publish/add-ons-badge-images/microsoft-edge-add-ons-badge.png">](https://microsoftedge.microsoft.com/addons/detail/cesturefy/jefejapoeaijdkiilodmeagdmddhfign) [<img height="62" src="https://developer.chrome.com/static/docs/webstore/branding/image/HRs9MPufa1J1h5glNhut.png">](https://chromewebstore.google.com/detail/cesturefy/bifgfhokfobhebifcogneljkpaaloonp)
+### ✨ 新增功能
 
-## Features
+#### 1. 语言选择
 
- - Mouse gestures (moving the mouse while holding the left, middle, or right button)
- - Rocker gestures (left-click while holding the right mouse button and vice versa)
- - Provides special commands like popup, [user script](docs/user-script.md) and multi purpose command
- - Wheel gestures (scroll wheel while holding the left, middle, or right button)
- - (80/91) different [predefined commands](docs/commands-todo.md)
- - Customizable gesture trace and status information style
- - Light, dark and highcontrast theme
+在设置页面新增语言选项，可手动切换扩展界面语言，无需依赖浏览器设置。
 
-## Limitations
+#### 2. 最近关闭标签页弹窗优化
 
-- Cesturefy does not work on Chrome internal pages like `chrome://extensions` or other restricted pages. This is due to browser security restrictions.
-- The page must be partially loaded to perform gestures.
-- Gestures cannot be properly performed inside iframe pages, because Chrome does not provide the [mozInnerScreenX/Y](https://developer.mozilla.org/en-US/docs/Web/API/Window/mozInnerScreenX) API.
-- On Linux and macOS, right-click menu gestures require a double click to trigger. Chrome does not support the [browserSettings.contextMenuShowEvent](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/browserSettings/contextMenuShowEvent) API.
+使用「弹出最近关闭的标签页」命令时，最近关闭的网址始终显示在离鼠标指针最近的位置，无论弹窗出现在鼠标上方还是下方。
 
-## License
+#### 3. 增加 “还原最近关闭的标签页”
 
-This project is licensed under the terms of the [GNU General Public License v3.0](https://github.com/diredocks/Cesturefy/blob/main/LICENSE).
+## 使用
 
-## Privacy
+在release里面下载 Cesturefy.zip 
 
-Cesturefy does not collect any data of any kind.
+打开 `chrome://extensions`，开启「开发者模式」
 
-* Cesturefy has no home server.
-* Cesturefy doesn't embed any analytic or telemetry hooks in its code.
+点击「加载已解压的扩展程序」，选择 `Cesturefy` 文件夹
 
-**GitHub** is used to host the Cesturefy project. **GitHub, Inc.** (a subsidiary of **Microsoft Corporation**) owns **GitHub** and is unrelated to Cesturefy.
+### 📦 自己构建安装安装
+
+1. 下载本仓库
+2. 运行 `bun install && bun run dist`
+3. 打开 `chrome://extensions`，开启「开发者模式」
+4. 点击「加载已解压的扩展程序」，选择 `dist` 文件夹
+
+------
+
+### 🙏 致谢
+
+原项目：[Cesturefy](https://github.com/Robbendebiene/Gesturefy)
