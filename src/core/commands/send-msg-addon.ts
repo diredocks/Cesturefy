@@ -1,6 +1,6 @@
 import { CommandFn } from "@utils/types";
 import { defineCommand } from "@commands/commands";
-import { displayNotification } from "@utils/common";
+import { displayNotification, getMessage } from "@utils/common";
 
 interface SendMessageToOtherAddonSettings {
   extensionId: string;
@@ -16,13 +16,8 @@ const fn: CommandFn<SendMessageToOtherAddonSettings> = async function () {
       message = JSON.parse(message);
     } catch (error) {
       displayNotification(
-        chrome.i18n.getMessage(
-          "commandErrorNotificationTitle",
-          chrome.i18n.getMessage("commandLabelSendMessageToOtherAddon"),
-        ),
-        chrome.i18n.getMessage(
-          "commandErrorNotificationMessageNotSerializeable",
-        ),
+        getMessage("commandErrorNotificationTitle").replace("$1", getMessage("commandLabelSendMessageToOtherAddon")),
+        getMessage("commandErrorNotificationMessageNotSerializeable"),
         "https://github.com/Robbendebiene/Gesturefy/wiki/Send-message-to-other-addon#error-not-serializeable",
       );
       console.error(error);
@@ -39,13 +34,8 @@ const fn: CommandFn<SendMessageToOtherAddonSettings> = async function () {
       "Could not establish connection. Receiving end does not exist."
     ) {
       displayNotification(
-        chrome.i18n.getMessage(
-          "commandErrorNotificationTitle",
-          chrome.i18n.getMessage("commandLabelSendMessageToOtherAddon"),
-        ),
-        chrome.i18n.getMessage(
-          "commandErrorNotificationMessageMissingRecipient",
-        ),
+        getMessage("commandErrorNotificationTitle").replace("$1", getMessage("commandLabelSendMessageToOtherAddon")),
+        getMessage("commandErrorNotificationMessageMissingRecipient"),
         "https://github.com/Robbendebiene/Gesturefy/wiki/Send-message-to-other-addon#error-missing-recipient",
       );
     }
