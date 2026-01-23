@@ -97,6 +97,9 @@ const initiatePopup: Handler<"popupInitiation", PopupMessages> = (msg) => {
   const relativeScreenHeight =
     docEl.clientHeight || body.clientHeight || window.innerHeight;
 
+  // calculate available space below the mouse
+  const availableSpaceBottom = relativeScreenHeight - mousePositionY;
+
   // get the absolute maximum available height from the current position either from the top or bottom
   const maxAvailableHeight = Math.max(
     relativeScreenHeight - mousePositionY,
@@ -107,9 +110,11 @@ const initiatePopup: Handler<"popupInitiation", PopupMessages> = (msg) => {
   const width = msg.data.width;
   const height = Math.min(msg.data.height, maxAvailableHeight);
 
-  // calculate absolute available space to the right and bottom
+  // calculate absolute available space to the right
   const availableSpaceRight = relativeScreenWidth - mousePositionX;
-  const availableSpaceBottom = relativeScreenHeight - mousePositionY;
+
+  // determine if popup should appear above mouse (need to reverse list)
+  const popupAboveMouse = availableSpaceBottom < height;
 
   // get the ideal relative position based on the given available space and dimensions
   const x =
@@ -129,7 +134,8 @@ const initiatePopup: Handler<"popupInitiation", PopupMessages> = (msg) => {
   Popup.style.setProperty("opacity", "1", "important");
   Popup.style.setProperty("visibility", "visible", "important");
 
-  return { width, height };
+  // return dimensions and whether to reverse the list (popup above mouse means most recent should be at bottom)
+  return { width, height, reverseList: popupAboveMouse };
 };
 
 const terminatePopup: Handler<"popupTermination", PopupMessages> = () => {

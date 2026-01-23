@@ -97,6 +97,12 @@ export type PopupMessages = {
   popupTermination: Record<string, never>;
 };
 
+export type PopupInitiationResponse = {
+  width: number;
+  height: number;
+  reverseList: boolean;
+};
+
 export type PopupIframeMessages = {
   popupConnection: { id: string; label: string; icon?: string }[];
 };

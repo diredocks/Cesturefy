@@ -1,6 +1,6 @@
 import { PopupBox } from "@options/components/popup-box";
 import { RGB, RGBA } from "@utils/types";
-import { clamp, rgbToHSV, RGBAToHexA, HexAToRGBA } from "@options/utils/common";
+import { clamp, rgbToHSV, RGBAToHexA, HexAToRGBA, getMessage } from "@options/utils/common";
 import { MouseButton } from "@utils/types";
 
 export class ColorPicker extends HTMLElement {
@@ -122,7 +122,7 @@ export class ColorPicker extends HTMLElement {
       this._handleHexSubmit.bind(this),
     );
 
-    this.$("saveButton").textContent = chrome.i18n.getMessage("buttonSave");
+    this.$("saveButton").textContent = getMessage("buttonSave");
 
     this.addEventListener("click", this._handleHostElementClick.bind(this));
   }

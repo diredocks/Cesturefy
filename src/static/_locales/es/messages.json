@@ -163,6 +163,20 @@
     "message": "Mostrar notificaciones de actualización",
     "description": "Display update notification"
   },
+
+  "settingLabelLanguage": {
+    "message": "Idioma",
+    "description": "Language"
+  },
+  "settingDescriptionLanguage": {
+    "message": "Selecciona el idioma de visualización para la extensión. Requiere recargar la página para aplicar los cambios.",
+    "description": "Select the display language for the extension"
+  },
+  "settingLabelLanguageAuto": {
+    "message": "Automático (predeterminado del navegador)",
+    "description": "Auto language option"
+  },
+
   "settingDescriptionMouseButton": {
     "message": "Captura un nuevo gesto del ratón mientras se mantiene presionado el botón.",
     "description": "Captures a new mouse gesture while the button is held down."

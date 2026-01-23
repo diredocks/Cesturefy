@@ -1,13 +1,13 @@
-import { ContentLoaded } from "@options/index";
+import { FullyLoaded, getMessage } from "@options/index";
 import { configManager } from "@model/config-manager";
 
-ContentLoaded.then(main);
+FullyLoaded.then(main);
 
 function main() {
   const exclusionsContainer = document.getElementById(
     "exclusionsContainer",
   ) as HTMLUListElement;
-  exclusionsContainer.dataset.noEntriesHint = chrome.i18n.getMessage(
+  exclusionsContainer.dataset.noEntriesHint = getMessage(
     "exclusionsHintNoEntries",
   );
 
@@ -18,10 +18,10 @@ function main() {
   const urlPatternInput = exclusionsForm.elements.namedItem(
     "urlPattern",
   ) as HTMLInputElement;
-  urlPatternInput.placeholder = chrome.i18n.getMessage(
+  urlPatternInput.placeholder = getMessage(
     "exclusionsPlaceholderURL",
   );
-  urlPatternInput.title = chrome.i18n.getMessage("exclusionsPlaceholderURL");
+  urlPatternInput.title = getMessage("exclusionsPlaceholderURL");
   urlPatternInput.addEventListener("change", onInputChange);
 
   // add existing exclusions entries
@@ -37,7 +37,7 @@ function onInputChange(this: HTMLInputElement) {
 
   if (exclusions.includes(value)) {
     this.setCustomValidity(
-      chrome.i18n.getMessage("exclusionsNotificationAlreadyExists"),
+      getMessage("exclusionsNotificationAlreadyExists"),
     );
   } else if (this.validity.customError) {
     this.setCustomValidity("");

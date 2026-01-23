@@ -1,12 +1,12 @@
 // TODO: popup close refresh
 import { CommandName, commands } from "@commands/index";
 import { PopupBox } from "@options/components/popup-box";
-import { ContentLoaded } from "@options/index";
+import { FullyLoaded } from "@options/index";
 import { ConfigSchema } from "@model/config";
 import { configManager } from "@model/config-manager";
 import { CommandPermission } from "@utils/types";
 
-ContentLoaded.then(main);
+FullyLoaded.then(main);
 
 function main() {
   const resetButton = document.getElementById("resetButton")!;

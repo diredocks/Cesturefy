@@ -61,6 +61,7 @@ export interface WheelSettings {
 export interface GeneralSettings {
   updateNotification: boolean;
   theme: string;
+  language: string;
 }
 
 export interface Settings {
@@ -131,6 +132,7 @@ export const DefaultConfig: ConfigSchema = {
     General: {
       updateNotification: true, // TODO
       theme: "light",
+      language: "auto",
     },
   },
   Gestures: [

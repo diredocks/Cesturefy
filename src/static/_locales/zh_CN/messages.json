@@ -163,6 +163,20 @@
     "message": "显示更新通知",
     "description": "Display update notification"
   },
+
+  "settingLabelLanguage": {
+    "message": "语言",
+    "description": "Language"
+  },
+  "settingDescriptionLanguage": {
+    "message": "选择扩展的显示语言。更改后需要刷新页面才能生效。",
+    "description": "Select the display language for the extension"
+  },
+  "settingLabelLanguageAuto": {
+    "message": "自动（浏览器默认）",
+    "description": "Auto language option"
+  },
+
   "settingDescriptionMouseButton": {
     "message": "按住该按键时，开始记录鼠标手势",
     "description": "Captures a new mouse gesture while the button is held down."
