@@ -1,4 +1,3 @@
-// TODO: popup close refresh
 import { CommandName, commands } from "@commands/index";
 import { PopupBox } from "@options/components/popup-box";
 import { ContentLoaded } from "@options/index";
@@ -20,14 +19,13 @@ function main() {
 }
 
 async function onResetButton() {
-  const popup = document.getElementById("resetConfirm")! as PopupBox;
-  popup.addEventListener(
-    "close",
-    async (event) => {
-      if (!event.detail) return;
-      await removePermissions();
-      configManager.clear().then(() => window.location.reload());
-    },
+  const popup = document.getElementById("resetConfirm") as PopupBox;
+  popup.addEventListener("close", async (event) => {
+    if (!event.detail) return;
+    await removeOptionalPermissions();
+    await configManager.clear();
+    window.location.reload();
+  },
     { once: true },
   );
   popup.open = true;
@@ -36,8 +34,7 @@ async function onResetButton() {
 function onBackupButton() {
   const manifest = chrome.runtime.getManifest();
   const linkElement = document.createElement("a");
-  linkElement.download = `${manifest.name}_${manifest.version}_${new Date().getTime()}.json`;
-  // creates a json file with the current config
+  linkElement.download = `${manifest.name} ${manifest.version} ${new Date().toDateString()}.json`;
   linkElement.href = URL.createObjectURL(
     new Blob([JSON.stringify(configManager.toJSON(), null, "  ")], {
       type: "application/json",
@@ -48,56 +45,94 @@ function onBackupButton() {
   document.body.removeChild(linkElement);
 }
 
-async function onRestoreButton(
-  this: HTMLInputElement,
-  _event: Event,
-): Promise<void> {
+async function onRestoreButton(this: HTMLInputElement): Promise<void> {
   const file = this.files?.[0];
   if (!file || file.type !== "application/json") {
-    const popup = document.getElementById("restoreAlertWrongFile") as any;
-    popup.addEventListener("close", () => window.location.reload(), {
-      once: true,
-    });
+    const popup = document.getElementById("restoreAlertWrongFile") as PopupBox;
     popup.open = true;
     return;
   }
 
   try {
     // FIXME: mouseButton from Gesturefy is string, causing wrong behaviour
-    const restoredConfig = (await readJsonFile(file)) as Partial<ConfigSchema>;
+    const restoredConfig =
+      (await readJsonFile(file)) as Partial<ConfigSchema>;
+    const usedCommands: CommandName[] = [];
 
-    const gestures = restoredConfig.Gestures ?? [];
-    const permissions = new Set<CommandPermission>();
+    // Gestures
+    if (restoredConfig.Gestures?.length) {
+      for (const g of restoredConfig.Gestures) {
+        if (g.command?.name)
+          usedCommands.push(g.command.name as CommandName);
+      }
+    }
+    // Rocker
+    const rocker = restoredConfig.Settings?.Rocker;
+    if (rocker) {
+      if (rocker.rightMouseClick?.name)
+        usedCommands.push(
+          rocker.rightMouseClick.name as CommandName,
+        );
 
-    for (const g of gestures) {
-      const def = commands[g.command.name as CommandName];
-      if (!def) throw new Error(`Command not found: ${g.command.name}`);
-      def.permissions?.forEach((p) => permissions.add(p));
+      if (rocker.leftMouseClick?.name)
+        usedCommands.push(
+          rocker.leftMouseClick.name as CommandName,
+        );
+    }
+    // Wheel
+    const wheel = restoredConfig.Settings?.Wheel;
+    if (wheel) {
+      if (wheel.wheelUp?.name)
+        usedCommands.push(wheel.wheelUp.name as CommandName);
+
+      if (wheel.wheelDown?.name)
+        usedCommands.push(wheel.wheelDown.name as CommandName);
     }
 
-    if (permissions.size > 0) {
-      const ok = await chrome.permissions.request({
-        origins: ["<all_urls>"],
-        permissions: [...permissions],
-      });
-      if (!ok) return;
+    const requiredPermissions = new Set<CommandPermission>();
+    for (const name of usedCommands) {
+      const def = commands[name];
+      if (!def) continue;
+      def.permissions?.forEach((p) =>
+        requiredPermissions.add(p),
+      );
     }
 
-    configManager.clear();
-    configManager.fromJSON(restoredConfig);
+    const confirmPopup = document.getElementById("restoreConfirm") as PopupBox;
+    confirmPopup.addEventListener("close", async (event) => {
+      if (!event.detail) return;
+      // Request optional permissions if needed
+      if (requiredPermissions.size > 0) {
+        const granted = await chrome.permissions.request({
+          origins: ["<all_urls>"],
+          permissions: [...requiredPermissions],
+        });
 
-    const popup = document.getElementById("restoreAlertSuccess") as any;
-    popup.addEventListener("close", () => window.location.reload(), {
-      once: true,
-    });
-    popup.open = true;
+        // TODO: restoreAlertNotGranted
+        if (!granted) return;
+      }
+      proceedRestore(restoredConfig);
+    },
+      { once: true },
+    );
+    confirmPopup.open = true;
   } catch {
-    const popup = document.getElementById("restoreAlertNoConfigFile") as any;
-    popup.addEventListener("close", () => window.location.reload(), {
-      once: true,
-    });
+    const popup = document.getElementById("restoreAlertNoConfigFile") as PopupBox;
     popup.open = true;
   }
+}
+
+function proceedRestore(restoredConfig: Partial<ConfigSchema>) {
+  configManager.clear();
+  configManager.fromJSON(restoredConfig);
+
+  const popup = document.getElementById("restoreAlertSuccess") as PopupBox;
+
+  popup.addEventListener("close", () => window.location.reload(),
+    { once: true },
+  );
+
+  popup.open = true;
 }
 
 function readJsonFile(file: File): Promise<unknown> {
@@ -105,8 +140,8 @@ function readJsonFile(file: File): Promise<unknown> {
     const reader = new FileReader();
     reader.onloadend = () => {
       try {
-        const result = typeof reader.result === "string" ? reader.result : "";
-        resolve(JSON.parse(result));
+        const text = typeof reader.result === "string" ? reader.result : "";
+        resolve(JSON.parse(text));
       } catch {
         reject(new Error("Invalid JSON"));
       }
@@ -116,28 +151,21 @@ function readJsonFile(file: File): Promise<unknown> {
   });
 }
 
-export async function removePermissions() {
-  // FIXME: removing <all_urls> from origins doesnot work and IDK why
+async function removeOptionalPermissions() {
   const manifest = chrome.runtime.getManifest();
-
   const optionalPermissions = new Set(manifest.optional_permissions ?? []);
-  // const optionalOrigins = new Set(manifest.optional_host_permissions ?? []);
-
   const current = await chrome.permissions.getAll();
 
   const permsToRemove =
-    current.permissions?.filter((p) => optionalPermissions.has(p)) ?? [];
-
-  // const originsToRemove = current.origins?.filter((o) =>
-  //   optionalOrigins.has(o)
-  // ) ?? [];
+    current.permissions?.filter((p) =>
+      optionalPermissions.has(p),
+    ) ?? [];
 
   if (permsToRemove.length === 0) {
     return false;
   }
 
-  return await chrome.permissions.remove({
+  return chrome.permissions.remove({
     permissions: permsToRemove,
-    // origins: originsToRemove,
   });
 }
