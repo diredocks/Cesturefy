@@ -1,3 +1,5 @@
+import { getMessage } from "@options/utils/common";
+
 // TODO: Command, input as popup-box property?
 interface PopupBoxEvents {
   open: void;
@@ -123,7 +125,7 @@ export class PopupBox extends HTMLElement {
         {
           const btn = document.createElement("button");
           btn.id = "popupBoxConfirmButton";
-          btn.textContent = chrome.i18n.getMessage("buttonConfirm");
+          btn.textContent = getMessage("buttonConfirm");
           btn.addEventListener("click", () => this._handleCloseButtonClick());
           footer.append(btn);
         }
@@ -133,14 +135,14 @@ export class PopupBox extends HTMLElement {
         {
           const confirmBtn = document.createElement("button");
           confirmBtn.id = "popupBoxConfirmButton";
-          confirmBtn.textContent = chrome.i18n.getMessage("buttonConfirm");
+          confirmBtn.textContent = getMessage("buttonConfirm");
           confirmBtn.addEventListener("click", () =>
             this._handleConfirmButtonClick(),
           );
 
           const cancelBtn = document.createElement("button");
           cancelBtn.id = "popupBoxCancelButton";
-          cancelBtn.textContent = chrome.i18n.getMessage("buttonCancel");
+          cancelBtn.textContent = getMessage("buttonCancel");
           cancelBtn.addEventListener("click", () =>
             this._handleCancelButtonClick(),
           );
@@ -159,7 +161,7 @@ export class PopupBox extends HTMLElement {
 
           const btn = document.createElement("button");
           btn.id = "popupBoxConfirmButton";
-          btn.textContent = chrome.i18n.getMessage("buttonConfirm");
+          btn.textContent = getMessage("buttonConfirm");
           btn.addEventListener("click", () => this._handleConfirmButtonClick());
 
           footer.append(input, btn);

@@ -169,6 +169,19 @@
     "description": "Display update notification"
   },
 
+  "settingLabelLanguage": {
+    "message": "Language",
+    "description": "Language"
+  },
+  "settingDescriptionLanguage": {
+    "message": "Select the display language for the extension. Requires page reload to take effect.",
+    "description": "Select the display language for the extension"
+  },
+  "settingLabelLanguageAuto": {
+    "message": "Auto (Browser Default)",
+    "description": "Auto language option"
+  },
+
   "settingDescriptionMouseButton": {
     "message": "Captures a new mouse gesture while the button is held down.",
     "description": "Captures a new mouse gesture while the button is held down."

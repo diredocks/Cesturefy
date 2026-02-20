@@ -1,6 +1,6 @@
 import { CommandFn } from "@utils/types";
 import { defineCommand } from "@commands/commands";
-import { displayNotification } from "@utils/common";
+import { displayNotification, getMessage } from "@utils/common";
 
 interface OpenCustomSettings {
   url?: string;
@@ -13,11 +13,8 @@ const OpenCustomURLFn: CommandFn<OpenCustomSettings> = async function (sender) {
     });
   } catch (error) {
     displayNotification(
-      chrome.i18n.getMessage(
-        "commandErrorNotificationTitle",
-        chrome.i18n.getMessage("commandLabelOpenCustomURL"),
-      ),
-      chrome.i18n.getMessage("commandErrorNotificationMessageIllegalURL"),
+      getMessage("commandErrorNotificationTitle").replace("$1", getMessage("commandLabelOpenCustomURL")),
+      getMessage("commandErrorNotificationMessageIllegalURL"),
       "https://github.com/Robbendebiene/Gesturefy/wiki/Illegal-URL",
     );
     return false;
@@ -39,11 +36,8 @@ const OpenCustomURLNewWindowFn: CommandFn<OpenCustomSettings> =
       });
     } catch (error) {
       displayNotification(
-        chrome.i18n.getMessage(
-          "commandErrorNotificationTitle",
-          chrome.i18n.getMessage("commandLabelOpenCustomURL"),
-        ),
-        chrome.i18n.getMessage("commandErrorNotificationMessageIllegalURL"),
+        getMessage("commandErrorNotificationTitle").replace("$1", getMessage("commandLabelOpenCustomURL")),
+        getMessage("commandErrorNotificationMessageIllegalURL"),
         "https://github.com/Robbendebiene/Gesturefy/wiki/Illegal-URL",
       );
       return false;
@@ -66,11 +60,8 @@ const OpenCustomURLNewPrivateWindowFn: CommandFn<OpenCustomSettings> =
       });
     } catch (error) {
       displayNotification(
-        chrome.i18n.getMessage(
-          "commandErrorNotificationTitle",
-          chrome.i18n.getMessage("commandLabelOpenCustomURL"),
-        ),
-        chrome.i18n.getMessage("commandErrorNotificationMessageIllegalURL"),
+        getMessage("commandErrorNotificationTitle").replace("$1", getMessage("commandLabelOpenCustomURL")),
+        getMessage("commandErrorNotificationMessageIllegalURL"),
         "https://github.com/Robbendebiene/Gesturefy/wiki/Illegal-URL",
       );
       return false;
@@ -118,11 +109,8 @@ const OpenCustomURLNewTabFn: CommandFn<OpenCustomNewTabSettings> =
       });
     } catch (error) {
       displayNotification(
-        chrome.i18n.getMessage(
-          "commandErrorNotificationTitle",
-          chrome.i18n.getMessage("commandLabelOpenCustomURLInNewTab"),
-        ),
-        chrome.i18n.getMessage("commandErrorNotificationMessageIllegalURL"),
+        getMessage("commandErrorNotificationTitle").replace("$1", getMessage("commandLabelOpenCustomURLInNewTab")),
+        getMessage("commandErrorNotificationMessageIllegalURL"),
         "https://github.com/Robbendebiene/Gesturefy/wiki/Illegal-URL",
       );
       return false;

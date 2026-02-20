@@ -163,6 +163,20 @@
     "message": "Уведомлять при новом обновлении",
     "description": "Display update notification"
   },
+
+  "settingLabelLanguage": {
+    "message": "Язык",
+    "description": "Language"
+  },
+  "settingDescriptionLanguage": {
+    "message": "Выберите язык отображения расширения. Для применения изменений требуется перезагрузить страницу.",
+    "description": "Select the display language for the extension"
+  },
+  "settingLabelLanguageAuto": {
+    "message": "Автоматически (по умолчанию браузера)",
+    "description": "Auto language option"
+  },
+
   "settingDescriptionMouseButton": {
     "message": "Записывает новый жест мыши при удерживании кнопки.",
     "description": "Captures a new mouse gesture while the button is held down."

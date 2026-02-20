@@ -163,6 +163,20 @@
     "message": "顯示更新通知",
     "description": "Display update notification"
   },
+
+  "settingLabelLanguage": {
+    "message": "語言",
+    "description": "Language"
+  },
+  "settingDescriptionLanguage": {
+    "message": "選擇擴展的顯示語言。變更後需要重新整理頁面才能生效。",
+    "description": "Select the display language for the extension"
+  },
+  "settingLabelLanguageAuto": {
+    "message": "自動（瀏覽器預設）",
+    "description": "Auto language option"
+  },
+
   "settingDescriptionMouseButton": {
     "message": "當按住按鈕時，錄製新手勢",
     "description": "Captures a new mouse gesture while the button is held down."

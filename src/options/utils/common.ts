@@ -1,5 +1,35 @@
 import { commands } from "@commands/index";
 import { Vectors, Points, RGB, RGBA } from "@utils/types";
+import { setMessageGetter } from "@utils/common";
+
+// Store for custom language messages
+let customMessages: Record<string, { message: string }> | null = null;
+
+// Custom getMessage function that uses custom language if set
+export function getMessage(key: string): string {
+  if (customMessages && customMessages[key]) {
+    return customMessages[key].message;
+  }
+  return chrome.i18n.getMessage(key);
+}
+
+// Load custom language messages
+export async function loadCustomLanguage(lang: string): Promise<void> {
+  if (lang === "auto") {
+    customMessages = null;
+  } else {
+    try {
+      const url = chrome.runtime.getURL(`/_locales/${lang}/messages.json`);
+      customMessages = await fetchJSONAsObject<Record<string, { message: string }>>(url);
+    } catch (e) {
+      console.warn(`Failed to load language ${lang}, falling back to browser default`);
+      customMessages = null;
+    }
+  }
+  
+  // Update the global message getter so Command.toString() uses the correct language
+  setMessageGetter(getMessage);
+}
 
 export async function fetchJSONAsObject<T = unknown>(url: string): Promise<T> {
   const response = await fetch(url, { method: "GET" });

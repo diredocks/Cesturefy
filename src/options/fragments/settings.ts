@@ -1,11 +1,8 @@
 // NOTE: Extras will reuse things we implement here
-import { ContentLoaded } from "@options/index";
+import { FullyLoaded } from "@options/index";
 import { configManager } from "@model/config-manager";
 
-const res: Promise<unknown>[] = [configManager.loaded, ContentLoaded];
-
-const loaded = Promise.all(res);
-loaded.then(main);
+FullyLoaded.then(main);
 
 async function main() {
   // apply values to input fields and add their event function
@@ -55,6 +52,11 @@ function onChange(this: HTMLElement) {
 
     // save to config
     configManager.set(this.dataset.config!, value);
+
+    // reload page when language changes
+    if (this.dataset.config === "Settings.General.language") {
+      window.location.reload();
+    }
   }
 }
 

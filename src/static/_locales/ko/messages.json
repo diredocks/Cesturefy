@@ -163,6 +163,20 @@
     "message": "업데이트 알림 표시",
     "description": "Display update notification"
   },
+
+  "settingLabelLanguage": {
+    "message": "언어",
+    "description": "Language"
+  },
+  "settingDescriptionLanguage": {
+    "message": "확장 프로그램의 표시 언어를 선택합니다. 변경 사항을 적용하려면 페이지를 새로 고침해야 합니다.",
+    "description": "Select the display language for the extension"
+  },
+  "settingLabelLanguageAuto": {
+    "message": "자동 (브라우저 기본값)",
+    "description": "Auto language option"
+  },
+
   "settingDescriptionMouseButton": {
     "message": "버튼을 누르고있는 동안 새 마우스 제스처를 캡처합니다.",
     "description": "Captures a new mouse gesture while the button is held down."
