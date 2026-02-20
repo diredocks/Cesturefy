@@ -1,6 +1,7 @@
 import {
   COMMAND_SETTING_TEMPLATES,
   COMMAND_ITEMS,
+  getMessage,
 } from "@options/utils/common";
 import { SortableMultiSelect } from "@options/components/sortable-multi-select";
 import Command from "@model/command"; // TODO: Maybe CommandJSON here
@@ -26,7 +27,7 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
         "sortable-multi-select-item",
       );
       commandMultiSelectItem.dataset.command = commandItem.command;
-      commandMultiSelectItem.textContent = chrome.i18n.getMessage(
+      commandMultiSelectItem.textContent = getMessage(
         `commandLabel${commandItem.command}`,
       );
       this.append(commandMultiSelectItem);
@@ -36,10 +37,10 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
   }
 
   connectedCallback(): void {
-    this.placeholder = chrome.i18n.getMessage(
+    this.placeholder = getMessage(
       "commandMultiSelectAddPlaceholder",
     );
-    this.dropdownPlaceholder = chrome.i18n.getMessage(
+    this.dropdownPlaceholder = getMessage(
       "commandMultiSelectNoResultsPlaceholder",
     );
   }
@@ -174,7 +175,7 @@ export class CommandMultiSelect extends SortableMultiSelect<Command> {
     for (const element of settingsPanel.querySelectorAll<HTMLElement>(
       "[data-i18n]",
     )) {
-      element.textContent = chrome.i18n.getMessage(element.dataset.i18n!);
+      element.textContent = getMessage(element.dataset.i18n!);
     }
 
     // Insert command settings

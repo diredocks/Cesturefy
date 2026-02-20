@@ -10,8 +10,40 @@ import {
   ContentMessages,
 } from "@utils/message";
 import Command from "@model/command";
+import { setMessageGetter } from "@utils/common";
 
 let gestures: Gesture[];
+let customMessages: Record<string, { message: string }> | null = null;
+
+// Custom getMessage function that uses custom language if set
+function getMessage(key: string): string {
+  if (customMessages && customMessages[key]) {
+    return customMessages[key].message;
+  }
+  return chrome.i18n.getMessage(key);
+}
+
+// Load custom language messages
+async function loadCustomLanguage(lang: string): Promise<void> {
+  if (lang === "auto") {
+    customMessages = null;
+  } else {
+    try {
+      const url = chrome.runtime.getURL(`/_locales/${lang}/messages.json`);
+      const response = await fetch(url, { method: "GET" });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${url}`);
+      }
+      customMessages = await response.json();
+    } catch (e) {
+      console.warn(`Failed to load language ${lang}, falling back to browser default`);
+      customMessages = null;
+    }
+  }
+  
+  // Update the global message getter so Command.toString() uses the correct language
+  setMessageGetter(getMessage);
+}
 
 const applyGestures = () => {
   gestures = (configManager.getPath(["Gestures"]) as GestureJSON[]).map(
@@ -19,8 +51,15 @@ const applyGestures = () => {
   );
 };
 
+const applyLanguage = async () => {
+  const language = configManager.getPath(["Settings", "General", "language"]) || "auto";
+  await loadCustomLanguage(language);
+};
+
 configManager.addEventListener("loaded", applyGestures);
 configManager.addEventListener("change", applyGestures);
+configManager.addEventListener("loaded", applyLanguage);
+configManager.addEventListener("change", applyLanguage);
 
 const handleGestureChange: Handler<"gestureChange", BackgroundMessages> = (
   m,

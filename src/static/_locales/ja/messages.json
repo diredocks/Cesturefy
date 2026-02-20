@@ -163,6 +163,20 @@
     "message": "更新の通知を表示する",
     "description": "Display update notification"
   },
+
+  "settingLabelLanguage": {
+    "message": "言語",
+    "description": "Language"
+  },
+  "settingDescriptionLanguage": {
+    "message": "拡張機能の表示言語を選択します。変更を反映するにはページの再読み込みが必要です。",
+    "description": "Select the display language for the extension"
+  },
+  "settingLabelLanguageAuto": {
+    "message": "自動（ブラウザのデフォルト）",
+    "description": "Auto language option"
+  },
+
   "settingDescriptionMouseButton": {
     "message": "ボタンが押されている間、マウスジェスチャーの検出を行います。",
     "description": "Captures a new mouse gesture while the button is held down."

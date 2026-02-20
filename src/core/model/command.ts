@@ -1,6 +1,7 @@
 import { CommandName, commands } from "@commands/index";
 import { CommandFn, CommandGroup, CommandPermission } from "@utils/types";
 import Context from "@model/context";
+import { getMessage } from "@utils/common";
 
 export interface CommandJSON<TSettings = Record<string, unknown>> {
   name: string;
@@ -32,7 +33,7 @@ export default class Command<TSettings = Record<string, unknown>> {
   }
 
   toString() {
-    return chrome.i18n.getMessage(`commandLabel${this.getName()}`);
+    return getMessage(`commandLabel${this.getName()}`);
   }
 
   getGroup() {
