@@ -53,10 +53,22 @@ const initializePopup = async (msg: PopupIframeMessages["popupConnection"]) => {
     height: list.scrollHeight,
   };
 
-  const availableDimensions = await chrome.runtime.sendMessage({
+  const response = await chrome.runtime.sendMessage({
     subject: "popupInitiation",
     data: requiredDimensions,
   });
+
+  const availableDimensions = response;
+
+  // If popup is above mouse, reverse the list so most recent is closest to cursor
+  if (response.reverseList) {
+    const items = Array.from(list.children);
+    items.reverse();
+    list.innerHTML = "";
+    items.forEach((item) => list.appendChild(item));
+    // Scroll to bottom so the most recent (now at bottom) is visible
+    window.scrollTo(0, document.body.scrollHeight);
+  }
 
   window.focus();
   window.onblur = terminatePopup;
