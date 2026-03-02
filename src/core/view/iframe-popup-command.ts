@@ -53,15 +53,25 @@ const initializePopup = async (msg: PopupIframeMessages["popupConnection"]) => {
     height: list.scrollHeight,
   };
 
-  const availableDimensions = await chrome.runtime.sendMessage({
+  const response = await chrome.runtime.sendMessage({
     subject: "popupInitiation",
     data: requiredDimensions,
   });
 
+  // If popup is above mouse, reverse the list so most recent is closest to cursor
+  if (response.reverseList) {
+    const items = Array.from(list.children);
+    items.reverse();
+    list.innerHTML = "";
+    items.forEach((item) => list.appendChild(item));
+    // Scroll to bottom so the most recent (now at bottom) is visible
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
   window.focus();
   window.onblur = terminatePopup;
 
-  if (availableDimensions.height < requiredDimensions.height) {
+  if (response.height < requiredDimensions.height) {
     const buttonUp = document.createElement("div");
     buttonUp.classList.add("button", "up", "hidden");
     buttonUp.addEventListener("mouseover", handleScrollButtonMouseover);
@@ -79,7 +89,7 @@ const initializePopup = async (msg: PopupIframeMessages["popupConnection"]) => {
 
         const isOnBottom =
           Math.round(scrollTop) >=
-          Math.round(requiredDimensions.height - availableDimensions.height);
+          Math.round(requiredDimensions.height - response.height);
         buttonDown.classList.toggle("hidden", isOnBottom);
       },
       { passive: true },
