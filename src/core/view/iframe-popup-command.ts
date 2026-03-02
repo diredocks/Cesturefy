@@ -58,8 +58,6 @@ const initializePopup = async (msg: PopupIframeMessages["popupConnection"]) => {
     data: requiredDimensions,
   });
 
-  const availableDimensions = response;
-
   // If popup is above mouse, reverse the list so most recent is closest to cursor
   if (response.reverseList) {
     const items = Array.from(list.children);
@@ -73,7 +71,7 @@ const initializePopup = async (msg: PopupIframeMessages["popupConnection"]) => {
   window.focus();
   window.onblur = terminatePopup;
 
-  if (availableDimensions.height < requiredDimensions.height) {
+  if (response.height < requiredDimensions.height) {
     const buttonUp = document.createElement("div");
     buttonUp.classList.add("button", "up", "hidden");
     buttonUp.addEventListener("mouseover", handleScrollButtonMouseover);
@@ -91,7 +89,7 @@ const initializePopup = async (msg: PopupIframeMessages["popupConnection"]) => {
 
         const isOnBottom =
           Math.round(scrollTop) >=
-          Math.round(requiredDimensions.height - availableDimensions.height);
+          Math.round(requiredDimensions.height - response.height);
         buttonDown.classList.toggle("hidden", isOnBottom);
       },
       { passive: true },
