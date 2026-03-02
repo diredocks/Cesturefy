@@ -107,7 +107,7 @@ const initiatePopup: Handler<"popupInitiation", PopupMessages> = (msg) => {
   const width = msg.data.width;
   const height = Math.min(msg.data.height, maxAvailableHeight);
 
-  // calculate absolute available space to the right and the bottom
+  // calculate absolute available space to the right and bottom
   const availableSpaceRight = relativeScreenWidth - mousePositionX;
   const availableSpaceBottom = relativeScreenHeight - mousePositionY;
   // determine if popup should appear above mouse (need to reverse list)
