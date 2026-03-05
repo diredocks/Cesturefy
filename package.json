@@ -6,6 +6,7 @@
 		"dev": "bun build.ts --watch",
 		"dist": "bun build.ts",
 		"clean": "rm -rf dist",
+		"release": "bun run clean && bun run dist && cd dist && zip -r ../release.zip .",
 		"lint": "eslint src --ext .ts",
 		"lint:fix": "eslint src --ext .ts --fix"
 	},
