@@ -1,4 +1,8 @@
 {
+  "extensionName": {
+    "message": "Cesturefy: Schneller navigieren, arbeiten und browsen mit Mausgesten",
+    "description": "Extension name"
+  },
   "extensionDescription": {
     "message": "Die hochgelobte Mausgesten-Erweiterung Gesturefy jetzt für Chromium-basierte Browser verfügbar.",
     "description": "Gesturefy for Chromium-based browsers "

@@ -1,4 +1,8 @@
 {
+  "extensionName": {
+    "message": "Cesturefy: マウスジェスチャーで快適ブラウジング",
+    "description": "Extension name"
+  },
   "extensionDescription": {
     "message": "高い評価を得ているマウスジェスチャー拡張機能 Gesturefy が Chromium ベースのブラウザで利用可能に",
     "description": "Gesturefy for Chromium-based browsers "

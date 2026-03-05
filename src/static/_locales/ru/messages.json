@@ -1,4 +1,8 @@
 {
+  "extensionName": {
+    "message": "Cesturefy: Быстрые жесты мыши",
+    "description": "Extension name"
+  },
   "extensionDescription": {
     "message": "Популярное расширение для жестов мыши Gesturefy теперь доступно для браузеров на основе Chromium.",
     "description": "Gesturefy for Chromium-based browsers "

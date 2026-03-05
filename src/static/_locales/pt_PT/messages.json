@@ -1,4 +1,8 @@
 {
+  "extensionName": {
+    "message": "Cesturefy: Navegue, opere e explore mais rápido com gestos do rato",
+    "description": "Extension name"
+  },
   "extensionDescription": {
     "message": "A aclamada extensão de gestos do rato Gesturefy, agora disponível para navegadores baseados em Chromium.",
     "description": "Gesturefy for Chromium-based browsers "

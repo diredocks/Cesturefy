@@ -1,4 +1,8 @@
 {
+  "extensionName": {
+    "message": "Cesturefy：使用滑鼠手勢更快導航、操作和瀏覽",
+    "description": "Extension name"
+  },
   "extensionDescription": {
     "message": "廣受好評的滑鼠手勢擴充功能 Gesturefy，現已登陸基於 Chromium 的瀏覽器",
     "description": "Gesturefy for Chromium-based browsers "

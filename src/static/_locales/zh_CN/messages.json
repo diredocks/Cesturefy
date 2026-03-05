@@ -1,4 +1,8 @@
 {
+  "extensionName": {
+    "message": "Cesturefy：使用鼠标手势更快导航、操作和浏览",
+    "description": "Extension name"
+  },
   "extensionDescription": {
     "message": "广受好评的鼠标手势插件 Gesturefy，现已登陆基于 Chromium 的浏览器",
     "description": "Gesturefy for Chromium-based browsers "

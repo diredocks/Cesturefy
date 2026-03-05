@@ -1,4 +1,8 @@
 {
+  "extensionName": {
+    "message": "Cesturefy : Naviguer vite avec les gestes de souris",
+    "description": "Extension name"
+  },
   "extensionDescription": {
     "message": "L'extension de gestes de souris Gesturefy, acclamée par les utilisateurs, désormais disponible pour les navigateurs basés sur Chromium.",
     "description": "Gesturefy for Chromium-based browsers "
