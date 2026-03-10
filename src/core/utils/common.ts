@@ -1,5 +1,16 @@
 import { MouseButton } from "@utils/types";
 
+// Global message getter - can be overridden by options page to use custom language
+let _getMessage: (key: string) => string = (key) => chrome.i18n.getMessage(key);
+
+export function getMessage(key: string): string {
+  return _getMessage(key);
+}
+
+export function setMessageGetter(getter: (key: string) => string): void {
+  _getMessage = getter;
+}
+
 export function preventDefault(e: Event) {
   if (e.isTrusted) {
     e.preventDefault();

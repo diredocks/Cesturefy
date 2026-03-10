@@ -1,6 +1,6 @@
 import { CommandFn } from "@utils/types";
 import { defineCommand } from "@commands/commands";
-import { displayNotification } from "@utils/common";
+import { displayNotification, getMessage } from "@utils/common";
 
 interface UserScriptSettings {
   targetFrame: "allFrames" | "topFrame" | "sourceFrame";
@@ -24,13 +24,8 @@ const ExecuteUserScriptFn: CommandFn<UserScriptSettings> = async function (
 ) {
   if (!isUserScriptsAvailable()) {
     displayNotification(
-      chrome.i18n.getMessage(
-        "commandErrorNotificationTitle",
-        chrome.i18n.getMessage("commandLabelExecuteUserScript"),
-      ),
-      chrome.i18n.getMessage(
-        "commandErrorNotificationMessageMissingUserScriptPermissions",
-      ),
+      getMessage("commandErrorNotificationTitle").replace("$1", getMessage("commandLabelExecuteUserScript")),
+      getMessage("commandErrorNotificationMessageMissingUserScriptPermissions"),
       "https://developer.chrome.com/blog/chrome-userscript",
     );
     return false;

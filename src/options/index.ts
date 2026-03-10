@@ -1,5 +1,8 @@
-import { fetchHTMLAsFragment } from "@options/utils/common";
+import { fetchHTMLAsFragment, getMessage, loadCustomLanguage } from "@options/utils/common";
 import { configManager } from "@model/config-manager";
+
+// Re-export getMessage for backward compatibility
+export { getMessage } from "@options/utils/common";
 
 // resources
 const res = [];
@@ -16,7 +19,15 @@ for (let e of document.querySelectorAll<HTMLElement>("[data-include]")) {
 
 // make sure all fragments loaded, or insertions would fail
 export const ContentLoaded = Promise.all(res);
-ContentLoaded.then(main);
+
+// Wait for config to be loaded, then load language
+// Export this promise so other modules can wait for full initialization
+export const FullyLoaded = configManager.loaded.then(async () => {
+  const language = configManager.getPath(["Settings", "General", "language"]) || "auto";
+  await loadCustomLanguage(language);
+  await ContentLoaded;
+  main();
+});
 
 const manifest = chrome.runtime.getManifest();
 
@@ -30,7 +41,7 @@ function main() {
 
   // insert text from language files
   for (const element of document.querySelectorAll<HTMLElement>("[data-i18n]")) {
-    element.textContent = chrome.i18n.getMessage(element.dataset.i18n!);
+    element.textContent = getMessage(element.dataset.i18n!);
   }
 
   // apply onchange handler and add title to every theme button
@@ -39,7 +50,7 @@ function main() {
   )) {
     const themeButton = el as HTMLInputElement;
     themeButton.addEventListener("change", onThemeButtonChange);
-    themeButton.title = chrome.i18n.getMessage(`${themeButton.value}Theme`);
+    themeButton.title = getMessage(`${themeButton.value}Theme`);
   }
   // apply theme class
   const themeValue = configManager.getPath(["Settings", "General", "theme"]);
@@ -73,7 +84,7 @@ function onPageNavigation() {
     // update document title
     const sectionKey =
       nextItem.querySelector<HTMLElement>("[data-i18n]")?.dataset.i18n;
-    document.title = `${manifest["name"]} - ${chrome.i18n.getMessage(sectionKey!)}`;
+    document.title = `${manifest["name"]} - ${getMessage(sectionKey!)}`;
   }
 }
 

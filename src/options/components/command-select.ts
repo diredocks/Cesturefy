@@ -1,6 +1,7 @@
 import {
   COMMAND_SETTING_TEMPLATES,
   COMMAND_ITEMS,
+  getMessage,
 } from "@options/utils/common";
 import { isEmpty } from "@utils/common";
 import Command from "@model/command";
@@ -58,12 +59,12 @@ export class CommandSelect extends HTMLElement {
       const hasSettings = this._command.hasSettings();
       secBtn.classList.toggle("has-settings", hasSettings);
       secBtn.title = hasSettings
-        ? chrome.i18n.getMessage("commandBarOpenSettingsText")
-        : chrome.i18n.getMessage("commandBarOpenSelectionText");
+        ? getMessage("commandBarOpenSettingsText")
+        : getMessage("commandBarOpenSelectionText");
     } else {
       mainBtn.textContent = mainBtn.title = "";
       secBtn.classList.remove("has-settings");
-      secBtn.title = chrome.i18n.getMessage("commandBarOpenSelectionText");
+      secBtn.title = getMessage("commandBarOpenSelectionText");
     }
   }
 
@@ -124,7 +125,7 @@ export class CommandSelect extends HTMLElement {
 
     const heading = frag.getElementById("commandsHeading")!;
     heading.title = heading.textContent =
-      chrome.i18n.getMessage("commandBarTitle");
+      getMessage("commandBarTitle");
 
     const searchBtn = frag.getElementById("commandsSearchButton")!;
     const searchInput = frag.getElementById(
@@ -135,7 +136,7 @@ export class CommandSelect extends HTMLElement {
     searchBtn.addEventListener("click", () =>
       this._toggleSearch(searchInput, panel),
     );
-    searchInput.placeholder = chrome.i18n.getMessage("commandBarSearch");
+    searchInput.placeholder = getMessage("commandBarSearch");
     searchInput.addEventListener("input", () =>
       this._handleSearch(searchInput.value, panel),
     );
@@ -162,7 +163,7 @@ export class CommandSelect extends HTMLElement {
       div.classList.add("cb-command-container");
       const label = document.createElement("span");
       label.classList.add("cb-command-name");
-      label.textContent = chrome.i18n.getMessage(
+      label.textContent = getMessage(
         `commandLabel${commandItem.command}`,
       );
       div.appendChild(label);
@@ -171,7 +172,7 @@ export class CommandSelect extends HTMLElement {
       if (!isEmpty(commandItem.settings)) {
         const icon = document.createElement("span");
         icon.classList.add("cb-command-settings-icon");
-        icon.title = chrome.i18n.getMessage("commandBarAdditionalSettingsText");
+        icon.title = getMessage("commandBarAdditionalSettingsText");
         div.appendChild(icon);
       }
 
@@ -179,7 +180,7 @@ export class CommandSelect extends HTMLElement {
       info.classList.add("cb-command-info");
       const desc = document.createElement("span");
       desc.classList.add("cb-command-description");
-      desc.textContent = chrome.i18n.getMessage(
+      desc.textContent = getMessage(
         `commandDescription${commandItem.command}`,
       );
       info.appendChild(desc);
@@ -188,13 +189,13 @@ export class CommandSelect extends HTMLElement {
       if (commandItem.permissions) {
         const icon = document.createElement("span");
         icon.classList.add("cb-command-permissions-icon");
-        icon.title = chrome.i18n.getMessage(
+        icon.title = getMessage(
           "commandBarAdditionalPermissionsText",
         );
 
         commandItem.permissions.forEach((permission, index) => {
           if (index > 0) icon.title += ", ";
-          icon.title += chrome.i18n.getMessage(`permissionLabel${permission}`);
+          icon.title += getMessage(`permissionLabel${permission}`);
         });
 
         info.append(icon);
@@ -253,7 +254,7 @@ export class CommandSelect extends HTMLElement {
     const saveBtn = document.createElement("button");
     saveBtn.id = "settingsSaveButton";
     saveBtn.type = "submit";
-    saveBtn.textContent = chrome.i18n.getMessage("buttonSave");
+    saveBtn.textContent = getMessage("buttonSave");
     form.appendChild(saveBtn);
 
     const templates = (
@@ -272,7 +273,7 @@ export class CommandSelect extends HTMLElement {
 
     // insert i18n text
     form.querySelectorAll<HTMLElement>("[data-i18n]").forEach((el) => {
-      el.textContent = chrome.i18n.getMessage(el.dataset.i18n!);
+      el.textContent = getMessage(el.dataset.i18n!);
     });
 
     // set current value

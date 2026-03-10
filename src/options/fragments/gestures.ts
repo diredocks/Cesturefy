@@ -1,6 +1,6 @@
 // TODO: spilit popup and item
 import { PopupBox } from "@options/components/popup-box";
-import { ContentLoaded } from "@options/index";
+import { FullyLoaded, getMessage } from "@options/index";
 import { GestureJSON } from "@model/gesture";
 import { configManager } from "@model/config-manager";
 import { Vectors } from "@utils/types";
@@ -12,7 +12,7 @@ import { CommandSelect } from "@options/components/command-select";
 import Pattern from "@utils/pattern";
 import { sendBackgroundMessage } from "@utils/message";
 
-ContentLoaded.then(main);
+FullyLoaded.then(main);
 
 let currentItem: HTMLElement | null = null;
 let currentPopupPattern: Vectors | null = null;
@@ -46,7 +46,7 @@ function main() {
     "gestureSearchInput",
   ) as HTMLInputElement;
   gestureSearchInput.addEventListener("input", onSearchInput);
-  gestureSearchInput.placeholder = chrome.i18n.getMessage(
+  gestureSearchInput.placeholder = getMessage(
     "gestureSearchPlaceholder",
   );
 
@@ -63,7 +63,7 @@ function main() {
   }
   const gestureList = document.getElementById("gestureContainer")!;
   gestureList.appendChild(fragment);
-  gestureList.dataset.noResultsHint = chrome.i18n.getMessage(
+  gestureList.dataset.noResultsHint = getMessage(
     "gestureHintNoSearchResults",
   );
 
@@ -149,9 +149,9 @@ async function openGesturePopup(gesture?: Gesture) {
   };
 
   patternContainer.classList.remove("alert");
-  patternContainer.dataset.gestureRecordingHint = chrome.i18n.getMessage(
+  patternContainer.dataset.gestureRecordingHint = getMessage(
     "gesturePopupRecordingAreaText",
-    chrome.i18n.getMessage(mouseButtonLabelMap[currentUserMouseButton]),
+    getMessage(mouseButtonLabelMap[currentUserMouseButton]),
   );
   patternContainer.title = "";
 
@@ -164,7 +164,7 @@ async function openGesturePopup(gesture?: Gesture) {
   mouseController.enable();
 
   if (gesture) {
-    heading.textContent = chrome.i18n.getMessage(
+    heading.textContent = getMessage(
       "gesturePopupTitleEditGesture",
     );
     commandSelect.command = gesture.getCommand();
@@ -182,7 +182,7 @@ async function openGesturePopup(gesture?: Gesture) {
     );
     if (mostSimilarGesture) {
       patternContainer.classList.add("alert");
-      patternContainer.title = chrome.i18n.getMessage(
+      patternContainer.title = getMessage(
         "gesturePopupNotificationSimilarGesture",
         mostSimilarGesture.toString(),
       );
@@ -192,7 +192,7 @@ async function openGesturePopup(gesture?: Gesture) {
         patternContainer.dataset.gestureRecordingHint ?? "";
     }
   } else {
-    heading.textContent = chrome.i18n.getMessage("gesturePopupTitleNewGesture");
+    heading.textContent = getMessage("gesturePopupTitleNewGesture");
     commandSelect.command = null;
     labelInput.value = "";
     labelInput.placeholder = "";
@@ -220,7 +220,7 @@ function onGesturePopupClose(): void {
     "#gesturePopupPatternContainer",
   )!;
 
-  heading.textContent = chrome.i18n.getMessage("gesturePopupTitleNewGesture");
+  heading.textContent = getMessage("gesturePopupTitleNewGesture");
   commandSelect.command = null;
   labelInput.value = "";
   labelInput.placeholder = "";
@@ -455,7 +455,7 @@ function onCommandSelectChange(this: CommandSelect, _e: Event) {
   const gesturePopupLabelInput = document.getElementById(
     "gesturePopupLabelInput",
   )! as HTMLInputElement;
-  gesturePopupLabelInput.placeholder = chrome.i18n.getMessage(
+  gesturePopupLabelInput.placeholder = getMessage(
     `commandLabel${this.value.name}`,
   );
 }
@@ -665,7 +665,7 @@ function mouseGestureControllerSetup() {
     if (mostSimilarGesture) {
       // activate alert symbol and change title
       gesturePopupPatternContainer.classList.add("alert");
-      gesturePopupPatternContainer.title = chrome.i18n.getMessage(
+      gesturePopupPatternContainer.title = getMessage(
         "gesturePopupNotificationSimilarGesture",
         mostSimilarGesture.toString(),
       );
