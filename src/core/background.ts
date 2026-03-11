@@ -10,8 +10,10 @@ import {
   ContentMessages,
 } from "@utils/message";
 import Command from "@model/command";
+import type { ClosedTabWindow } from "@utils/types";
 
 let gestures: Gesture[];
+export const closedTabWindows: ClosedTabWindow[] = [];
 
 const applyGestures = () => {
   gestures = (configManager.getPath(["Gestures"]) as GestureJSON[]).map(
@@ -121,6 +123,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     (response) => sendResponse(response),
   );
   return true;
+});
+
+// TODO: limited items size <= 20
+chrome.tabs.onRemoved.addListener(async (_tabId, removeInfo) => {
+  if (removeInfo.isWindowClosing) return;
+
+  const sessions = await chrome.sessions.getRecentlyClosed();
+  const sessionId = sessions.find((s) => s.tab)?.tab?.sessionId;
+  if (!sessionId) return;
+
+  closedTabWindows.unshift({
+    sessionId,
+    windowId: removeInfo.windowId,
+  });
 });
 
 chrome.action.onClicked.addListener(() => {

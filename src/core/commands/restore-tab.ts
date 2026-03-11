@@ -1,34 +1,27 @@
 import { CommandFn } from "@utils/types";
 import { defineCommand } from "@commands/commands";
+import { closedTabWindows } from "core/background";
 
 interface RestoreTabSettings {
   currentWindowOnly?: boolean;
 }
 
 const fn: CommandFn<RestoreTabSettings> = async function (sender) {
-  let sessions = await chrome.sessions.getRecentlyClosed();
-
   if (this.getSetting("currentWindowOnly") && sender.tab?.windowId) {
-    sessions = sessions.filter(
-      (s) => s.tab && s.tab.windowId === sender.tab!.windowId,
+    const targetIndex = closedTabWindows.findIndex(
+      (closed) => closed.windowId === sender.tab!.windowId,
     );
+    if (targetIndex < 0) return false;
+    const [target] = closedTabWindows.splice(targetIndex, 1);
+    await chrome.sessions.restore(target.sessionId);
+    return true;
   }
 
-  if (sessions.length > 0) {
-    const mostRecent = sessions.reduce((prev, cur) =>
-      prev.lastModified &&
-      cur.lastModified &&
-      prev.lastModified > cur.lastModified
-        ? prev
-        : cur,
-    );
+  const sessions = await chrome.sessions.getRecentlyClosed();
+  const sessionId = sessions[0].tab?.sessionId ?? sessions[0].window?.sessionId;
+  if (!sessionId) return false;
 
-    const sessionId = mostRecent.tab?.sessionId ?? mostRecent.window?.sessionId;
-    if (sessionId) {
-      await chrome.sessions.restore(sessionId);
-    }
-  }
-
+  await chrome.sessions.restore(sessionId);
   return true;
 };
 

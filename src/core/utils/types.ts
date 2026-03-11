@@ -40,7 +40,7 @@ export type CommandGroup =
   | "open";
 
 export type CommandPermission = Extract<
-  chrome.runtime.ManifestPermissions,
+  chrome.runtime.ManifestPermission,
   | "tabs"
   | "sessions"
   | "bookmarks"
@@ -70,3 +70,8 @@ export enum MouseButton {
   RIGHT = 2,
   MIDDLE = 4,
 }
+
+export type ClosedTabWindow = {
+  sessionId: string;
+  windowId: number;
+};
