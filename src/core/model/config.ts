@@ -129,7 +129,7 @@ export const DefaultConfig: ConfigSchema = {
       },
     },
     General: {
-      updateNotification: true, // TODO
+      updateNotification: true,
       theme: "light",
     },
   },
