@@ -17,11 +17,7 @@ const fn: CommandFn<RestoreTabSettings> = async function (sender) {
     return true;
   }
 
-  const sessions = await chrome.sessions.getRecentlyClosed();
-  const sessionId = sessions[0].tab?.sessionId ?? sessions[0].window?.sessionId;
-  if (!sessionId) return false;
-
-  await chrome.sessions.restore(sessionId);
+  await chrome.sessions.restore();
   return true;
 };
 
