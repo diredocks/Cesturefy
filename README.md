@@ -35,3 +35,8 @@ Cesturefy does not collect any data of any kind.
 * Cesturefy doesn't embed any analytic or telemetry hooks in its code.
 
 **GitHub** is used to host the Cesturefy project. **GitHub, Inc.** (a subsidiary of **Microsoft Corporation**) owns **GitHub** and is unrelated to Cesturefy.
+
+## Sponsor
+
+Support me via Wechat Pay and Alipay:
+![Payment QR Code](./sponsor.webp)
