@@ -70,11 +70,15 @@ export class MouseController {
   }
 
   enable() {
-    this._target.addEventListener("pointerdown", this._handlePointerDown);
+    this._target.addEventListener("pointerdown", this._handlePointerDown, true);
   }
 
   disable() {
-    this._target.removeEventListener("pointerdown", this._handlePointerDown);
+    this._target.removeEventListener(
+      "pointerdown",
+      this._handlePointerDown,
+      true,
+    );
   }
 
   private _handlePointerDown = (e: PointerEvent) => {

@@ -47,13 +47,14 @@ export class WheelController {
       capture: true,
       passive: false,
     });
-    this._target.addEventListener("mousedown", this._handleMousedown);
-    this._target.addEventListener("mouseup", this._handleMouseup);
-    this._target.addEventListener("click", this._handleClick);
-    this._target.addEventListener("contextmenu", this._handleContextmenu);
+    this._target.addEventListener("mousedown", this._handleMousedown, true);
+    this._target.addEventListener("mouseup", this._handleMouseup, true);
+    this._target.addEventListener("click", this._handleClick, true);
+    this._target.addEventListener("contextmenu", this._handleContextmenu, true);
     this._target.addEventListener(
       "visibilitychange",
       this._handleVisibilitychange,
+      true,
     );
   }
 
@@ -62,13 +63,18 @@ export class WheelController {
     this._target.removeEventListener("wheel", this._handleWheel, {
       capture: true,
     });
-    this._target.removeEventListener("mousedown", this._handleMousedown);
-    this._target.removeEventListener("mouseup", this._handleMouseup);
-    this._target.removeEventListener("click", this._handleClick);
-    this._target.removeEventListener("contextmenu", this._handleContextmenu);
+    this._target.removeEventListener("mousedown", this._handleMousedown, true);
+    this._target.removeEventListener("mouseup", this._handleMouseup, true);
+    this._target.removeEventListener("click", this._handleClick, true);
+    this._target.removeEventListener(
+      "contextmenu",
+      this._handleContextmenu,
+      true,
+    );
     this._target.removeEventListener(
       "visibilitychange",
       this._handleVisibilitychange,
+      true,
     );
   }
 
