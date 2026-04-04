@@ -20,12 +20,14 @@ function main() {
 
 async function onResetButton() {
   const popup = document.getElementById("resetConfirm") as PopupBox;
-  popup.addEventListener("close", async (event) => {
-    if (!event.detail) return;
-    await removeOptionalPermissions();
-    await configManager.clear();
-    window.location.reload();
-  },
+  popup.addEventListener(
+    "close",
+    async (event) => {
+      if (!event.detail) return;
+      await removeOptionalPermissions();
+      await configManager.clear();
+      window.location.reload();
+    },
     { once: true },
   );
   popup.open = true;
@@ -55,29 +57,23 @@ async function onRestoreButton(this: HTMLInputElement): Promise<void> {
 
   try {
     // FIXME: mouseButton from Gesturefy is string, causing wrong behaviour
-    const restoredConfig =
-      (await readJsonFile(file)) as Partial<ConfigSchema>;
+    const restoredConfig = (await readJsonFile(file)) as Partial<ConfigSchema>;
     const usedCommands: CommandName[] = [];
 
     // Gestures
     if (restoredConfig.Gestures?.length) {
       for (const g of restoredConfig.Gestures) {
-        if (g.command?.name)
-          usedCommands.push(g.command.name as CommandName);
+        if (g.command?.name) usedCommands.push(g.command.name as CommandName);
       }
     }
     // Rocker
     const rocker = restoredConfig.Settings?.Rocker;
     if (rocker) {
       if (rocker.rightMouseClick?.name)
-        usedCommands.push(
-          rocker.rightMouseClick.name as CommandName,
-        );
+        usedCommands.push(rocker.rightMouseClick.name as CommandName);
 
       if (rocker.leftMouseClick?.name)
-        usedCommands.push(
-          rocker.leftMouseClick.name as CommandName,
-        );
+        usedCommands.push(rocker.leftMouseClick.name as CommandName);
     }
     // Wheel
     const wheel = restoredConfig.Settings?.Wheel;
@@ -93,31 +89,33 @@ async function onRestoreButton(this: HTMLInputElement): Promise<void> {
     for (const name of usedCommands) {
       const def = commands[name];
       if (!def) continue;
-      def.permissions?.forEach((p) =>
-        requiredPermissions.add(p),
-      );
+      def.permissions?.forEach((p) => requiredPermissions.add(p));
     }
 
     const confirmPopup = document.getElementById("restoreConfirm") as PopupBox;
-    confirmPopup.addEventListener("close", async (event) => {
-      if (!event.detail) return;
-      // Request optional permissions if needed
-      if (requiredPermissions.size > 0) {
-        const granted = await chrome.permissions.request({
-          origins: ["<all_urls>"],
-          permissions: [...requiredPermissions],
-        });
+    confirmPopup.addEventListener(
+      "close",
+      async (event) => {
+        if (!event.detail) return;
+        // Request optional permissions if needed
+        if (requiredPermissions.size > 0) {
+          const granted = await chrome.permissions.request({
+            origins: ["<all_urls>"],
+            permissions: [...requiredPermissions],
+          });
 
-        // TODO: restoreAlertNotGranted
-        if (!granted) return;
-      }
-      proceedRestore(restoredConfig);
-    },
+          // TODO: restoreAlertNotGranted
+          if (!granted) return;
+        }
+        proceedRestore(restoredConfig);
+      },
       { once: true },
     );
     confirmPopup.open = true;
   } catch {
-    const popup = document.getElementById("restoreAlertNoConfigFile") as PopupBox;
+    const popup = document.getElementById(
+      "restoreAlertNoConfigFile",
+    ) as PopupBox;
     popup.open = true;
   }
 }
@@ -128,9 +126,9 @@ function proceedRestore(restoredConfig: Partial<ConfigSchema>) {
 
   const popup = document.getElementById("restoreAlertSuccess") as PopupBox;
 
-  popup.addEventListener("close", () => window.location.reload(),
-    { once: true },
-  );
+  popup.addEventListener("close", () => window.location.reload(), {
+    once: true,
+  });
 
   popup.open = true;
 }
@@ -157,9 +155,7 @@ async function removeOptionalPermissions() {
   const current = await chrome.permissions.getAll();
 
   const permsToRemove =
-    current.permissions?.filter((p) =>
-      optionalPermissions.has(p),
-    ) ?? [];
+    current.permissions?.filter((p) => optionalPermissions.has(p)) ?? [];
 
   if (permsToRemove.length === 0) {
     return false;

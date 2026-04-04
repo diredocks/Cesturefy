@@ -1,19 +1,18 @@
-import Gesture, { GestureJSON } from "@model/gesture";
+import Command from "@model/command";
 import { configManager } from "@model/config-manager";
+import Gesture, { type GestureJSON } from "@model/gesture";
+import { rememberClosedTabWindow } from "@utils/closed-tab-windows";
 import { matcher } from "@utils/match";
 import {
-  Handler,
-  HandlerMap,
+  type BackgroundMessages,
+  type ContentMessages,
+  type Handler,
+  type HandlerMap,
   registerHandlers,
   sendTabMessage,
-  BackgroundMessages,
-  ContentMessages,
 } from "@utils/message";
-import Command from "@model/command";
-import type { ClosedTabWindow } from "@utils/types";
 
 let gestures: Gesture[];
-export const closedTabWindows: ClosedTabWindow[] = [];
 
 const applyGestures = () => {
   gestures = (configManager.getPath(["Gestures"]) as GestureJSON[]).map(
@@ -133,7 +132,7 @@ chrome.tabs.onRemoved.addListener(async (_tabId, removeInfo) => {
   const sessionId = sessions.find((s) => s.tab)?.tab?.sessionId;
   if (!sessionId) return;
 
-  closedTabWindows.unshift({
+  rememberClosedTabWindow({
     sessionId,
     windowId: removeInfo.windowId,
   });
