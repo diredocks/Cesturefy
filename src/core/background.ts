@@ -3,6 +3,7 @@ import { configManager } from "@model/config-manager";
 import Gesture, { type GestureJSON } from "@model/gesture";
 import { rememberClosedTabWindow } from "@utils/closed-tab-windows";
 import { matcher } from "@utils/match";
+import { displayNotification } from "@utils/common";
 import {
   type BackgroundMessages,
   type ContentMessages,
@@ -13,6 +14,36 @@ import {
 } from "@utils/message";
 
 let gestures: Gesture[];
+
+function getChangelogURL(): string | undefined {
+  const homepageURL = chrome.runtime.getManifest().homepage_url;
+  if (!homepageURL) return undefined;
+
+  return `${homepageURL.replace(/\/$/, "")}/releases`;
+}
+
+async function handleAddonUpdateNotification(
+  details: chrome.runtime.InstalledDetails,
+): Promise<void> {
+  if (details.reason !== chrome.runtime.OnInstalledReason.UPDATE) return;
+  if (!details.previousVersion) return;
+
+  await configManager.loaded;
+  const showUpdateNotification = configManager.getPath([
+    "Settings",
+    "General",
+    "updateNotification",
+  ]);
+
+  if (!showUpdateNotification) return;
+
+  const manifest = chrome.runtime.getManifest();
+  displayNotification(
+    chrome.i18n.getMessage("addonUpdateNotificationTitle", manifest.name),
+    chrome.i18n.getMessage("addonUpdateNotificationMessage", manifest.version),
+    getChangelogURL(),
+  );
+}
 
 const applyGestures = () => {
   gestures = (configManager.getPath(["Gestures"]) as GestureJSON[]).map(
@@ -103,6 +134,10 @@ const backgroundHandlers: HandlerMap<BackgroundMessages> = {
 };
 
 registerHandlers(backgroundHandlers);
+
+chrome.runtime.onInstalled.addListener((details) => {
+  void handleAddonUpdateNotification(details);
+});
 
 // It work as a broker, from `message-router`,
 // iframe -> popup-command (part of content script)
