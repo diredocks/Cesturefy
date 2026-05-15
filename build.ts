@@ -5,7 +5,6 @@ import { access, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { build } from 'vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 const SrcDirname = 'src';
 const DistDirname = 'dist';
@@ -39,9 +38,9 @@ function createConfig(entry: EntryPoint) {
   return {
     root: `${SrcDirname}${entry.outputDirname ? `/${entry.outputDirname}` : ''}`,
     base: './',
-    plugins: [
-      tsconfigPaths(),
-    ],
+    resolve: {
+      tsconfigPaths: true
+    },
     build: {
       watch: isWatch ? {} : undefined,
       minify: isWatch ? false : true,

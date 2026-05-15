@@ -3,16 +3,17 @@
 	"version": "0.1.6",
 	"type": "module",
 	"scripts": {
-		"dev": "bun build.ts --watch",
-		"dist": "bun build.ts",
+		"dev": "tsx build.ts --watch",
+		"dist": "tsx build.ts",
 		"clean": "rm -rf dist",
-		"release": "bun run clean && bun run dist && cd dist && zip -r ../release.zip .",
+		"release": "pnpm run clean && pnpm run dist && cd dist && zip -r ../release.zip .",
 		"lint": "eslint src --ext .ts",
 		"lint:fix": "eslint src --ext .ts --fix"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.39.2",
 		"@types/chrome": "^0.1.36",
+		"@types/node": "^25.8.0",
 		"@typescript-eslint/eslint-plugin": "^8.56.0",
 		"@typescript-eslint/parser": "^8.56.0",
 		"eslint": "^9.39.2",
@@ -23,7 +24,9 @@
 		"globals": "^16.5.0",
 		"tslib": "^2.8.1",
 		"typescript": "^5.9.3",
-		"vite": "npm:rolldown-vite@^7.3.1",
-		"vite-tsconfig-paths": "^5.1.4"
+		"vite": "^8.0.13"
+	},
+	"dependencies": {
+		"tsx": "^4.22.0"
 	}
 }
