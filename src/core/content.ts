@@ -34,6 +34,11 @@ const applySettings = () => {
     "Gesture",
     "distanceThreshold",
   ]);
+  mouseController.contextMenuTimeout = configManager.getPath([
+    "Settings",
+    "Gesture",
+    "contextMenuTimeout",
+  ]);
   mouseController.isTimeoutAbort = configManager.getPath([
     "Settings",
     "Gesture",

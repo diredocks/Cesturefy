@@ -26,6 +26,11 @@ enum State {
 }
 
 const doubleClickThreshold = 300; // ms
+// Distance tolerance (px) between the two right-clicks that open the context
+// menu. Kept separate from (and more forgiving than) the gesture
+// `distanceThreshold` so a stationary double-click is reliably recognized even
+// with minor cursor jitter between the two clicks.
+const contextMenuDistanceTolerance = 24; // px
 
 export class MouseController {
   private static _instance: MouseController;
@@ -45,6 +50,10 @@ export class MouseController {
   public mouseButton: MouseButton = DefaultConfig.Settings.Gesture.mouseButton;
   public distanceThreshold: number =
     DefaultConfig.Settings.Gesture.distanceThreshold; // px
+  // Max time between the two right-clicks that open the context menu on
+  // platforms where `contextmenu` fires on mouse-down (Linux/macOS). See #24.
+  public contextMenuTimeout: number =
+    DefaultConfig.Settings.Gesture.contextMenuTimeout; // ms
   public suppressionKey: SuppressionKey =
     DefaultConfig.Settings.Gesture.suppressionKey;
   public currentOS: string = "";
@@ -90,10 +99,10 @@ export class MouseController {
 
   private _handleContextMenu = (e: MouseEvent) => {
     const now = Date.now();
-    const withinTime = now - this._lastClick.time < doubleClickThreshold;
+    const withinTime = now - this._lastClick.time < this.contextMenuTimeout;
     const withinDist =
       getDistance(this._lastClick.x, this._lastClick.y, e.clientX, e.clientY) <
-      this.distanceThreshold;
+      contextMenuDistanceTolerance;
 
     if (withinTime && withinDist) {
       this._reset();
@@ -194,6 +203,10 @@ export class MouseController {
           this._state = State.ACTIVE;
           this._enablePreventDefault();
           document.documentElement.setPointerCapture(e.pointerId);
+          // A real gesture started: forget any pending "first right-click" so
+          // the gesture's suppressed contextmenu can't be mistaken for the
+          // second click of a context-menu double-click.
+          this._lastClick = { time: 0, x: 0, y: 0 };
         }
         break;
       }
