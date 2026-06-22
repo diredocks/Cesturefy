@@ -84,6 +84,7 @@ import {
 } from "@commands/crease-url-number";
 import { UnloadTab } from "./unload";
 import { ExecuteUserScript } from "./user-script";
+import { InsertCustomText } from "@commands/insert-text";
 
 export const commands = {
   NewTab,
@@ -167,6 +168,7 @@ export const commands = {
   IncreaseURLNumber,
   DecreaseURLNumber,
   ExecuteUserScript,
+  InsertCustomText,
 } as const;
 
 export type CommandName = keyof typeof commands;

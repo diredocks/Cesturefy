@@ -127,6 +127,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // TODO: limited items size <= 20
 chrome.tabs.onRemoved.addListener(async (_tabId, removeInfo) => {
   if (removeInfo.isWindowClosing) return;
+  if (!chrome.sessions) return;
 
   const sessions = await chrome.sessions.getRecentlyClosed();
   const sessionId = sessions.find((s) => s.tab)?.tab?.sessionId;
