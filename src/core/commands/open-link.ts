@@ -10,63 +10,70 @@ const OpenLinkFn: CommandFn = async function (sender, data) {
   return true;
 };
 
+type TabPosition = "before" | "after" | "start" | "end" | "default";
+
+function resolveTabIndex(
+  position: TabPosition,
+  sender: chrome.runtime.MessageSender,
+): number | undefined {
+  switch (position) {
+    case "before":
+      return sender.tab!.index;
+    case "after":
+      return sender.tab!.index + 1;
+    case "start":
+      return 0;
+    case "end":
+      return 999;
+    default:
+      return undefined;
+  }
+}
+
 interface OpenLinkNewTabSettings {
-  position?: "before" | "after" | "start" | "end" | "default";
+  position?: TabPosition;
   focus?: boolean;
+  emptyTab?: boolean;
 }
 
 const OpenLinkNewTabFn: CommandFn<OpenLinkNewTabSettings> = async function (
   sender,
   data,
 ) {
-  if (!data?.link?.href) return false;
-
-  let url = data.link.href;
-  let index: number | undefined;
-
-  switch (this.getSetting("position")) {
-    case "before":
-      index = sender.tab!.index;
-      break;
-    case "after":
-      index = sender.tab!.index + 1;
-      break;
-    case "start":
-      index = 0;
-      break;
-    case "end":
-      index = 999;
-      break;
-    default:
-      index = undefined;
-  }
+  const url = data?.link?.href;
+  if (!url && !this.getSetting("emptyTab")) return false;
 
   await chrome.tabs.create({
-    url,
+    ...(url && { url }),
     active: this.getSetting("focus"),
-    index,
+    index: resolveTabIndex(this.getSetting("position"), sender),
   });
 
   return true;
 };
 
-const OpenLinkInNewWindowFn: CommandFn = async function (_sender, data) {
-  if (!data?.link?.href) return false;
+interface OpenLinkNewWindowSettings {
+  emptyWindow?: boolean;
+}
 
-  let url = data.link.href;
-  await chrome.windows.create({ url });
+function makeOpenLinkInWindowFn(
+  incognito = false,
+): CommandFn<OpenLinkNewWindowSettings> {
+  return async function (_sender, data) {
+    const url = data?.link?.href;
+    if (!url && !this.getSetting("emptyWindow")) return false;
 
-  return true;
-};
+    await chrome.windows.create({
+      ...(url && { url }),
+      ...(incognito && { incognito: true as const }),
+    });
 
-const OpenLinkInNewPrivateWindowFn: CommandFn = async function (_sender, data) {
-  if (!data?.link?.href) return false;
+    return true;
+  };
+}
 
-  let url = data.link.href;
-  await chrome.windows.create({ url, incognito: true });
-
-  return true;
-};
+const OpenLinkInNewWindowFn = makeOpenLinkInWindowFn(false);
+const OpenLinkInNewPrivateWindowFn = makeOpenLinkInWindowFn(true);
 
 export const OpenLink = defineCommand(OpenLinkFn, {}, "link");
 export const OpenLinkInNewTab = defineCommand(
@@ -74,16 +81,21 @@ export const OpenLinkInNewTab = defineCommand(
   {
     position: "after",
     focus: true,
+    emptyTab: false,
   },
   "link",
 );
 export const OpenLinkInNewWindow = defineCommand(
   OpenLinkInNewWindowFn,
-  {},
+  {
+    emptyWindow: false,
+  },
   "link",
 );
 export const OpenLinkInNewPrivateWindow = defineCommand(
   OpenLinkInNewPrivateWindowFn,
-  {},
+  {
+    emptyWindow: false,
+  },
   "link",
 );
