@@ -37,6 +37,7 @@ export interface GestureSettings {
   mouseButton: MouseButton;
   suppressionKey: SuppressionKey;
   distanceThreshold: number;
+  contextMenuTimeout: number;
   deviationTolerance: number;
   matchingAlgorithm: MatchingAlgorithm;
   Timeout: TimeoutSettings;
@@ -82,6 +83,7 @@ export const DefaultConfig: ConfigSchema = {
       mouseButton: 2,
       suppressionKey: "none",
       distanceThreshold: 10, // px
+      contextMenuTimeout: 400, // ms
       deviationTolerance: 0.15,
       matchingAlgorithm: "Combined",
       Timeout: {

@@ -118,6 +118,10 @@
     "message": "Distance threshold",
     "description": "Distance threshold"
   },
+  "settingLabelContextMenuTimeout": {
+    "message": "Context menu timeout",
+    "description": "Context menu timeout"
+  },
   "settingLabelDeviationTolerance": {
     "message": "Deviation tolerance",
     "description": "Deviation tolerance"
@@ -200,6 +204,10 @@
   "settingDescriptionDistanceThreshold": {
     "message": "The minimum distance the mouse must be moved until the start of a gesture is recognized.",
     "description": "The minimum distance the mouse must be moved until the start of a gesture is recognized."
+  },
+  "settingDescriptionContextMenuTimeout": {
+    "message": "On Linux and macOS the context menu opens with a double right-click (the browser shows it on mouse-down, so the first click is reserved for gestures). This is the maximum time, in milliseconds, allowed between the two clicks. Increase it if the menu is hard to trigger.",
+    "description": "Explains the context menu timeout setting."
   },
   "settingDescriptionDeviationTolerance": {
     "message": "The permissible gesture deviation that should still be recognized as a match.",
