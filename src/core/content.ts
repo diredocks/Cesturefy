@@ -22,6 +22,7 @@ let displayTrace: boolean = DefaultConfig.Settings.Gesture.Trace.display;
 let displayCommand: boolean = DefaultConfig.Settings.Gesture.Command.display;
 
 let contextData: Context;
+let gestureTargetElement: HTMLElement | null = null;
 
 const applySettings = () => {
   mouseController.mouseButton = configManager.getPath([
@@ -104,6 +105,8 @@ async function main() {
 mouseController.addEventListener("register", (_es, e) => {
   // collect contextual data, run as early as possible
   contextData = Context.fromEvent(e);
+  const composedPath = e.composedPath();
+  gestureTargetElement = (composedPath[0] ?? e.target) as HTMLElement;
 });
 
 mouseController.addEventListener("start", (es, e) => {
@@ -230,11 +233,54 @@ const handleClipboardWriteImage: Handler<
   await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
 };
 
+function insertTextAtCaret(text: string, target: HTMLElement | null): boolean {
+  if (
+    (target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement) &&
+    !target.disabled &&
+    !target.readOnly
+  ) {
+    const start = target.selectionStart ?? target.value.length;
+    const end = target.selectionEnd ?? target.value.length;
+    const value = target.value;
+
+    target.value = value.slice(0, start) + text + value.slice(end);
+    target.selectionStart = target.selectionEnd = start + text.length;
+    target.dispatchEvent(new Event("input", { bubbles: true }));
+    return true;
+  }
+
+  if (target?.isContentEditable) {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return false;
+
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+
+    const node = document.createTextNode(text);
+    range.insertNode(node);
+    range.setStartAfter(node);
+    range.setEndAfter(node);
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    target.dispatchEvent(new Event("input", { bubbles: true }));
+    return true;
+  }
+
+  return false;
+}
+
+const handleInsertText: Handler<"insertText", ContentMessages> = (m) => {
+  insertTextAtCaret(m.data, gestureTargetElement);
+};
+
 const contentHandlers: HandlerMap<ContentMessages> = {
   matchingGesture: handleMatchingGesture,
   clipboardWriteText: handleClipboardWriteText,
   clipboardReadText: handleClipboardReadText,
   clipboardWriteImage: handleClipboardWriteImage,
+  insertText: handleInsertText,
 };
 
 registerHandlers(contentHandlers);

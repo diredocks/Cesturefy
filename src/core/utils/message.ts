@@ -73,6 +73,7 @@ export type ContentMessages = {
   clipboardWriteText: string;
   clipboardReadText: Record<string, never>;
   clipboardWriteImage: string; // url to image
+  insertText: string;
 };
 
 export function waitForVoidMessage(subject: string): Promise<any> {

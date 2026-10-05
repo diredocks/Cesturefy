@@ -84,10 +84,10 @@ This is a TODO list of commands to be implemented
 - [x]  DecreaseURLNumber
 - [x]  IncreaseURLNumber
 - [x]  ExecuteUserScript
+- [x]  InsertCustomText
 
 ## What's not done yet?
 
-- [ ]  InsertCustomText
 - [ ]  OpenImageInNewTab
 - [ ]  SaveImage(WIP)
 - [ ]  ViewImage
